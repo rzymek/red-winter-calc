@@ -1,6 +1,6 @@
 import './app.css'
-import {useState} from "preact/hooks";
 import type {PropsWithChildren} from "preact/compat";
+import {createContext, useCallback, useContext, useState} from "preact/compat";
 
 function ToggleButton(props: {
     value: string | number,
@@ -37,8 +37,10 @@ type PickProps = {
     minWidth?: string,
 };
 
-function Pick(props: PickProps) {
-    const [selected, select] = useState<string | number>();
+function Pick(props: PickProps & {
+    selected: (string | number)[],
+    onClick(v: string | number): void
+}) {
     return <div style={{
         border: 'solid 1px black',
         overflowX: 'auto',
@@ -56,15 +58,45 @@ function Pick(props: PickProps) {
             fontWeight: 'bold',
             textAlign: 'center'
         }}>{props.label}</div>
-        {props.values.map(v =>
-            <ToggleButton key={v} value={v} selected={selected === v} onClick={() => select(v)}
-                          minWidth={props.minWidth}/>
+        {props.values.map(v => {
+                return <ToggleButton key={v} value={v}
+                                     selected={props.selected.includes(v)}
+                                     onClick={() => props.onClick(v)}
+                                     minWidth={props.minWidth}/>;
+            }
         )}
     </div>
 }
 
+
+function PickOne(props: PickProps) {
+    const context = useContext(Context);
+    const selected = context.state[props.label] as (string|number);
+
+    return <Pick {...props}
+                 selected={[selected]}
+                 onClick={(v: string | number) => {
+                     context.update({[props.label]: selected===v ? undefined : v});
+                 }}/>;
+}
+
+function toggle<T>(a: T[], v: T) {
+    if(a.includes(v)) {
+        return a.filter(i => i !== v)
+    }else{
+        return [...a, v];
+    }
+}
+
 function PickMany(props: PickProps & {}) {
-    return <Pick {...props}/>
+    const context = useContext(Context);
+    const selected = (context.state[props.label] ?? []) as (number|string)[];
+
+    return <Pick {...props}
+                 selected={selected}
+                 onClick={(v: string | number) => {
+                     context.update({[props.label]: toggle(selected, v)});
+                 }}/>;
 }
 
 function Section(props: PropsWithChildren<{
@@ -76,35 +108,47 @@ function Section(props: PropsWithChildren<{
     </div>
 }
 
-export function App() {
+type Value = string | number | undefined | (string|number)[]
+const Context = createContext<{
+    state: Record<string, Value>,
+    update(v: Record<string, Value>): void
+}>(null as any);
 
-    return (
-        <>
-            <Pick label='Distance' values={[
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '13+'
-            ]}/>
-            <Section label="Firerer">
-                <Pick label='Firepower' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
-                <Pick label='Firepower' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
-                <Pick label='Firepower' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
-                <Pick label='Add unit' values={['+']} />
-                <Pick label='Type' values={['inf', 'low', 'high', 'mortar', 'arty']}/>
-                <PickMany label='Type' values={['any sup/par', 'cross fire', 'arty zone', 'smoke']}/>
-            </Section>
-            <Section label="Target">
-                <Pick label="Steps" values={['1-2', '3-4', '5-7', '8-9', '10-12', '13-19', '20+']}/>
-                <Pick label="Terrain" values={['billiard', 'open', 'partly', 'protective']}/>
-                <Pick label="Posture" values={['move', 'fire', 'dug in']}/>
-                <PickMany label="Environment"
-                          values={['night', 'illum/twilight', 'road move', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke']}
-                          wrap={true} minWidth='3cm'/>
-            </Section>
-            <Section label="Morale">
-                <PickMany label="Environmen" values={['attacked by sortie', 'unassigned']}/>
-                <Pick label='Unit Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
-                <Pick label='Step Loses' values={[1, 2, 3, 4, 5]}/>
-                <Pick label='Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
-            </Section>
-        </>
-    )
+export function App() {
+    const [state, setState] = useState<Record<string, Value>>({});
+    console.log(state)
+    return <Context.Provider value={{
+        state,
+        update: useCallback((v) => {
+            setState(prev => ({
+                ...prev,
+                ...v
+            }))
+        }, [])
+
+    }}>
+        <PickOne label='Distance' values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '13+']}/>
+        <Section label="Firerer">
+            <PickOne label='Firepower1' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
+            <PickOne label='Firepower2' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
+            <PickOne label='Firepower3' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
+            <PickOne label='Add unit' values={['+']}/>
+            <PickOne label='Type' values={['inf', 'low', 'high', 'mortar', 'arty']}/>
+            <PickMany label='Env' values={['any sup/par', 'cross fire', 'arty zone', 'smoke']}/>
+        </Section>
+        <Section label="Target">
+            <PickOne label="Steps" values={['1-2', '3-4', '5-7', '8-9', '10-12', '13-19', '20+']}/>
+            <PickOne label="Terrain" values={['billiard', 'open', 'partly', 'protective']}/>
+            <PickOne label="Posture" values={['move', 'fire', 'dug in']}/>
+            <PickMany label="Environment"
+                      values={['night', 'illum/twilight', 'road move', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke']}
+                      wrap={true} minWidth='3cm'/>
+        </Section>
+        <Section label="Morale">
+            <PickMany label="Environmen" values={['attacked by sortie', 'unassigned']}/>
+            <PickOne label='Unit Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
+            <PickOne label='Step Loses' values={[1, 2, 3, 4, 5]}/>
+            <PickOne label='Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
+        </Section>
+    </Context.Provider>
 }
