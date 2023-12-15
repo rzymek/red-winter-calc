@@ -1,5 +1,5 @@
 import {Pick, PickProps} from "./pick.tsx";
-import {useContext} from "preact-compat";
+import {useContext} from "preact/compat";
 import {Context} from "./context.tsx";
 
 export function PickOne(props: PickProps) {
@@ -9,7 +9,6 @@ export function PickOne(props: PickProps) {
     return <Pick {...props}
                  selected={[selected]}
                  onClick={(v: string | number) => {
-                     console.log(props.onClick, v)
                      if (props.onClick && props.onClick(v) === false) {
                          return
                      }

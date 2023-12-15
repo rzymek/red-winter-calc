@@ -1,5 +1,5 @@
 import {Pick, PickProps} from "./pick.tsx";
-import {useContext} from "preact-compat";
+import {useContext} from "preact/compat";
 import {Context} from "./context.tsx";
 
 function toggle<T>(a: T[], v: T) {

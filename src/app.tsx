@@ -5,6 +5,7 @@ import {firetable} from "./firetable.tsx";
 import {Context} from "./context.tsx";
 import {PickOne} from "./pickOne.tsx";
 import {PickMany} from "./pickMany.tsx";
+import {range} from 'remeda';
 
 
 export function App() {
@@ -52,12 +53,15 @@ export function App() {
             }}/>
         )}
         <PickOne label='Firerer Type' values={['inf', 'low', 'high', 'mortar', 'arty']}/>
+        {(state['Firerer Type'] === 'inf' && state.Distance <= 1) &&
+            <PickOne label='Firerer Steps' values={range(1,40+1)} />}
+
         <PickMany label='Firerer Env' values={['any sup/par', 'cross fire', 'arty zone', 'smoke']}/>
         <PickOne label="Target Steps" values={['1-2', '3-4', '5-7', '8-9', '10-12', '13-19', '20+']}/>
         <PickOne label="Target Terrain" values={['billiard', 'open', 'partly', 'protective']}/>
         <PickOne label="Target Posture" values={['move', 'fire', 'dug in']}/>
         <PickMany label="Target Environment"
-                  values={['night', 'illum/twilight', 'road move', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke',
+                  values={['night', 'illum/twilight', 'road move', 'firing', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke',
                       'attacked by sortie', 'unassigned']}
                   wrap={true} minWidth='3cm'/>
         <div>
@@ -66,5 +70,10 @@ export function App() {
         <PickOne label='Target Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
         <PickOne label='Target step Loses' values={[1, 2, 3, 4, 5]}/>
         <PickOne label='Target Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
+        <pre>
+            {JSON.stringify(state,null, ' ')}
+            ---
+            {JSON.stringify([state['Firerer Type'] === 'inf', state.Distance <= 1])}
+        </pre>
     </Context.Provider>
 }
