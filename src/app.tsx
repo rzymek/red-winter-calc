@@ -42,6 +42,7 @@ export function App() {
                             .reduce((acc, val) => ({...acc, ...val}), {})
                         const rest = Object.entries(next)
                             .filter(([name, value]) => !name.startsWith('Firepower'))
+                            .map(([name, value]) => ({[name]:value}))
                             .reduce((acc, val) => ({...acc, ...val}), {})
                         return {
                             ...firepowers,
