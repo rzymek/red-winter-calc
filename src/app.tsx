@@ -24,7 +24,7 @@ function ToggleButton(props: {
             fontWeight: 'bold',
             cursor: 'pointer',
             flex: 1,
-            backgroundColor: props.selected ? 'lightgray' : undefined
+            backgroundColor: props.selected ? 'lightblue' : undefined
         }} onClick={props.onClick}>
         {props.value}
     </div>
@@ -34,6 +34,7 @@ type PickProps = {
     label: string,
     wrap?: boolean,
     values: (string | number)[],
+    onClick?(value: string | number): boolean,
     minWidth?: string,
 };
 
@@ -48,7 +49,7 @@ function Pick(props: PickProps & {
         flexDirection: 'row',
         flexWrap: props.wrap ? 'wrap' : undefined,
         position: 'relative'
-    }}>
+    }} className="Pick">
         <div style={{
             position: 'absolute',
             inset: 0,
@@ -71,30 +72,37 @@ function Pick(props: PickProps & {
 
 function PickOne(props: PickProps) {
     const context = useContext(Context);
-    const selected = context.state[props.label] as (string|number);
+    const selected = context.state[props.label] as (string | number);
 
     return <Pick {...props}
                  selected={[selected]}
                  onClick={(v: string | number) => {
-                     context.update({[props.label]: selected===v ? undefined : v});
+                     console.log(props.onClick, v)
+                     if (props.onClick && props.onClick(v) === false) {
+                         return
+                     }
+                     context.update({[props.label]: selected === v ? undefined : v});
                  }}/>;
 }
 
 function toggle<T>(a: T[], v: T) {
-    if(a.includes(v)) {
+    if (a.includes(v)) {
         return a.filter(i => i !== v)
-    }else{
+    } else {
         return [...a, v];
     }
 }
 
 function PickMany(props: PickProps & {}) {
     const context = useContext(Context);
-    const selected = (context.state[props.label] ?? []) as (number|string)[];
+    const selected = (context.state[props.label] ?? []) as (number | string)[];
 
     return <Pick {...props}
                  selected={selected}
                  onClick={(v: string | number) => {
+                     if (props.onClick && props.onClick(v) === false) {
+                         return
+                     }
                      context.update({[props.label]: toggle(selected, v)});
                  }}/>;
 }
@@ -108,7 +116,7 @@ function Section(props: PropsWithChildren<{
     </div>
 }
 
-type Value = string | number | undefined | (string|number)[]
+type Value = string | number | undefined | (string | number)[]
 const Context = createContext<{
     state: Record<string, Value>,
     update(v: Record<string, Value>): void
@@ -116,7 +124,6 @@ const Context = createContext<{
 
 export function App() {
     const [state, setState] = useState<Record<string, Value>>({});
-    console.log(state)
     return <Context.Provider value={{
         state,
         update: useCallback((v) => {
@@ -128,27 +135,48 @@ export function App() {
 
     }}>
         <PickOne label='Distance' values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '13+']}/>
-        <Section label="Firerer">
-            <PickOne label='Firepower1' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
-            <PickOne label='Firepower2' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
-            <PickOne label='Firepower3' values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}/>
-            <PickOne label='Add unit' values={['+']}/>
-            <PickOne label='Type' values={['inf', 'low', 'high', 'mortar', 'arty']}/>
-            <PickMany label='Env' values={['any sup/par', 'cross fire', 'arty zone', 'smoke']}/>
-        </Section>
-        <Section label="Target">
-            <PickOne label="Steps" values={['1-2', '3-4', '5-7', '8-9', '10-12', '13-19', '20+']}/>
-            <PickOne label="Terrain" values={['billiard', 'open', 'partly', 'protective']}/>
-            <PickOne label="Posture" values={['move', 'fire', 'dug in']}/>
-            <PickMany label="Environment"
-                      values={['night', 'illum/twilight', 'road move', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke']}
-                      wrap={true} minWidth='3cm'/>
-        </Section>
-        <Section label="Morale">
-            <PickMany label="Environmen" values={['attacked by sortie', 'unassigned']}/>
-            <PickOne label='Unit Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
-            <PickOne label='Step Loses' values={[1, 2, 3, 4, 5]}/>
-            <PickOne label='Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
-        </Section>
+        <PickOne label='Firepower1' values={['+', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} onClick={v => {
+            if (v === '+') {
+                setState(prev => ({
+                    ...prev,
+                    [`Firepower${Object.keys(prev).filter(it => it.startsWith('Firepower')).length + 1}`]: undefined,
+                }))
+                return false;
+            }
+        }}/>
+        {Object.keys(state).filter(it => it !== 'Firepower1' && it.startsWith('Firepower')).map(it =>
+            <PickOne key={it} label={it} values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} onClick={v => {
+                if (v === 0) {
+                    setState(prev => {
+                        const next = {...prev};
+                        delete next[it];
+                        const firepowers = Object.entries(next)
+                            .filter(([name, value]) => name.startsWith('Firepower'))
+                            .map(([name, value], index) => ({[`Firepower${index+1}`]: value}))
+                            .reduce((acc,val)=>({...acc,...val}),{})
+                        const rest = Object.entries(next)
+                            .filter(([name, value]) => !name.startsWith('Firepower'))
+                            .reduce((acc,val)=>({...acc,...val}),{})
+                        return {
+                            ...firepowers,
+                            ...rest,
+                        };
+                    })
+                    return false;
+                }
+            }}/>
+        )}
+        <PickOne label='Firerer Type' values={['inf', 'low', 'high', 'mortar', 'arty']}/>
+        <PickMany label='Firerer Env' values={['any sup/par', 'cross fire', 'arty zone', 'smoke']}/>
+        <PickOne label="Target Steps" values={['1-2', '3-4', '5-7', '8-9', '10-12', '13-19', '20+']}/>
+        <PickOne label="Target Terrain" values={['billiard', 'open', 'partly', 'protective']}/>
+        <PickOne label="Target Posture" values={['move', 'fire', 'dug in']}/>
+        <PickMany label="Target Environment"
+                  values={['night', 'illum/twilight', 'road move', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke',
+                      'attacked by sortie', 'unassigned']}
+                  wrap={true} minWidth='3cm'/>
+        <PickOne label='Target Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
+        <PickOne label='Target step Loses' values={[1, 2, 3, 4, 5]}/>
+        <PickOne label='Target Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
     </Context.Provider>
 }
