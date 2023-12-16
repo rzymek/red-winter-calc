@@ -13,6 +13,7 @@ export default defineConfig({
                 name: "TCS Calculator",
                 short_name: 'tcs-calc',
                 description: "TCS Calculator",
+                theme_color: "#FFFFE0",
                 icons: [{
                     src: "pwa-64x64.png",
                     sizes: "64x64",
