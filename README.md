@@ -1,0 +1,1 @@
+![QR Code Link](https://rzymek.github.io/tcs-calc) 
