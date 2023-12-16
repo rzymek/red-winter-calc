@@ -1,1 +1,1 @@
-![QR Code Link](https://rzymek.github.io/tcs-calc) 
+![QR Code Link](./docs/qrcode.svg) 
