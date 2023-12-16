@@ -4,7 +4,7 @@ export type PickProps = {
     label: string,
     wrap?: boolean,
     values: (string | number)[],
-    onClick?(value: string | number): boolean,
+    onClick?(value: string | number): boolean|void,
     minWidth?: string,
 };
 

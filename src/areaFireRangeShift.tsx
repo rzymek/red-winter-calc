@@ -9,7 +9,7 @@ export function areaFireRangeShift(state: Record<string, Value>) {
         high: [+4, +2, +1],
         mortar: [0],
     }
-    return table[type]?.[distance] ?? 0;
+    return table[type as string]?.[distance] ?? 0;
 
     function normalize(distance) {
         if (distance >= 9 || `${distance}`.includes('+')) {

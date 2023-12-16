@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "vite --host",
     "preview": "vite preview",
-    "build": "npm-run-all clean build:*",
+    "build": "npm-run-all clean -p check:* bundle",
+
     "clean": "rm -rf dist",
+    "check:test": "vitest --run",
+    "check:types": "tsc",
+    "bundle": "run-s build:*",
     "build:bundle": "vite build",
-    "build:icons": "pwa-assets-generator --root dist --preset minimal-2023 icon.svg",
-    "build:typecheck": "#tsc"
+    "build:icons": "pwa-assets-generator --root dist --preset minimal-2023 icon.svg"
   },
   "dependencies": {
     "preact": "^10.19.3",
@@ -23,6 +26,7 @@
     "npm-run-all": "^4.1.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
-    "vite-plugin-pwa": "^0.17.4"
+    "vite-plugin-pwa": "^0.17.4",
+    "vitest": "^1.0.4"
   }
 }

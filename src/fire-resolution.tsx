@@ -5,7 +5,7 @@ function infFirepowerDistanceBonus(state: Record<string, Value>): number {
     if (state['Firerer Type'] !== 'inf') {
         return 0;
     }
-    const steps = state['Firerer Steps'] ?? 0;
+    const steps = (state['Firerer Steps'] ?? 0) as number;
     if (state.Distance === 0) {
         return steps;
     }
@@ -21,24 +21,24 @@ function spotingRange(state: Record<string, Value>): number {
         billiard: +2,
         partly: -1,
         protective: -1,
-    }[state['Target Terrain']] ?? 0;
-    let range= baseRange + terrainShift;
+    }[state['Target Terrain'] as string] ?? 0;
+    let range = baseRange + terrainShift;
     const env = (state['Target Environment'] ?? []) as string[];
-    if(env.includes('illum/twilight')) {
+    if (env.includes('illum/twilight')) {
         range += -1;
-    }else if(env.includes('night')) {
+    } else if (env.includes('night')) {
         range += -3;
     }
-    if(env.includes('firing')) {
+    if (env.includes('firing')) {
         range += +4;
     }
-    if(env.includes('road move')) {
+    if (env.includes('road move')) {
         range += +2;
-    }else if(state['Target Posture'] === 'move') {
+    } else if (state['Target Posture'] === 'move') {
         range += +1;
     }
     //firerer dug in
-    if(state['Target Posture'] === 'dug in'){
+    if (state['Target Posture'] === 'dug in') {
         range += -1;
     }
     return range;
@@ -58,21 +58,21 @@ function targetTerrainPosture(state: Record<string, Value>): number {
         partly: [-2, -5, -7],
         protective: [-3, -6, -8]
     }
-    const table = (state.Distance <= spotRange) ? spotted : unspotted;
+    const table = (Number(state.Distance) <= spotRange) ? spotted : unspotted;
     const index = {
-        move:0,
-        fire:1,
-        'dug in':2
+        move: 0,
+        fire: 1,
+        'dug in': 2
     };
-    const row = table[state['Target Terrain']] ?? [];
-    const rowIndex = index[state['Target Posture']];
+    const row = table[state['Target Terrain'] as string] ?? [];
+    const rowIndex = index[state['Target Posture'] as string];
     return row[rowIndex] ?? 0
 }
 
-export function firetable(state: Record<string, Value>) {
+export function fireResolution(state: Record<string, Value>) {
     const baseFirepower = Object.entries(state)
         .map(([name, value]) => name.startsWith('Firepower') ? value : 0)
-        .reduce((a, b) => a + b, 0);
+        .reduce((a: number, b: number) => a + b, 0) as number;
     const spotRange = spotingRange(state);
     const firepower = baseFirepower + infFirepowerDistanceBonus(state);
     const shift = 0
