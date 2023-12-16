@@ -20,6 +20,7 @@
   "dir": "auto",
   "lang": "en-US",
   "name": "TCS Calculator",
+  "description": "TCS Calculator",
   "short_name": "tcs calc",
   "start_url": "https://rzymek.github.io/tcs-calc/",
   "scope": "/tcs-calc/"
