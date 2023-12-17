@@ -49,7 +49,7 @@ export function App() {
             if (v === '+') {
                 setState(prev => ({
                     ...prev,
-                    [`Firepower${Object.keys(prev).filter(it => it.startsWith('Firepower')).length + 1}`]: undefined
+                    [`Firepower${Object.keys(prev).filter(it => it.startsWith('Firepower')).length + 1}`]: 5
                 }))
                 return false;
             }
