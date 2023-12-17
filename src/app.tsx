@@ -6,35 +6,15 @@ import {Context} from "./context.tsx";
 import {PickOne} from "./pickOne.tsx";
 import {PickMany} from "./pickMany.tsx";
 import {range} from 'remeda';
-import {fireTable} from "./firetable.ts";
-
-function rollD(d: number): number {
-    return 1 + Math.floor(Math.random() * d);
-}
-
-function RollAndResolve(props: { firepower: number; spotRange: number; shift: number }) {
-    const [roll, setRoll] = useState<number>(0)
-
-    function rollDice() {
-        setRoll(NaN);
-        setTimeout(() => {
-            setRoll(rollD(6) * 10 + rollD(6));
-        }, 1000);
-    }
-
-    return <div>
-        Column: {fireTable.column(props.firepower)?.label}<br/>
-        Effect: {fireTable.result(props.firepower, roll)}<br/>
-        <button onClick={rollDice}>[{isFinite(roll) ? roll : '...'}]</button>
-    </div>;
-}
+import {RollAndResolve} from "./rollAndResolve.tsx";
+import {RollAndResolveMorale} from "./rollAndResolveMorale.tsx";
 
 export function App() {
     const [state, setState] = useState<Record<string, Value>>({
         Firepower1: 5
     });
     const resolution = fireResolution(state);
-    console.log(state);
+
     return <Context.Provider value={{
         state,
         update: useCallback((v) => {
@@ -99,6 +79,7 @@ export function App() {
         <PickOne label='Target Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
         <PickOne label='Target step Loses' values={[1, 2, 3, 4, 5]}/>
         <PickOne label='Target Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
+        <RollAndResolveMorale state={state}/>
         <pre>
             {JSON.stringify(state, null, ' ')}
         </pre>

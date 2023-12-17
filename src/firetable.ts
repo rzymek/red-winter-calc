@@ -1,4 +1,5 @@
 import {range} from "remeda";
+import {inRange} from "./inRange.ts";
 
 export const rawColumns = [
     0, 1, 2, 3, 4, 5, 6, '7-8', '9-10', '11-13', '14-16', '17-20', '21-25', '26-32', '33-40', '41-50', '51-64', '65-80', '81-100', '101+'
@@ -29,14 +30,6 @@ export const firetable = [
     ['-8 steps', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '66', '66', '65', '64..65'],
     ['-9 steps', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '66', '66'],
 ]
-
-function inRange(rollDef: string, roll: number) {
-    if(rollDef === undefined || !isFinite(roll)) {
-        return false;
-    }
-    const [from, to = from] = rollDef.split(/[.][.]/).map(it => Number(it));
-    return from <= roll && roll <= to;
-}
 
 export const fireTable = {
     column(firepower: number) {
