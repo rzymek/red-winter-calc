@@ -78,10 +78,9 @@ export function fireResolution(state: Record<string, Value>) {
     const shift = 0
         + areaFireRangeShift(state)
         + targetTerrainPosture(state);
-    return JSON.stringify({
+    return {
         firepower,
         shift,
         spotRange,
-        posture: targetTerrainPosture(state)
-    })
+    };
 }

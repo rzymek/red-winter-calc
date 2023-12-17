@@ -10,7 +10,7 @@ export function PickOne(props: PickProps) {
                  selected={[selected]}
                  onClick={(v: string | number) => {
                      if (props.onClick && props.onClick(v) === false) {
-                         return
+                         return;
                      }
                      context.update({[props.label]: selected === v ? undefined : v});
                  }}/>;

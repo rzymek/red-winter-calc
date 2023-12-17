@@ -1,6 +1,6 @@
 import {Value} from "./value.tsx";
 
-export function areaFireRangeShift(state: Record<string, Value>) {
+export function areaFireRangeShift(state: Record<string, Value>): number {
     const type = state['Firerer Type'];
     const distance = normalize(state.Distance)
     const table = {
