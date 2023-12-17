@@ -34,6 +34,7 @@ export function App() {
         Firepower1: 5
     });
     const resolution = fireResolution(state);
+    console.log(state);
     return <Context.Provider value={{
         state,
         update: useCallback((v) => {
@@ -49,7 +50,7 @@ export function App() {
             if (v === '+') {
                 setState(prev => ({
                     ...prev,
-                    [`Firepower${Object.keys(prev).filter(it => it.startsWith('Firepower')).length + 1}`]: 5
+                    [`Firepower${Object.keys(prev).filter(it => it.startsWith('Firepower')).length + 1}`]: undefined
                 }))
                 return false;
             }
@@ -100,8 +101,6 @@ export function App() {
         <PickOne label='Target Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
         <pre>
             {JSON.stringify(state, null, ' ')}
-            ---
-            {JSON.stringify([state['Firerer Type'] === 'inf', Number(state.Distance) <= 1])}
         </pre>
     </Context.Provider>
 }

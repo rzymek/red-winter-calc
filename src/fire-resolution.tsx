@@ -72,6 +72,7 @@ function targetTerrainPosture(state: Record<string, Value>): number {
 export function fireResolution(state: Record<string, Value>) {
     const baseFirepower = Object.entries(state)
         .map(([name, value]) => name.startsWith('Firepower') ? value : 0)
+        .filter(isFinite)
         .reduce((a: number, b: number) => a + b, 0) as number;
     const spotRange = spotingRange(state);
     const firepower = baseFirepower + infFirepowerDistanceBonus(state);

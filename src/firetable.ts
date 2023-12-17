@@ -31,13 +31,20 @@ export const firetable = [
 ]
 
 function inRange(rollDef: string, roll: number) {
+    if(rollDef === undefined || !isFinite(roll)) {
+        return false;
+    }
     const [from, to = from] = rollDef.split(/[.][.]/).map(it => Number(it));
     return from <= roll && roll <= to;
 }
 
 export const fireTable = {
     column(firepower: number) {
-        return columns[Math.min(firepower, 101)];
+        if(isFinite(firepower)) {
+            return columns[Math.min(firepower, 101)];
+        }else{
+            return {index: 0, label: '0'};
+        }
     },
     result(firepower: number, roll: number) {
         const col = this.column(firepower);
