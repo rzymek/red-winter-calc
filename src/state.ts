@@ -55,7 +55,7 @@ export const pickManyDefs = {
     },
     targetEnv: {
         label: "Target Environment",
-        values: ['night', 'illum/twilight', 'road move', 'firing', 'all sup/par',
+        values: ['night', 'illum / twilight', 'road move', 'firing', 'all sup/par',
             'P+2 in hex', 'arty zone', 'smoke', 'attacked by sortie', 'unassigned']
     },
 } as const;
