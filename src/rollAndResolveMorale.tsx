@@ -13,6 +13,8 @@ export function RollAndResolveMorale(props: { state: Record<string, string | num
             Morale roll: {isFinite(roll) && roll}<br/>
             Morale effect: {calculateMorale(props.state, roll)}<br/>
         </div>
-        <Roll2D6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
+        <Roll2D6
+            disabled
+            onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
     </div>;
 }

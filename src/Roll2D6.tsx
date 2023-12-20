@@ -7,6 +7,7 @@ type TDiceRef = {
 };
 
 export function Roll2D6(props: {
+    disabled?: boolean,
     onRoll(result: [number, number]): void
 }) {
     const [result, setResult] = useState<[number, number]>([undefined, undefined])
@@ -22,6 +23,9 @@ export function Roll2D6(props: {
     }, [result]);
 
     function roll2D6() {
+        if (props.disabled) {
+            return;
+        }
         props.onRoll([undefined, undefined]);
         setResult([undefined, undefined]);
         d1.current?.rollDice();
@@ -33,7 +37,8 @@ export function Roll2D6(props: {
         display: 'flex',
         flexDirection: 'row',
         gap: 24,
-        position: 'relative'
+        position: 'relative',
+        opacity: props.disabled ? 0.1 : 1,
     }}>
         <div>
             <Dice ref={d1 as any}
@@ -49,6 +54,7 @@ export function Roll2D6(props: {
                   onRoll={((v: TValue) => setResult(([r,]) => [r, v])) as any}
                   size={size}/>
         </div>
-        <div style={{position: 'absolute', inset: 0, opacity: 0}} onClick={roll2D6}/>
+        <div style={{position: 'absolute', inset: 0, opacity: 0}}
+             onClick={roll2D6}/>
     </div>
 }
