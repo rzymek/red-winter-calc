@@ -1,11 +1,8 @@
 import './app.css'
 import {useCallback, useState} from "preact/compat";
-import {fireResolution} from "./fire-resolution.tsx";
 import {Value} from "./value.tsx";
 import {Context} from "./context.tsx";
-import {PickOne} from "./pickOne.tsx";
-import {PickMany} from "./pickMany.tsx";
-import {range} from 'remeda';
+import {PickManyX, PickOne, PickOneX} from "./pickOne.tsx";
 import {RollAndResolve} from "./rollAndResolve.tsx";
 import {RollAndResolveMorale} from "./rollAndResolveMorale.tsx";
 
@@ -13,7 +10,6 @@ export function App() {
     const [state, setState] = useState<Record<string, Value>>({
         Firepower1: 5
     });
-    const resolution = fireResolution(state);
 
     return <Context.Provider value={{
         state,
@@ -25,7 +21,7 @@ export function App() {
         }, [])
 
     }}>
-        <PickOne label='Distance' values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '13+']}/>
+        <PickOneX field="distance"/>
         <PickOne label='Firepower1' values={['+', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} onClick={v => {
             if (v === '+') {
                 setState(prev => ({
@@ -58,27 +54,23 @@ export function App() {
                 }
             }}/>
         )}
-        <PickOne label='Firerer Type' values={['inf', 'low', 'high', 'mortar', 'arty']}/>
+        <PickOneX field="firererType"/>
         {(state['Firerer Type'] === 'inf' && Number(state.Distance) <= 1) &&
-            <PickOne label='Firerer Steps' values={range(1, 40 + 1)}/>}
+            <PickOneX field="firererSteps"/>}
 
-        <PickMany label='Firerer Env' values={['any sup/par', 'cross fire', 'arty zone', 'smoke']}/>
-        <PickOne label="Target Steps" values={['1-2', '3-4', '5-7', '8-9', '10-12', '13-19', '20+']}/>
-        <PickOne label="Target Terrain" values={['billiard', 'open', 'partly', 'protective']}/>
-        <PickOne label="Target Posture" values={['move', 'fire', 'dug in']}/>
-        <PickMany label="Target Environment"
-                  values={['night', 'illum/twilight', 'road move', 'firing', 'all sup/par', 'P+2 in hex', 'arty zone', 'smoke',
-                      'attacked by sortie', 'unassigned']}
-                  wrap={true} minWidth='3cm'/>
-        <div>
-            Spotting range: {resolution.spotRange}<br/>
-            Firepower: {resolution.firepower}<br/>
-            Shift: {resolution.shift}<br/>
-            <RollAndResolve {...resolution}/>
-        </div>
-        <PickOne label='Target Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
-        <PickOne label='Target step Loses' values={[1, 2, 3, 4, 5]}/>
-        <PickOne label='Target Bn Morale' values={[1, 2, 3, 4, 5, 6, 7, 8, 9]}/>
+        <PickOneX field="firererType"/>
+
+        <PickManyX field="firererEnv"/>
+        <PickOneX field="targetSteps"/>
+        <PickOneX field="targetTerrain"/>
+        <PickOneX field="targetPosture"/>
+        <PickManyX field="targetEnv" wrap={true} minWidth='3cm'/>
+
+        <RollAndResolve state={state}/>
+
+        <PickOneX field="targetMorale"/>
+        <PickOneX field="targetStepLoses"/>
+        <PickOneX field="targetBnMorale"/>
         <RollAndResolveMorale state={state}/>
         <pre>
             {JSON.stringify(state, null, ' ')}
