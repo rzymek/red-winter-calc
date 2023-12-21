@@ -11,7 +11,7 @@ const table: string[][] = [
 ];
 
 export function effectiveMorale(state: State): number {
-    let base = (state.targetMorale ?? 0)
+    let base = (state.targetMorale ?? NaN)
         + (state.targetStepLoses ?? 0)
         + (state.targetBnMorale ?? 0)
     const env = state.targetEnv;

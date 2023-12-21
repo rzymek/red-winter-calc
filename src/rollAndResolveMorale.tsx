@@ -3,7 +3,10 @@ import {calculateMorale, effectiveMorale} from "./morale.ts";
 import {Roll2D6} from "./Roll2D6.tsx";
 import {State} from "./state.ts";
 
-export function RollAndResolveMorale(props: { state: State }) {
+export function RollAndResolveMorale(props: {
+    state: State,
+    disabled?: boolean,
+}) {
     const [roll, setRoll] = useState<number>(0)
 
     return <div style={{
@@ -13,6 +16,7 @@ export function RollAndResolveMorale(props: { state: State }) {
         <div style={{
             flex: 1,
             display: 'flex',
+            paddingLeft: 5,
             justifyContent: 'center',
             flexDirection: 'column',
         }}>
@@ -23,6 +27,7 @@ export function RollAndResolveMorale(props: { state: State }) {
             </span>
         </div>
         <Roll2D6
+            disabled={props.disabled}
             onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
     </div>;
 }

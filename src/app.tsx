@@ -7,9 +7,11 @@ import {RollAndResolveMorale} from "./rollAndResolveMorale.tsx";
 import {initialState, State} from "./state.ts";
 import {PickMany} from "./pickMany.tsx";
 import {isDefined} from "remeda";
+import {FireResolutionResult} from "./firetable.ts";
 
 export function App() {
     const [state, setState] = useState<State>(initialState);
+    const [result, setResult] = useState<FireResolutionResult>()
 
     return <Context.Provider value={{
         state,
@@ -35,11 +37,12 @@ export function App() {
         <PickOne field="targetPosture"/>
         <PickMany field="targetEnv" wrap={true} minWidth='2cm'/>
 
-        <RollAndResolve state={state}/>
+        <RollAndResolve state={state} onResult={setResult}/>
 
         <PickOne field="targetMorale"/>
         <PickOne field="targetStepLoses"/>
         <PickOne field="targetBnMorale"/>
-        <RollAndResolveMorale state={state}/>
+
+        <RollAndResolveMorale state={state} disabled={result === undefined || result === 'No Effect'}/>
     </Context.Provider>
 }

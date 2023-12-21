@@ -29,7 +29,7 @@ export const firetable = [
     ['-7 steps', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '66', '66', '65', '65', '63..64', '61..63'],
     ['-8 steps', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '66', '66', '65', '64..65'],
     ['-9 steps', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '66', '66'],
-]
+] as const;
 
 export const fireTable = {
     column(firepower: number) {
@@ -46,3 +46,5 @@ export const fireTable = {
         return result;
     }
 }
+
+export type FireResolutionResult = ReturnType<typeof fireTable["result"]>
