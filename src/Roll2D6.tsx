@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "preact/compat";
 import Dice from "react-dice-roll";
 import {TValue} from "react-dice-roll/dist/_types";
+import {isDefined} from "remeda";
 
 type TDiceRef = {
     rollDice: (value?: TValue) => void;
@@ -10,15 +11,15 @@ export function Roll2D6(props: {
     disabled?: boolean,
     onRoll(result: [number, number]): void
 }) {
-    const [result, setResult] = useState<[number, number]>([undefined, undefined])
+    const [result, setResult] = useState<[number | undefined, number | undefined]>([undefined, undefined])
     const size = 64;
     const faceBg = '#ffffff'
     const d1 = useRef<TDiceRef>();
     const d2 = useRef<TDiceRef>();
 
     useEffect(() => {
-        if (result.every(isFinite)) {
-            props.onRoll(result);
+        if (result.every(isDefined)) {
+            props.onRoll(result as [number, number]);
         }
     }, [result]);
 
@@ -26,7 +27,7 @@ export function Roll2D6(props: {
         if (props.disabled) {
             return;
         }
-        props.onRoll([undefined, undefined]);
+        props.onRoll([NaN,NaN]);
         setResult([undefined, undefined]);
         d1.current?.rollDice();
         setTimeout(() => d2.current?.rollDice(), 100);

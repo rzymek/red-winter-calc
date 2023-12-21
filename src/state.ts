@@ -7,13 +7,13 @@ export function firepowerDef(index: number) {
             index == 0 ? '+' : 0,
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10
         ],
-    }
+    } as const
 };
 
 export const pickOneDefs = {
     distance: {
         label: 'Distance',
-        values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, '13+']
+        values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     },
     firererType: {
         label: 'Firerer Type',
@@ -67,9 +67,15 @@ export type SingleSelectionFields = keyof TPickOne;
 export type MultipleSelectionFields = keyof TPickMany;
 
 export type State = {
-    [key in SingleSelectionFields]: TPickOne[key]['values'][number] | undefined
+    [key in SingleSelectionFields]?: TPickOne[key]['values'][number]
 } & {
     [key in MultipleSelectionFields]: TPickMany[key]['values'][number][]
 } & {
-    firepower: number[]
+    firepower: (number|undefined)[]
+};
+
+export const initialState:State = {
+    firepower: [undefined],
+    firererEnv: [],
+    targetEnv: [],
 }

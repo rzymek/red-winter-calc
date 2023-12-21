@@ -1,29 +1,39 @@
 import {Pick, PickProps} from "./pick.tsx";
 import {useContext} from "preact/compat";
 import {Context} from "./context.tsx";
-import {MultipleSelectionFields, pickManyDefs, pickOneDefs, SingleSelectionFields} from "./state.ts";
-import {PickMany} from "./pickMany.tsx";
+import {firepowerDef, pickOneDefs, SingleSelectionFields} from "./state.ts";
 
-export function PickOne(props: PickProps) {
+export function PickOne(props: PickProps & { field: SingleSelectionFields }) {
     const context = useContext(Context);
-    const selected = context.state[props.label] as (string | number);
+    const {label, values} = pickOneDefs[props.field];
+    const selected = context.state[props.field];
 
     return <Pick {...props}
+                 label={label}
+                 values={values}
                  selected={[selected]}
                  onClick={(v: string | number) => {
-                     if (props.onClick && props.onClick(v) === false) {
-                         return;
-                     }
-                     context.update({[props.label]: selected === v ? undefined : v});
+                     context.update({[props.field]: selected === v ? undefined : v});
                  }}/>;
 }
 
-export function PickOneX(props: { field: SingleSelectionFields }) {
-    const {label, values} = pickOneDefs[props.field];
-    return <PickOne label={label} values={values as (string | number)[]}/>
-}
-
-export function PickManyX(props: { field: MultipleSelectionFields } & Partial<PickProps>) {
-    const {label, values} = pickManyDefs[props.field];
-    return <PickMany label={label} values={values as any} {...props}/>
+export function PickFirepower(props: PickProps & { index: number }) {
+    const context = useContext(Context);
+    const {label, values} = firepowerDef(props.index);
+    const selected = context.state.firepower[props.index];
+    return <Pick {...props}
+                 label={label}
+                 values={values}
+                 selected={[selected]}
+                 onClick={(v: '+' | number) => {
+                     const firepower = [...context.state.firepower];
+                     if (v === '+') {
+                         firepower.push(undefined);
+                     } else if (v > 0) {
+                         firepower[props.index] = v;
+                     } else if (v === 0) {
+                         firepower.splice(props.index, 1);
+                     }
+                     context.update({firepower});
+                 }}/>;
 }

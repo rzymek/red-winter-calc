@@ -1,16 +1,15 @@
 import {ToggleButton} from "./toggleButton.tsx";
 
 export type PickProps = {
-    label: string,
     wrap?: boolean,
-    values: (string | number)[],
-    onClick?(value: string | number): boolean|void,
     minWidth?: string,
 };
 
-export function Pick(props: PickProps & {
-    selected: (string | number)[],
-    onClick(v: string | number): void
+export function Pick<T extends string|number>(props: PickProps & {
+    label: string,
+    values: readonly T[],
+    selected: readonly (T|undefined)[],
+    onClick(v: T): void
 }) {
     return <div style={{
         border: 'solid 1px black',

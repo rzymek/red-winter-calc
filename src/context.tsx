@@ -1,7 +1,7 @@
 import {createContext} from "preact/compat";
-import {Value} from "./value.tsx";
+import {State} from "./state.ts";
 
 export const Context = createContext<{
-    state: Record<string, Value>,
-    update(v: Record<string, Value>): void
+    state: State,
+    update(v: Partial<State>): void
 }>(null as any);

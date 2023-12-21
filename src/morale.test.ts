@@ -18,8 +18,6 @@ describe('morale', () => {
     });
     it('undefined', () => {
         expect(morale(NaN, 11)).toBeUndefined();
-        expect(morale(undefined as number, 11)).toBeUndefined();
         expect(morale(1, NaN)).toBeUndefined();
-        expect(morale(1, NaN as undefined)).toBeUndefined();
     })
 })

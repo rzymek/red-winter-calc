@@ -1,30 +1,36 @@
-import {Value} from "./value.tsx";
 import {areaFireRangeShift} from "./areaFireRangeShift.tsx";
+import {State} from "./state.ts";
+import {isDefined} from "remeda";
 
-function infFirepowerDistanceBonus(state: Record<string, Value>): number {
-    if (state['Firerer Type'] !== 'inf') {
+function infFirepowerDistanceBonus(state: State): number {
+    if (state.firererType !== 'inf') {
         return 0;
     }
-    const steps = (state['Firerer Steps'] ?? 0) as number;
-    if (state.Distance === 0) {
+    const steps = state.firererSteps ?? 0;
+    if (state.distance === 0) {
         return steps;
     }
-    if (state.Distance === 1) {
+    if (state.distance === 1) {
         return Math.round(steps / 2);
     }
     return 0;
 }
 
-function spotingRange(state: Record<string, Value>): number {
+function spottingRange(state: State): number {
+    if(state.targetTerrain === undefined) {
+        return Infinity;
+    }
     let baseRange = 3;
-    const terrainShift = {
+    const table = {
         billiard: +2,
+        open: 0,
         partly: -1,
         protective: -1,
-    }[state['Target Terrain'] as string] ?? 0;
+    } as const;
+    const terrainShift = table[state.targetTerrain];
     let range = baseRange + terrainShift;
-    const env = (state['Target Environment'] ?? []) as string[];
-    if (env.includes('illum/twilight')) {
+    const env = state.targetEnv
+    if (env.includes('illum / twilight')) {
         range += -1;
     } else if (env.includes('night')) {
         range += -3;
@@ -34,18 +40,21 @@ function spotingRange(state: Record<string, Value>): number {
     }
     if (env.includes('road move')) {
         range += +2;
-    } else if (state['Target Posture'] === 'move') {
+    } else if (state.targetPosture === 'move') {
         range += +1;
     }
-    //firerer dug in
-    if (state['Target Posture'] === 'dug in') {
+    //TODO: firerer dug in
+    if (state.targetPosture === 'dug in') {
         range += -1;
     }
     return range;
 }
 
-function targetTerrainPosture(state: Record<string, Value>): number {
-    const spotRange = spotingRange(state);
+function targetTerrainPosture(state: State): number {
+    if(state.targetTerrain === undefined || state.targetPosture === undefined) {
+        return 0;
+    }
+    const spotRange = spottingRange(state);
     const spotted = {
         billiard: [+4, +2, -1],
         open: [+2, 0, -2],
@@ -58,23 +67,21 @@ function targetTerrainPosture(state: Record<string, Value>): number {
         partly: [-2, -5, -7],
         protective: [-3, -6, -8]
     }
-    const table = (Number(state.Distance) <= spotRange) ? spotted : unspotted;
+    const table = (Number(state.distance) <= spotRange) ? spotted : unspotted;
     const index = {
         move: 0,
         fire: 1,
         'dug in': 2
     };
-    const row = table[state['Target Terrain'] as string] ?? [];
-    const rowIndex = index[state['Target Posture'] as string];
+    const row = table[state.targetTerrain];
+    const rowIndex = index[state.targetPosture];
     return row[rowIndex] ?? 0
 }
 
-export function fireResolution(state: Record<string, Value>) {
-    const baseFirepower = Object.entries(state)
-        .map(([name, value]) => name.startsWith('Firepower') ? value : 0)
-        .filter(isFinite)
+export function fireResolution(state: State) {
+    const baseFirepower = state.firepower.filter(isDefined)
         .reduce((a: number, b: number) => a + b, 0) as number;
-    const spotRange = spotingRange(state);
+    const spotRange = spottingRange(state);
     const firepower = baseFirepower + infFirepowerDistanceBonus(state);
     const shift = 0
         + areaFireRangeShift(state)

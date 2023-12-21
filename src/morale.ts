@@ -1,5 +1,6 @@
 import {inRange} from "./inRange.ts";
-import {Value} from "./value.tsx";
+import {State} from "./state.ts";
+import {isDefined} from "remeda";
 
 const table: string[][] = [
     ['No Effect', '11..53', '11..46', '11..41', '11..33', '11..25', '11..21', '11..14', '11'],
@@ -9,14 +10,14 @@ const table: string[][] = [
     ['Surrender', '', '', '', '', '', '', '66', '65..66', '64..66', '62..66', '54..66', '46..66', '42..66'],
 ];
 
-function effectiveMorale(state: Record<string, Value>): number {
-    let base = Number(state['Target Morale'] ?? 0)
-        + Number(state['Target step Loses'] ?? 0)
-        + Number(state['Target Bn Morale'] ?? 0)
-    const env = (state['Target Environment'] ?? []) as string[];
-    const fireEnv = (state['Firerer Env'] ?? []) as string[];
-    const posture = state['Target Posture'] as string;
-    const terrain = state['Target Terrain'] as string;
+export function effectiveMorale(state: State): number {
+    let base = (state.targetMorale ?? 0)
+        + (state.targetStepLoses ?? 0)
+        + (state.targetBnMorale ?? 0)
+    const env = state.targetEnv;
+    const fireEnv = state.firererEnv;
+    const posture = state.targetPosture;
+    const terrain = state.targetTerrain;
     if (env.includes('arty zone')) {
         base += +2;
     }
@@ -35,7 +36,7 @@ function effectiveMorale(state: Record<string, Value>): number {
     if (fireEnv.includes("cross fire")) {
         base += +2;
     }
-    if (['partly', 'protective'].includes(terrain)) {
+    if (isDefined(terrain) && ['partly', 'protective'].includes(terrain)) {
         base += -1;
     }
     // no low
@@ -51,6 +52,6 @@ export function morale(morale: number, roll: number): string {
     return result;
 }
 
-export function calculateMorale(state: Record<string, Value>, roll: number) {
+export function calculateMorale(state: State, roll: number) {
     return morale(effectiveMorale(state), roll);
 }
