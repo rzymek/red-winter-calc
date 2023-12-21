@@ -58,8 +58,6 @@ export function App() {
         {(state['Firerer Type'] === 'inf' && Number(state.Distance) <= 1) &&
             <PickOneX field="firererSteps"/>}
 
-        <PickOneX field="firererType"/>
-
         <PickManyX field="firererEnv"/>
         <PickOneX field="targetSteps"/>
         <PickOneX field="targetTerrain"/>
