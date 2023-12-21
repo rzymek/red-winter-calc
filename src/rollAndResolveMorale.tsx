@@ -9,6 +9,7 @@ export function RollAndResolveMorale(props: {
 }) {
     const [roll, setRoll] = useState<number>(0)
 
+    const morale = effectiveMorale(props.state);
     return <div style={{
         display: 'flex',
         flexDirection: 'row',
@@ -21,7 +22,7 @@ export function RollAndResolveMorale(props: {
             flexDirection: 'column',
         }}>
             <span>
-                Effective morale: {effectiveMorale(props.state)}<br/>
+                Effective morale: {isFinite(morale) && morale}<br/>
                 Morale roll: {isFinite(roll) && roll}<br/>
                 Effect: <b>{calculateMorale(props.state, roll)}</b>
             </span>
