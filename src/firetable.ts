@@ -1,21 +1,9 @@
-import {isString} from "remeda";
+import {groupBy, isString, mapValues, pipe, range} from "remeda";
 import {inRange} from "./inRange.ts";
 
 export const rawColumns = [
     0, 1, 2, 3, 4, 5, 6, '7-8', '9-10', '11-13', '14-16', '17-20', '21-25', '26-32', '33-40', '41-50', '51-64', '65-80', '81-100', '101+'
 ] as const;
-// export const columns: {
-//     [firepower: number]: { index: number; label: string }
-// } = rawColumns.flatMap((label, index) => {
-//     if (label === '101+') {
-//         return {101: {label, index}}
-//     } else if (typeof (label) === 'string') {
-//         const [from, to]: number[] = label.split(/[-+]/).map(it => Number(it))
-//         return range(from, to + 1).map(it => ({[it]: {label, index}}))
-//     } else {
-//         return {[label]: {label: `${label}`, index}};
-//     }
-// }).reduce((res, it) => ({...res, ...it}), {});
 
 export const firetable = [
     ['No Effect', '11..53', '11..51', '11..45', '11..43', '11..41', '11..35', '11..33', '11..26', '11..24', '11..22', '11..16', '11..14', '11..12'],
@@ -50,6 +38,18 @@ export const fireTable = {
             index: effectiveIndex,
             label: String(rawColumns[effectiveIndex])
         }
+    },
+    probability(column: number) {
+        const resultsForRolls = range(1, 6 + 1).flatMap(d1 => range(1, 6 + 1).map(d2 => {
+            const roll = d1 * 10 + d2;
+            const [result] = firetable.find(([, ...rols]) => inRange(rols[column], roll)) ?? firetable[0]
+            return result;
+        }))
+        return pipe(
+            resultsForRolls,
+            groupBy(effect => effect),
+            mapValues(arr => (100 * arr.length / resultsForRolls.length).toFixed()+'%')
+        )
     },
     result(resolution: { firepower: number, shift: number }, roll: number) {
         const col = this.column(resolution);

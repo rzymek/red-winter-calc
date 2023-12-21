@@ -15,17 +15,18 @@ export function RollAndResolve(props: {
     useEffect(() => {
         props.onResult(result);
     }, [result]);
-    return <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-    }}>
+    return <>
         <div style={{
-            flex: 1,
             display: 'flex',
-            paddingLeft: 5,
-            justifyContent: 'center',
-            flexDirection: 'column',
+            flexDirection: 'row',
         }}>
+            <div style={{
+                flex: 1,
+                display: 'flex',
+                paddingLeft: 5,
+                justifyContent: 'center',
+                flexDirection: 'column',
+            }}>
             <span>
             Spotting range: {resolution.spotRange}<br/>
             Firepower: {resolution.firepower}<br/>
@@ -33,7 +34,11 @@ export function RollAndResolve(props: {
             Column: {fireTable.column(resolution)?.label}<br/>
             Effect: <b>{result}</b>
             </span>
+            </div>
+            <Roll2D6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
         </div>
-        <Roll2D6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
-    </div>;
+        <pre>
+            {JSON.stringify(fireTable.probability(fireTable.column(resolution).index), null, ' ')}
+        </pre>
+    </>;
 }
