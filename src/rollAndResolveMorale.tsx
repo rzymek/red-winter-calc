@@ -10,6 +10,7 @@ export function RollAndResolveMorale(props: { state: Record<string, string | num
         flexDirection: 'row',
     }}>
         <div style={{flex: 1}}>
+            Effective morale:<br/>
             Morale roll: {isFinite(roll) && roll}<br/>
             Morale effect: {calculateMorale(props.state, roll)}<br/>
         </div>
