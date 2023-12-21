@@ -17,10 +17,10 @@ function infFirepowerDistanceBonus(state: State): number {
 }
 
 function spottingRange(state: State): number {
-    if(state.targetTerrain === undefined) {
+    if (state.targetTerrain === undefined) {
         return Infinity;
     }
-    let baseRange = 3;
+    const baseRange = 3;
     const table = {
         billiard: +2,
         open: 0,
@@ -51,7 +51,7 @@ function spottingRange(state: State): number {
 }
 
 function targetTerrainPosture(state: State): number {
-    if(state.targetTerrain === undefined || state.targetPosture === undefined) {
+    if (state.targetTerrain === undefined || state.targetPosture === undefined) {
         return 0;
     }
     const spotRange = spottingRange(state);
@@ -78,6 +78,44 @@ function targetTerrainPosture(state: State): number {
     return row[rowIndex] ?? 0
 }
 
+function otherModifiers(state: State) {
+    let shift = 0;
+    if(state.targetEnv.includes('night')) {
+        shift += -2;
+    }
+    if(state.targetEnv.includes('illum / twilight')) {
+        shift += -1;
+    }
+    if(state.targetEnv.includes('road move')) {
+        shift += +2;
+    }
+    if(state.targetEnv.includes('all sup/par')) {
+        shift += -1;
+    }
+    if(state.targetEnv.includes('P+2 in hex')) {
+        shift += -2;
+    }
+    if(state.firererEnv.includes('any sup/par')) {
+        shift += -2;
+    }
+    if(state.firererEnv.includes('cross fire')) {
+        shift += +4;
+    }
+    if(state.firererEnv.includes('arty zone')) {
+        shift += -2;
+    }
+    if(state.targetEnv.includes('arty zone')) {
+        shift += -2;
+    }
+    if(state.firererEnv.includes('smoke')) {
+        shift += -1;
+    }
+    if(state.targetEnv.includes('smoke')) {
+        shift += -1;
+    }
+    return shift;
+}
+
 export function fireResolution(state: State) {
     const baseFirepower = state.firepower.filter(isDefined)
         .reduce((a: number, b: number) => a + b, 0) as number;
@@ -85,7 +123,8 @@ export function fireResolution(state: State) {
     const firepower = baseFirepower + infFirepowerDistanceBonus(state);
     const shift = 0
         + areaFireRangeShift(state)
-        + targetTerrainPosture(state);
+        + targetTerrainPosture(state)
+        + otherModifiers(state);
     return {
         firepower,
         shift,

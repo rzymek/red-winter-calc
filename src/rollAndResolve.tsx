@@ -11,7 +11,7 @@ export function RollAndResolve(props: {
     const [roll, setRoll] = useState<number>(NaN);
     const resolution = fireResolution(props.state);
 
-    const result = isFinite(roll) ? fireTable.result(resolution.firepower, roll) : undefined;
+    const result = isFinite(roll) ? fireTable.result(resolution, roll) : undefined;
     useEffect(() => {
         props.onResult(result);
     }, [result]);
@@ -30,7 +30,7 @@ export function RollAndResolve(props: {
             Spotting range: {resolution.spotRange}<br/>
             Firepower: {resolution.firepower}<br/>
             Shift: {resolution.shift}<br/>
-            Column: {fireTable.column(resolution.firepower)?.label}<br/>
+            Column: {fireTable.column(resolution)?.label}<br/>
             Effect: <b>{result}</b>
             </span>
         </div>

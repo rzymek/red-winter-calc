@@ -1,21 +1,21 @@
-import {range} from "remeda";
+import {isString} from "remeda";
 import {inRange} from "./inRange.ts";
 
 export const rawColumns = [
     0, 1, 2, 3, 4, 5, 6, '7-8', '9-10', '11-13', '14-16', '17-20', '21-25', '26-32', '33-40', '41-50', '51-64', '65-80', '81-100', '101+'
-];
-export const columns: {
-    [firepower: number]: { index: number; label: string }
-} = rawColumns.flatMap((label, index) => {
-    if (label === '101+') {
-        return {101: {label, index}}
-    } else if (typeof (label) === 'string') {
-        const [from, to]: number[] = label.split(/[-+]/).map(it => Number(it))
-        return range(from, to + 1).map(it => ({[it]: {label, index}}))
-    } else {
-        return {[label]: {label: `${label}`, index}};
-    }
-}).reduce((res, it) => ({...res, ...it}), {});
+] as const;
+// export const columns: {
+//     [firepower: number]: { index: number; label: string }
+// } = rawColumns.flatMap((label, index) => {
+//     if (label === '101+') {
+//         return {101: {label, index}}
+//     } else if (typeof (label) === 'string') {
+//         const [from, to]: number[] = label.split(/[-+]/).map(it => Number(it))
+//         return range(from, to + 1).map(it => ({[it]: {label, index}}))
+//     } else {
+//         return {[label]: {label: `${label}`, index}};
+//     }
+// }).reduce((res, it) => ({...res, ...it}), {});
 
 export const firetable = [
     ['No Effect', '11..53', '11..51', '11..45', '11..43', '11..41', '11..35', '11..33', '11..26', '11..24', '11..22', '11..16', '11..14', '11..12'],
@@ -32,15 +32,27 @@ export const firetable = [
 ] as const;
 
 export const fireTable = {
-    column(firepower: number) {
-        if(isFinite(firepower)) {
-            return columns[Math.min(firepower, 101)];
-        }else{
-            return {index: 0, label: '0'};
+    column(resolution: { firepower: number, shift: number }) {
+        const index = rawColumns.findIndex(colDef => {
+            if (colDef === resolution.firepower) {
+                return true;
+            } else if (isString(colDef)) {
+                const [from, to = Infinity] = colDef.split(/[-+]/)
+                    .filter(v => v !== '')
+                    .map(it => Number(it));
+                return from <= resolution.firepower && resolution.firepower <= to;
+            } else {
+                return false;
+            }
+        });
+        const effectiveIndex = Math.min(index + resolution.shift, rawColumns.length - 1)
+        return {
+            index: effectiveIndex,
+            label: String(rawColumns[effectiveIndex])
         }
     },
-    result(firepower: number, roll: number) {
-        const col = this.column(firepower);
+    result(resolution: { firepower: number, shift: number }, roll: number) {
+        const col = this.column(resolution);
         const row = firetable.find(([, ...rols]) => inRange(rols[col.index], roll)) ?? firetable[0]
         const result = row[0]
         return result;
