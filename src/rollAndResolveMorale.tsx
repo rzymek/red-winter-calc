@@ -5,7 +5,6 @@ import {Input2d6} from "./Input2d6.tsx";
 
 export function RollAndResolveMorale(props: {
     state: State,
-    disabled?: boolean,
 }) {
     const [roll, setRoll] = useState<number>(33)
 
@@ -27,8 +26,6 @@ export function RollAndResolveMorale(props: {
                 Effect: <b>{calculateMorale(props.state, roll)}</b>
             </span>
         </div>
-        <Input2d6
-            disabled={props.disabled}
-            onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
+        <Input2d6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
     </div>;
 }

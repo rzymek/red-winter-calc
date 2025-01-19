@@ -24,7 +24,7 @@ function transition(prev: State, next: State) {
 export function App() {
     const [state, setState] = useState<State>(initialState);
     const [result, setResult] = useState<FireResolutionResult>()
-
+    const rollForMorale = result !== undefined && result !== 'No Effect';
     return <Context.Provider value={{
         state,
         update: useCallback((v) => {
@@ -47,16 +47,18 @@ export function App() {
         <PickOne field="targetSteps"/>
         <PickOne field="targetTerrain"/>
         <PickOne field="targetPosture"/>
-        <PickOne field="extraShift"/>
         <PickMany field="targetEnv" wrap={true} minWidth='2cm'/>
+        <PickOne field="extraShift"/>
 
         <RollAndResolve state={state} onResult={setResult}/>
 
-        <PickOne field="targetMorale"/>
-        <PickOne field="targetStepLoses"/>
-        <PickOne field="targetBnMorale"/>
+        {rollForMorale && <>
+            <PickOne field="targetMorale"/>
+            <PickOne field="targetStepLoses"/>
+            <PickOne field="targetBnMorale"/>
 
-        <RollAndResolveMorale state={state} disabled={result === undefined || result === 'No Effect'}/>
+            <RollAndResolveMorale state={state}/>
+        </>}
         <Dbg state={state}/>
     </Context.Provider>
 }

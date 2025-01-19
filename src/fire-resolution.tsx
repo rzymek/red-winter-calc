@@ -38,7 +38,7 @@ function spottingRange(state: State): number {
     if (env.includes('firing')) {
         range += +4;
     }
-    if (env.includes('road move')) {
+    if (env.includes('road move') && state.firererEnv.includes('overwatch')) {
         range += +2;
     } else if (state.targetPosture === 'move') {
         range += +1;
@@ -86,7 +86,7 @@ function otherModifiers(state: State) {
     if (state.targetEnv.includes('illum / twilight') && state.firererType !== 'arty') {
         shift += -1;
     }
-    if (state.targetEnv.includes('road move') && (state.firererEnv.includes('overwatch') || state.firererType !== 'arty')) {
+    if (state.targetEnv.includes('road move') && (state.firererEnv.includes('overwatch') || state.firererType === 'arty')) {
         shift += +2;
     }
     if (state.targetEnv.includes('all sup/par') && state.distance !== 0) {
@@ -98,7 +98,7 @@ function otherModifiers(state: State) {
     if (state.firererEnv.includes('any sup/par')) {
         shift += -2;
     }
-    if (state.firererEnv.includes('cross fire')) {
+    if (state.firererEnv.includes('cross fire') && state.distance !== 0 && includesLowTrajectory(state)) {
         shift += +4;
     }
     if (state.firererEnv.includes('arty zone')) {
