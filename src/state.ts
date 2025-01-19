@@ -60,8 +60,8 @@ export const pickManyDefs = {
     },
 } as const;
 
-type TPickOne = typeof pickOneDefs;
-type TPickMany = typeof pickManyDefs;
+export type TPickOne = typeof pickOneDefs;
+export type TPickMany = typeof pickManyDefs;
 
 export type SingleSelectionFields = keyof TPickOne;
 export type MultipleSelectionFields = keyof TPickMany;
@@ -71,10 +71,10 @@ export type State = {
 } & {
     [key in MultipleSelectionFields]: TPickMany[key]['values'][number][]
 } & {
-    firepower: (number|undefined)[]
+    firepower: (number | undefined)[]
 };
 
-export const initialState:State = {
+export const initialState: State = {
     firepower: [undefined],
     firererEnv: [],
     targetEnv: [],

@@ -9,6 +9,26 @@ import {PickMany} from "./pickMany.tsx";
 import {isDefined} from "remeda";
 import {FireResolutionResult} from "./firetable.ts";
 
+
+function drop<T>(array: T[], value: T) {
+    const idx = array.indexOf(value);
+    if (idx !== -1) {
+        array.splice(idx, 1);
+    }
+}
+
+
+function transition(prev: State, next: State) {
+    if (next.targetEnv.includes('night') && next.targetEnv.includes('illum / twilight')) {
+        if (prev.targetEnv.includes('night')) {
+            drop(next.targetEnv, 'night');
+        } else if (prev.targetEnv.includes('illum / twilight')) {
+            drop(next.targetEnv, 'illum / twilight');
+        }
+    }
+    return next;
+}
+
 export function App() {
     const [state, setState] = useState<State>(initialState);
     const [result, setResult] = useState<FireResolutionResult>()
@@ -16,7 +36,7 @@ export function App() {
     return <Context.Provider value={{
         state,
         update: useCallback((v) => {
-            setState(prev => ({
+            setState(prev => transition(prev, {
                 ...prev,
                 ...v
             }))
@@ -24,7 +44,7 @@ export function App() {
 
     }}>
         <PickOne field="distance"/>
-        {state.firepower.map((_,idx) =>
+        {state.firepower.map((_, idx) =>
             <PickFirepower index={idx} key={idx}/>
         )}
         <PickOne field="firererType"/>

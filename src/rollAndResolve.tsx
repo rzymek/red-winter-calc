@@ -38,7 +38,8 @@ export function RollAndResolve(props: {
             <Roll2D6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
         </div>
         <pre>
-            {JSON.stringify(fireTable.probability(fireTable.column(resolution).index), null, ' ')}
+            {JSON.stringify(resolution.dbg, null, 1).replace(/"/g, '')}
+            {JSON.stringify(fireTable.probability(fireTable.column(resolution).index), null, 1).replace(/"/g, '')}
         </pre>
     </>;
 }

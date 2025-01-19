@@ -1,5 +1,5 @@
 import {areaFireRangeShift} from "./areaFireRangeShift.tsx";
-import {State} from "./state.ts";
+import {State, TPickMany, TPickOne} from "./state.ts";
 import {isDefined} from "remeda";
 
 function infFirepowerDistanceBonus(state: State): number {
@@ -80,40 +80,76 @@ function targetTerrainPosture(state: State): number {
 
 function otherModifiers(state: State) {
     let shift = 0;
-    if(state.targetEnv.includes('night')) {
+    if (state.targetEnv.includes('night')) {
         shift += -2;
     }
-    if(state.targetEnv.includes('illum / twilight')) {
+    if (state.targetEnv.includes('illum / twilight')) {
         shift += -1;
     }
-    if(state.targetEnv.includes('road move')) {
+    if (state.targetEnv.includes('road move')) {
         shift += +2;
     }
-    if(state.targetEnv.includes('all sup/par')) {
+    if (state.targetEnv.includes('all sup/par')) {
         shift += -1;
     }
-    if(state.targetEnv.includes('P+2 in hex')) {
+    if (state.targetEnv.includes('P+2 in hex')) {
         shift += -2;
     }
-    if(state.firererEnv.includes('any sup/par')) {
+    if (state.firererEnv.includes('any sup/par')) {
         shift += -2;
     }
-    if(state.firererEnv.includes('cross fire')) {
+    if (state.firererEnv.includes('cross fire')) {
         shift += +4;
     }
-    if(state.firererEnv.includes('arty zone')) {
+    if (state.firererEnv.includes('arty zone')) {
         shift += -2;
     }
-    if(state.targetEnv.includes('arty zone')) {
+    if (state.targetEnv.includes('arty zone')) {
         shift += -2;
     }
-    if(state.firererEnv.includes('smoke')) {
+    if (state.firererEnv.includes('smoke')) {
         shift += -1;
     }
-    if(state.targetEnv.includes('smoke')) {
+    if (state.targetEnv.includes('smoke')) {
         shift += -1;
     }
     return shift;
+}
+
+function includesLowTrajectory(state: {
+    distance?: TPickOne["distance"]["values"][number];
+    firererType?: TPickOne["firererType"]["values"][number];
+    firererSteps?: TPickOne["firererSteps"]["values"][number];
+    targetSteps?: TPickOne["targetSteps"]["values"][number];
+    targetTerrain?: TPickOne["targetTerrain"]["values"][number];
+    targetPosture?: TPickOne["targetPosture"]["values"][number];
+    targetMorale?: TPickOne["targetMorale"]["values"][number];
+    targetStepLoses?: TPickOne["targetStepLoses"]["values"][number];
+    targetBnMorale?: TPickOne["targetBnMorale"]["values"][number]
+} & {
+    firererEnv: TPickMany["firererEnv"]["values"][number][];
+    targetEnv: TPickMany["targetEnv"]["values"][number][]
+} & { firepower: (number | undefined)[] }) {
+    return state.firererType === 'inf' || state.firererType === 'low';
+}
+
+function areaTargetStacking(state: State): number {
+    const modifier: Record<NonNullable<typeof state['targetSteps']>, number> = {
+        "1-2": -3,
+        "3-4": -1,
+        "5-7": 0,
+        "8-9": 1,
+        "10-12": 3,
+        "13-19": 6,
+        "20+": 10,
+    }
+    const value = modifier[state.targetSteps ?? "5-7"] ?? 0;
+    const noPenalty = state.firererType === 'arty' || (includesLowTrajectory(state) && spotted(state))
+    return noPenalty ? Math.min(0, value) : 0;
+}
+
+function spotted(state: State) {
+    return spottingRange(state) > (state.distance ?? Infinity);
 }
 
 export function fireResolution(state: State) {
@@ -121,7 +157,7 @@ export function fireResolution(state: State) {
         .reduce((a: number, b: number) => a + b, 0) as number;
     const spotRange = spottingRange(state);
     const firepower = baseFirepower + infFirepowerDistanceBonus(state);
-    const shift = 0
+    const shift = areaTargetStacking(state)
         + areaFireRangeShift(state)
         + targetTerrainPosture(state)
         + otherModifiers(state);
@@ -129,5 +165,14 @@ export function fireResolution(state: State) {
         firepower,
         shift,
         spotRange,
+        dbg: {
+            spotted: spotted(state),
+            baseFirepower,
+            infFirepowerDistanceBonus: infFirepowerDistanceBonus(state),
+            areaTargetStacking: areaTargetStacking(state),
+            areaFireRangeShift: areaFireRangeShift(state),
+            targetTerrainPosture: targetTerrainPosture(state),
+            otherModifiers: otherModifiers(state),
+        },
     };
 }
