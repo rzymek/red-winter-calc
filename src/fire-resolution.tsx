@@ -1,5 +1,5 @@
 import {areaFireRangeShift} from "./areaFireRangeShift.tsx";
-import {State, TPickMany, TPickOne} from "./state.ts";
+import {State} from "./state.ts";
 import {isDefined} from "remeda";
 
 function infFirepowerDistanceBonus(state: State): number {
@@ -116,20 +116,7 @@ function otherModifiers(state: State) {
     return shift;
 }
 
-function includesLowTrajectory(state: {
-    distance?: TPickOne["distance"]["values"][number];
-    firererType?: TPickOne["firererType"]["values"][number];
-    firererSteps?: TPickOne["firererSteps"]["values"][number];
-    targetSteps?: TPickOne["targetSteps"]["values"][number];
-    targetTerrain?: TPickOne["targetTerrain"]["values"][number];
-    targetPosture?: TPickOne["targetPosture"]["values"][number];
-    targetMorale?: TPickOne["targetMorale"]["values"][number];
-    targetStepLoses?: TPickOne["targetStepLoses"]["values"][number];
-    targetBnMorale?: TPickOne["targetBnMorale"]["values"][number]
-} & {
-    firererEnv: TPickMany["firererEnv"]["values"][number][];
-    targetEnv: TPickMany["targetEnv"]["values"][number][]
-} & { firepower: (number | undefined)[] }) {
+function includesLowTrajectory(state: State) {
     return state.firererType === 'inf' || state.firererType === 'low';
 }
 
