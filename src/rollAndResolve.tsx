@@ -1,8 +1,10 @@
 import {useEffect, useState} from "preact/compat";
-import {FireResolutionResult, fireTable} from "./firetable.ts";
+import {FireResolutionResult, firetable, fireTable} from "./firetable.ts";
 import {fireResolution} from "./fire-resolution.tsx";
 import {State} from "./state.ts";
 import {Input2d6} from "./Input2d6.tsx";
+import {Probabilities} from "./probabilities.tsx";
+import {probability} from "./probability.ts";
 
 
 export function RollAndResolve(props: {
@@ -37,7 +39,7 @@ export function RollAndResolve(props: {
                     Column: {fireTable.column(resolution)?.label}<br/>
                     Effect: <b>{result} ({roll})</b>
                     </span>}
-                <Probabilities resolution={resolution}/>
+                <Probabilities probabilities={probability(firetable,fireTable.column(resolution).index)} accumulate/>
 
             </div>
 
@@ -46,39 +48,3 @@ export function RollAndResolve(props: {
     </>;
 }
 
-function Probabilities(props: {
-    resolution: {
-        firepower: number;
-        shift: number;
-        spotRange: number;
-        noLOS: boolean
-    }
-}) {
-    const probabilities = fireTable.probability(fireTable.column(props.resolution).index)
-    const cumulative = Object.entries(probabilities).reverse().reduce((acc, [name, value]) => ({
-        sum: acc.sum + value,
-        entries: {
-            ...acc.entries,
-            [name]: acc.sum + value,
-        }
-    }), {sum: 0, entries: {} as Record<string, number>});
-    return <div style={{
-        padding: 4,
-        marginTop: 4,
-        border: 'solid 1px gray',
-        display: 'grid',
-        gridTemplateColumns: 'auto auto',
-        gridAutoRows: 'auto',
-        width: 'fit-content',
-        columnGap: 16,
-        rowGap: 4,
-    }}>
-        {Object.keys(probabilities).map(name => <>
-            <div key={`${name}-key`}>{name}</div>
-            <div key={`${name}-val`}>{(
-                name === 'No Effect' ? probabilities[name] : cumulative.entries[name]
-            ).toFixed()}%
-            </div>
-        </>)}
-    </div>
-}

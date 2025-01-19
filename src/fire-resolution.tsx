@@ -145,7 +145,8 @@ export function fireResolution(state: State) {
     const shift = areaTargetStacking(state)
         + areaFireRangeShift(state)
         + targetTerrainPosture(state)
-        + otherModifiers(state);
+        + otherModifiers(state)
+        + (state.extraShift ?? 0);
     const noLOS = state.targetEnv.includes('night') && (state.distance ?? Infinity) > 2;
     return {
         firepower,

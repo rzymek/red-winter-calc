@@ -1,4 +1,4 @@
-import {groupBy, isString, mapValues, pipe, range} from "remeda";
+import {isString} from "remeda";
 import {inRange} from "./inRange.ts";
 
 export const rawColumns = [
@@ -39,23 +39,11 @@ export const fireTable = {
             label: String(rawColumns[effectiveIndex])
         }
     },
-    probability(column: number) {
-        const resultsForRolls = range(1, 6 + 1).flatMap(d1 => range(1, 6 + 1).map(d2 => {
-            const roll = d1 * 10 + d2;
-            const [result] = firetable.find(([, ...rols]) => inRange(rols[column], roll)) ?? firetable[0]
-            return result;
-        }))
-        return pipe(
-            resultsForRolls,
-            groupBy(effect => effect),
-            mapValues(arr => 100 * arr.length / resultsForRolls.length)
-        )
-    },
+
     result(resolution: { firepower: number, shift: number }, roll: number) {
         const col = this.column(resolution);
         const row = firetable.find(([, ...rols]) => inRange(rols[col.index], roll)) ?? firetable[0]
-        const result = row[0]
-        return result;
+        return row[0];
     }
 }
 
