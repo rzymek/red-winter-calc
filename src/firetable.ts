@@ -48,7 +48,7 @@ export const fireTable = {
         return pipe(
             resultsForRolls,
             groupBy(effect => effect),
-            mapValues(arr => (100 * arr.length / resultsForRolls.length).toFixed()+'%')
+            mapValues(arr => 100 * arr.length / resultsForRolls.length)
         )
     },
     result(resolution: { firepower: number, shift: number }, roll: number) {

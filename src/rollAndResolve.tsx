@@ -55,6 +55,13 @@ function Probabilities(props: {
     }
 }) {
     const probabilities = fireTable.probability(fireTable.column(props.resolution).index)
+    const cumulative = Object.entries(probabilities).reverse().reduce((acc, [name, value]) => ({
+        sum: acc.sum + value,
+        entries: {
+            ...acc.entries,
+            [name]: acc.sum + value,
+        }
+    }), {sum: 0, entries: {} as Record<string, number>});
     return <div style={{
         padding: 4,
         marginTop: 4,
@@ -66,9 +73,12 @@ function Probabilities(props: {
         columnGap: 16,
         rowGap: 4,
     }}>
-        {Object.entries(probabilities).map(([name, value]) => <>
+        {Object.keys(probabilities).map(name => <>
             <div key={`${name}-key`}>{name}</div>
-            <div key={`${name}-val`}>{value}</div>
+            <div key={`${name}-val`}>{(
+                name === 'No Effect' ? probabilities[name] : cumulative.entries[name]
+            ).toFixed()}%
+            </div>
         </>)}
     </div>
 }
