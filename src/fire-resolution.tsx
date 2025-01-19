@@ -67,7 +67,8 @@ function targetTerrainPosture(state: State): number {
         partly: [-2, -5, -7],
         protective: [-3, -6, -8]
     }
-    const table = (Number(state.distance) <= spotRange) ? spotted : unspotted;
+    const aboveSpottingRange = (state.distance ?? Infinity) <= spotRange;
+    const table = (aboveSpottingRange && includesLowTrajectory(state)) ? spotted : unspotted;
     const index = {
         move: 0,
         fire: 1,
@@ -128,7 +129,8 @@ function areaTargetStacking(state: State): number {
     const noPenalty = state.firererType === 'arty' || (
         includesLowTrajectory(state) && spotted(state) && state.distance !== 0
     )
-    return noPenalty ? Math.min(0, value) : 0;
+    console.log({value, 'targetSteps': state.targetSteps, noPenalty})
+    return noPenalty ? Math.max(0, value) : value;
 }
 
 function spotted(state: State) {

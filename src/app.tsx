@@ -50,6 +50,7 @@ export function App() {
         <PickOne field="targetPosture"/>
         <PickMany field="targetEnv" wrap={true} minWidth='2cm'/>
         <PickOne field="extraShift"/>
+        <Dbg state={state}/>
 
         <RollAndResolve state={state} onResult={setResult}/>
 
@@ -60,7 +61,6 @@ export function App() {
 
             <RollAndResolveMorale state={state}/>
         </>}
-        <Dbg state={state}/>
     </Context.Provider>
 }
 

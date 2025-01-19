@@ -10,6 +10,7 @@ export function ToggleButton(props: {
             border: 'solid 1px black',
             borderRadius: 3,
             minWidth: props.minWidth ?? size,
+            userSelect: 'none',
             height: size,
             display: 'flex',
             justifyContent: 'center',
