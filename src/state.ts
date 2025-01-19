@@ -8,7 +8,7 @@ export function firepowerDef(index: number) {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10
         ],
     } as const
-};
+}
 
 export const pickOneDefs = {
     distance: {
@@ -46,6 +46,10 @@ export const pickOneDefs = {
     targetBnMorale: {
         label: 'Target Bn Morale',
         values: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    },
+    extraShift: {
+        label: 'Extra Shift',
+        values: [-3, -2, -1, 1, 2, 3],
     }
 } as const;
 export const pickManyDefs = {

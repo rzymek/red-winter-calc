@@ -46,6 +46,7 @@ export function App() {
         <PickOne field="targetSteps"/>
         <PickOne field="targetTerrain"/>
         <PickOne field="targetPosture"/>
+        <PickOne field="extraShift"/>
         <PickMany field="targetEnv" wrap={true} minWidth='2cm'/>
 
         <RollAndResolve state={state} onResult={setResult}/>
