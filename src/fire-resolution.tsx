@@ -80,19 +80,19 @@ function targetTerrainPosture(state: State): number {
 
 function otherModifiers(state: State) {
     let shift = 0;
-    if (state.targetEnv.includes('night')) {
+    if (state.targetEnv.includes('night') && state.firererType !== 'arty') {
         shift += -2;
     }
-    if (state.targetEnv.includes('illum / twilight')) {
+    if (state.targetEnv.includes('illum / twilight') && state.firererType !== 'arty') {
         shift += -1;
     }
-    if (state.targetEnv.includes('road move')) {
+    if (state.targetEnv.includes('road move') && (state.firererEnv.includes('overwatch') || state.firererType !== 'arty')) {
         shift += +2;
     }
-    if (state.targetEnv.includes('all sup/par')) {
+    if (state.targetEnv.includes('all sup/par') && state.distance !== 0) {
         shift += -1;
     }
-    if (state.targetEnv.includes('P+2 in hex')) {
+    if (state.targetEnv.includes('P+2 in hex') && includesLowTrajectory(state)) {
         shift += -2;
     }
     if (state.firererEnv.includes('any sup/par')) {
@@ -104,10 +104,10 @@ function otherModifiers(state: State) {
     if (state.firererEnv.includes('arty zone')) {
         shift += -2;
     }
-    if (state.targetEnv.includes('arty zone')) {
+    if (state.targetEnv.includes('arty zone') && state.firererType !== 'arty') {
         shift += -2;
     }
-    if (state.firererEnv.includes('smoke')) {
+    if (state.firererEnv.includes('smoke') && state.firererType !== 'arty') {
         shift += -1;
     }
     if (state.targetEnv.includes('smoke')) {

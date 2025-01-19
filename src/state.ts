@@ -55,7 +55,7 @@ export const pickOneDefs = {
 export const pickManyDefs = {
     firererEnv: {
         label: 'Firerer Env',
-        values: ['any sup/par', 'cross fire', 'arty zone', 'smoke']
+        values: ['any sup/par', 'cross fire', 'arty zone', 'smoke', 'overwatch']
     },
     targetEnv: {
         label: "Target Environment",

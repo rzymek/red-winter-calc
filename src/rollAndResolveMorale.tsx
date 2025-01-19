@@ -7,7 +7,7 @@ export function RollAndResolveMorale(props: {
     state: State,
     disabled?: boolean,
 }) {
-    const [roll, setRoll] = useState<number>(0)
+    const [roll, setRoll] = useState<number>(33)
 
     const morale = effectiveMorale(props.state);
     return <div style={{

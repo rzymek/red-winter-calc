@@ -4,6 +4,7 @@ import {fireResolution} from "./fire-resolution.tsx";
 import {State} from "./state.ts";
 import {Input2d6} from "./Input2d6.tsx";
 
+
 export function RollAndResolve(props: {
     state: State
     onResult(result: FireResolutionResult | undefined): void;
@@ -23,7 +24,7 @@ export function RollAndResolve(props: {
             <div style={{
                 flex: 1,
                 display: 'flex',
-                paddingLeft: 5,
+                padding: 4,
                 justifyContent: 'center',
                 flexDirection: 'column',
             }}>
@@ -34,18 +35,40 @@ export function RollAndResolve(props: {
                     Firepower: {resolution.firepower}<br/>
                     Shift: {resolution.shift}<br/>
                     Column: {fireTable.column(resolution)?.label}<br/>
-                    Effect: <b>{result}</b>
+                    Effect: <b>{result} ({roll})</b>
                     </span>}
+                <Probabilities resolution={resolution}/>
+
             </div>
 
             <Input2d6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
         </div>
-        <pre>
-            {JSON.stringify({
-                "2d6": roll,
-                ...resolution.dbg
-            }, null, 1).replace(/"/g, '')}
-            {JSON.stringify(fireTable.probability(fireTable.column(resolution).index), null, 1).replace(/"/g, '')}
-        </pre>
     </>;
+}
+
+function Probabilities(props: {
+    resolution: {
+        firepower: number;
+        shift: number;
+        spotRange: number;
+        noLOS: boolean
+    }
+}) {
+    const probabilities = fireTable.probability(fireTable.column(props.resolution).index)
+    return <div style={{
+        padding: 4,
+        marginTop: 4,
+        border: 'solid 1px gray',
+        display: 'grid',
+        gridTemplateColumns: 'auto auto',
+        gridAutoRows: 'auto',
+        width: 'fit-content',
+        columnGap: 16,
+        rowGap: 4,
+    }}>
+        {Object.entries(probabilities).map(([name, value]) => <>
+            <div key={`${name}-key`}>{name}</div>
+            <div key={`${name}-val`}>{value}</div>
+        </>)}
+    </div>
 }

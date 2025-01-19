@@ -8,6 +8,7 @@ import {initialState, State} from "./state.ts";
 import {PickMany} from "./pickMany.tsx";
 import {isDefined} from "remeda";
 import {FireResolutionResult} from "./firetable.ts";
+import {Dbg} from "./dbg.tsx";
 
 function transition(prev: State, next: State) {
     if (next.targetEnv.includes('night') && next.targetEnv.includes('illum / twilight')) {
@@ -56,6 +57,7 @@ export function App() {
         <PickOne field="targetBnMorale"/>
 
         <RollAndResolveMorale state={state} disabled={result === undefined || result === 'No Effect'}/>
+        <Dbg state={state}/>
     </Context.Provider>
 }
 
