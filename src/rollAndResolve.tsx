@@ -27,13 +27,15 @@ export function RollAndResolve(props: {
                 justifyContent: 'center',
                 flexDirection: 'column',
             }}>
-            <span>
-            Spotting range: {resolution.spotRange}<br/>
-            Firepower: {resolution.firepower}<br/>
-            Shift: {resolution.shift}<br/>
-            Column: {fireTable.column(resolution)?.label}<br/>
-            Effect: <b>{result}</b>
-            </span>
+                {resolution.noLOS
+                    ? <span>No LOS</span>
+                    : <span>
+                    Spotting range: {resolution.spotRange}<br/>
+                    Firepower: {resolution.firepower}<br/>
+                    Shift: {resolution.shift}<br/>
+                    Column: {fireTable.column(resolution)?.label}<br/>
+                    Effect: <b>{result}</b>
+                    </span>}
             </div>
 
             <Input2d6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
