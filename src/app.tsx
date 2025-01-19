@@ -9,15 +9,6 @@ import {PickMany} from "./pickMany.tsx";
 import {isDefined} from "remeda";
 import {FireResolutionResult} from "./firetable.ts";
 
-
-function drop<T>(array: T[], value: T) {
-    const idx = array.indexOf(value);
-    if (idx !== -1) {
-        array.splice(idx, 1);
-    }
-}
-
-
 function transition(prev: State, next: State) {
     if (next.targetEnv.includes('night') && next.targetEnv.includes('illum / twilight')) {
         if (prev.targetEnv.includes('night')) {
@@ -65,4 +56,11 @@ export function App() {
 
         <RollAndResolveMorale state={state} disabled={result === undefined || result === 'No Effect'}/>
     </Context.Provider>
+}
+
+function drop<T>(array: T[], value: T) {
+    const idx = array.indexOf(value);
+    if (idx !== -1) {
+        array.splice(idx, 1);
+    }
 }

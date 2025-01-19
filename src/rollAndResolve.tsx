@@ -1,8 +1,8 @@
 import {useEffect, useState} from "preact/compat";
 import {FireResolutionResult, fireTable} from "./firetable.ts";
-import {Roll2D6} from "./Roll2D6.tsx";
 import {fireResolution} from "./fire-resolution.tsx";
 import {State} from "./state.ts";
+import {Input2d6} from "./Input2d6.tsx";
 
 export function RollAndResolve(props: {
     state: State
@@ -35,7 +35,8 @@ export function RollAndResolve(props: {
             Effect: <b>{result}</b>
             </span>
             </div>
-            <Roll2D6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
+
+            <Input2d6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
         </div>
         <pre>
             {JSON.stringify(resolution.dbg, null, 1).replace(/"/g, '')}

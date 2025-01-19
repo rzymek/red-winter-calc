@@ -8,6 +8,7 @@ export function ToggleButton(props: {
     return <div
         style={{
             border: 'solid 1px black',
+            borderRadius: 3,
             minWidth: props.minWidth ?? size,
             height: size,
             display: 'flex',
