@@ -8,7 +8,7 @@ export function RollAndResolve(props: {
     state: State
     onResult(result: FireResolutionResult | undefined): void;
 }) {
-    const [roll, setRoll] = useState<number>(NaN);
+    const [roll, setRoll] = useState<number>(33);
     const resolution = fireResolution(props.state);
 
     const result = isFinite(roll) ? fireTable.result(resolution, roll) : undefined;
@@ -39,7 +39,10 @@ export function RollAndResolve(props: {
             <Input2d6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
         </div>
         <pre>
-            {JSON.stringify(resolution.dbg, null, 1).replace(/"/g, '')}
+            {JSON.stringify({
+                "2d6": roll,
+                ...resolution.dbg
+            }, null, 1).replace(/"/g, '')}
             {JSON.stringify(fireTable.probability(fireTable.column(resolution).index), null, 1).replace(/"/g, '')}
         </pre>
     </>;
