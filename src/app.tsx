@@ -10,6 +10,7 @@ import {isDefined} from "remeda";
 import {FireResolutionResult} from "./firetable.ts";
 import {Dbg} from "./dbg.tsx";
 
+
 function transition(prev: State, next: State) {
     if (next.targetEnv.includes('night') && next.targetEnv.includes('illum / twilight')) {
         if (prev.targetEnv.includes('night')) {

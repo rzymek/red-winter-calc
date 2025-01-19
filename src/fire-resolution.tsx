@@ -101,16 +101,10 @@ function otherModifiers(state: State) {
     if (state.firererEnv.includes('cross fire') && state.distance !== 0 && includesLowTrajectory(state)) {
         shift += +4;
     }
-    if (state.firererEnv.includes('arty zone')) {
-        shift += -2;
-    }
     if (state.targetEnv.includes('arty zone') && state.firererType !== 'arty') {
         shift += -2;
     }
     if (state.firererEnv.includes('smoke') && state.firererType !== 'arty') {
-        shift += -1;
-    }
-    if (state.targetEnv.includes('smoke')) {
         shift += -1;
     }
     return shift;
