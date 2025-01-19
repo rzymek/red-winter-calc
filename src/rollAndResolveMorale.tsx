@@ -1,7 +1,7 @@
 import {useState} from "preact/compat";
 import {calculateMorale, effectiveMorale} from "./morale.ts";
-import {Roll2D6} from "./Roll2D6.tsx";
 import {State} from "./state.ts";
+import {Input2d6} from "./Input2d6.tsx";
 
 export function RollAndResolveMorale(props: {
     state: State,
@@ -27,7 +27,7 @@ export function RollAndResolveMorale(props: {
                 Effect: <b>{calculateMorale(props.state, roll)}</b>
             </span>
         </div>
-        <Roll2D6
+        <Input2d6
             disabled={props.disabled}
             onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>
     </div>;

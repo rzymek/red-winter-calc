@@ -2,10 +2,13 @@ import {DiceInput} from "./diceInput.tsx";
 import {useState} from "preact/compat";
 
 export function Input2d6(props: {
+    disabled?: boolean,
     onRoll(result: [number, number]): void
 }) {
     const [value, setValue] = useState<[number, number]>([3, 3])
-
+    if (props.disabled) {
+        return <></>
+    }
     return <div style={{
         display: 'flex',
         flexDirection: 'column',
