@@ -1,3 +1,7 @@
 .Pick:nth-child(odd) {
     background-color: #FFFFE0;
 }
+#app {
+    margin: 0 auto;
+    max-width: 16cm;
+}
