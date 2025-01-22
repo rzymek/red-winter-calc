@@ -25,7 +25,7 @@ function transition(prev: State, next: State) {
 export function App() {
     const [state, setState] = useState<State>(initialState);
     const [result, setResult] = useState<FireResolutionResult>()
-    const rollForMorale = result !== undefined && result !== 'No Effect';
+    const rollForMorale = result !== undefined && result !== 'No Effect' && state.firererType !== 'point';
     return <Context.Provider value={{
         state,
         update: useCallback((v) => {
