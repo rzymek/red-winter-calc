@@ -12,6 +12,7 @@ export function areaFireRangeShift(state: State): number {
         high: [+4, +2, +1],
         mortar: [0],
         arty: [0],
+        point: [],
     } as const;
     return table[type][distance] ?? 0;
 

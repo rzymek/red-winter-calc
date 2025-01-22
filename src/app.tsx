@@ -36,19 +36,27 @@ export function App() {
         }, [])
 
     }}>
-        <PickOne field="distance"/>
-        {state.firepower.map((_, idx) =>
-            <PickFirepower index={idx} key={idx}/>
-        )}
         <PickOne field="firererType"/>
-        {(state.firererType === 'inf' && isDefined(state.distance) && state.distance <= 1) &&
-            <PickOne field="firererSteps"/>}
+        {state.firererType === 'point'
+            ? <>
+                <PickOne field="pRange"/>
+                <PickOne field="pDifferential"/>
+            </>
+            : <>
+                <PickOne field="distance"/>
+                {state.firepower.map((_, idx) =>
+                    <PickFirepower index={idx} key={idx}/>
+                )}
+                {(state.firererType === 'inf' && isDefined(state.distance) && state.distance <= 1) &&
+                    <PickOne field="firererSteps"/>}
 
-        <PickMany field="firererEnv"/>
-        <PickOne field="targetSteps"/>
+                <PickOne field="targetSteps"/>
+            </>}
         <PickOne field="targetTerrain"/>
         <PickOne field="targetPosture"/>
+        <PickMany field="firererEnv"/>
         <PickMany field="targetEnv" wrap={true} minWidth='2cm'/>
+
         <PickOne field="extraShift"/>
         <Dbg state={state}/>
 

@@ -13,14 +13,14 @@ export function firepowerDef(index: number) {
 export const pickOneDefs = {
     distance: {
         label: 'Distance',
-        values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        values: range(1, 20 + 1),
     },
     firererType: {
-        label: 'Firerer Type',
-        values: ['inf', 'low', 'high', 'mortar', 'arty']
+        label: 'Firer Type',
+        values: ['inf', 'low', 'high', 'mortar', 'arty', 'point']
     },
     firererSteps: {
-        label: 'Firerer Steps',
+        label: 'Firer Steps',
         values: range(1, 40 + 1)
     },
     targetSteps: {
@@ -50,15 +50,23 @@ export const pickOneDefs = {
     extraShift: {
         label: 'Extra Shift',
         values: [-3, -2, -1, 1, 2, 3],
+    },
+    pRange:{
+        label: 'Range',
+        values: ['close','nominal','long'],
+    },
+    pDifferential: {
+        label: 'Differential',
+        values: range(-5,5+1).reverse(),
     }
 } as const;
 export const pickManyDefs = {
     firererEnv: {
-        label: 'Firerer Env',
+        label: 'Firer',
         values: ['any sup/par', 'cross fire', 'arty zone', 'smoke', 'overwatch']
     },
     targetEnv: {
-        label: "Target Environment",
+        label: "Target",
         values: ['night', 'illum / twilight', 'road move', 'firing', 'all sup/par',
             'P+2 in hex', 'arty zone', 'smoke', 'attacked by sortie', 'unassigned']
     },
