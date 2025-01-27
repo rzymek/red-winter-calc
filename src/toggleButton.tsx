@@ -3,11 +3,12 @@ export function ToggleButton(props: {
     selected?: boolean,
     onClick(): void,
     minWidth?: string,
+    color?: string
 }) {
     const size = '11mm';
     return <div
         style={{
-            border: 'solid 1px black',
+            border: `solid 1px ${props.selected ? 'blue' : 'black'}`,
             borderRadius: 3,
             minWidth: props.minWidth ?? size,
             userSelect: 'none',
@@ -22,7 +23,7 @@ export function ToggleButton(props: {
             fontWeight: 'bold',
             cursor: 'pointer',
             flex: 1,
-            backgroundColor: props.selected ? 'lightblue' : undefined
+            backgroundColor: props.selected ? 'lightblue' : props.color
         }} onClick={props.onClick}>
         {props.value}
     </div>

@@ -53,11 +53,15 @@ export const pickOneDefs = {
     },
     pRange:{
         label: 'Range',
-        values: ['close','nominal','long'],
+        values: range(1, 20 + 1),
     },
-    pDifferential: {
-        label: 'Differential',
-        values: range(-5,5+1).reverse(),
+    lowestPFire: {
+        label: 'Lowest P-Fire',
+        values: range(1,10+1),
+    },
+    bestPDefence: {
+        label: 'Best P-Defence',
+        values: range(0,10+1),
     }
 } as const;
 export const pickManyDefs = {

@@ -14,7 +14,7 @@ export function RollAndResolve(props: {
     const [roll, setRoll] = useState<number>(33);
     const resolution = fireResolution(props.state);
 
-    const result = isFinite(roll) ? fireTable.result(resolution, roll) : undefined;
+    const result = isFinite(roll) ? fireTable.result(resolution, roll, props.state) : undefined;
     useEffect(() => {
         props.onResult(result);
     }, [result]);
@@ -29,17 +29,22 @@ export function RollAndResolve(props: {
                 padding: 4,
                 justifyContent: 'center',
                 flexDirection: 'column',
+                alignSelf: 'start',
             }}>
                 {resolution.noLOS
                     ? <span>No LOS</span>
-                    : <span>
-                    Spotting range: {resolution.spotRange}<br/>
-                    Firepower: {resolution.firepower}<br/>
-                    Shift: {resolution.shift}<br/>
-                    Column: {fireTable.column(resolution)?.label}<br/>
+                    :
+                    <span>Spotting range: {resolution.spotRange} {(props.state.distance ?? NaN) < resolution.spotRange &&
+                        <b> - Spotted</b>}<br/>
+                        {'firepower' in resolution && <>Firepower: {resolution.firepower}<br/></>}
+                        Shift: {resolution.shift}<br/>
+                    Column: {fireTable.column(resolution, props.state)?.label}<br/>
                     Effect: <b>{result} ({roll})</b>
                     </span>}
-                <Probabilities probabilities={probability(firetable,fireTable.column(resolution).index)} accumulate/>
+                <Probabilities probabilities={probability(
+                    firetable, fireTable.column(resolution, props.state).index,
+                    props.state.firererType
+                )} accumulate/>
 
             </div>
 

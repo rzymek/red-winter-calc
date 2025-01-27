@@ -3,7 +3,10 @@ import {useContext} from "preact/compat";
 import {Context} from "./context.tsx";
 import {firepowerDef, pickOneDefs, SingleSelectionFields} from "./state.ts";
 
-export function PickOne(props: PickProps & { field: SingleSelectionFields }) {
+export function PickOne(props: PickProps & {
+    color?: (v: any) => (undefined | string),
+    field: SingleSelectionFields
+}) {
     const context = useContext(Context);
     const {label, values} = pickOneDefs[props.field];
     const selected = context.state[props.field];

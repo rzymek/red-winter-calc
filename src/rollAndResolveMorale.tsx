@@ -27,7 +27,7 @@ export function RollAndResolveMorale(props: {
                 Effective morale: {isFinite(morale) && morale}<br/>
                 Morale roll: {isFinite(roll) && roll}<br/>
                 Effect: <b>{moraleResult.result}</b>
-                <Probabilities probabilities={probability(moraleTable, moraleResult.column - 1)}/>
+                <Probabilities probabilities={probability(moraleTable, moraleResult.column - 1, props.state.firererType)}/>
             </span>
         </div>
         <Input2d6 onRoll={([d1, d2]) => setRoll(d1 * 10 + d2)}/>

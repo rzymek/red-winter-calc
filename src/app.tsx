@@ -25,6 +25,21 @@ function transition(prev: State, next: State) {
 export function App() {
     const [state, setState] = useState<State>(initialState);
     const [result, setResult] = useState<FireResolutionResult>()
+
+    function distanceColor(distance: number) {
+        if (state.firererType !== 'point' || state.pRange === undefined) {
+            return undefined;
+        } else if (distance < Math.round(state.pRange / 2)) {
+            return 'lightgreen';
+        } else if (distance <= state.pRange) {
+            return 'lightseagreen';
+        } else if (state.pRange < distance && distance <= state.pRange * 2) {
+            return 'lightcoral';
+        } else if (distance > state.pRange * 2) {
+            return 'gray';
+        }
+    }
+
     const rollForMorale = result !== undefined && result !== 'No Effect' && state.firererType !== 'point';
     return <Context.Provider value={{
         state,
@@ -37,21 +52,19 @@ export function App() {
 
     }}>
         <PickOne field="firererType"/>
-        {state.firererType === 'point'
-            ? <>
-                <PickOne field="pRange"/>
-                <PickOne field="pDifferential"/>
-            </>
-            : <>
-                <PickOne field="distance"/>
-                {state.firepower.map((_, idx) =>
-                    <PickFirepower index={idx} key={idx}/>
-                )}
-                {(state.firererType === 'inf' && isDefined(state.distance) && state.distance <= 1) &&
-                    <PickOne field="firererSteps"/>}
-
-                <PickOne field="targetSteps"/>
-            </>}
+        {state.firererType === 'point' ? <>
+            <PickOne field="firererSteps"/>
+            <PickOne field="pRange"/>
+            <PickOne field="lowestPFire"/>
+            <PickOne field="bestPDefence"/>
+        </> : <>
+            {state.firepower.map((_, idx) =>
+                <PickFirepower index={idx} key={idx}/>)}
+            {(state.firererType === 'inf' && isDefined(state.distance) && state.distance <= 1) &&
+                <PickOne field="firererSteps"/>}
+            <PickOne field="targetSteps"/>
+        </>}
+        <PickOne field="distance" color={distanceColor}/>
         <PickOne field="targetTerrain"/>
         <PickOne field="targetPosture"/>
         <PickMany field="firererEnv"/>

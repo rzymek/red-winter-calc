@@ -5,10 +5,11 @@ export type PickProps = {
     minWidth?: string,
 };
 
-export function Pick<T extends string|number>(props: PickProps & {
+export function Pick<T extends string | number>(props: PickProps & {
+    color?: (v: T) => (undefined | string)
     label: string,
     values: readonly T[],
-    selected: readonly (T|undefined)[],
+    selected: readonly (T | undefined)[],
     onClick(v: T): void
 }) {
     return <div style={{
@@ -31,6 +32,7 @@ export function Pick<T extends string|number>(props: PickProps & {
         {props.values.map(v => {
                 return <ToggleButton key={v} value={v}
                                      selected={props.selected.includes(v)}
+                                     color={props.color?.(v)}
                                      onClick={() => props.onClick(v)}
                                      minWidth={props.minWidth}/>;
             }

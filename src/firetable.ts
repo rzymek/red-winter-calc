@@ -1,8 +1,24 @@
 import {isString} from "remeda";
 import {inRange} from "./inRange.ts";
+import {State} from "./state.ts";
 
 export const rawColumns = [
     0, 1, 2, 3, 4, 5, 6, '7-8', '9-10', '11-13', '14-16', '17-20', '21-25', '26-32', '33-40', '41-50', '51-64', '65-80', '81-100', '101+'
+] as const;
+export const pColumns = [
+    [1,4],
+    [2,'7-8'],
+    [3,'11-13'],
+    [4,'14-16'],
+    [5,'17-20'],
+    [6,'21-25'],
+    ['7-8','26-32'],
+    ['9-10','33-40'],
+    ['11-12','41-50'],
+    ['13-16','51-64'],
+    ['17-20','65-80'],
+    ['21-25','81-100'],
+    ['26+' ,'101+'],
 ] as const;
 
 export const firetable = [
@@ -19,31 +35,50 @@ export const firetable = [
     ['-9 steps', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '66', '66'],
 ] as const;
 
-export const fireTable = {
-    column(resolution: { firepower: number, shift: number }) {
-        const index = rawColumns.findIndex(colDef => {
-            if (colDef === resolution.firepower) {
-                return true;
-            } else if (isString(colDef)) {
-                const [from, to = Infinity] = colDef.split(/[-+]/)
-                    .filter(v => v !== '')
-                    .map(it => Number(it));
-                return from <= resolution.firepower && resolution.firepower <= to;
-            } else {
-                return false;
-            }
-        });
-        const effectiveIndex = Math.min(index + resolution.shift, rawColumns.length - 1)
-        return {
-            index: effectiveIndex,
-            label: String(rawColumns[effectiveIndex])
+function isInRangePredicate(v:number) {
+    return (range:number|string) => {
+        if (range === v) {
+            return true;
+        } else if (isString(range)) {
+            const [from, to = Infinity] = range.split(/[-+]/)
+                .filter(v => v !== '')
+                .map(it => Number(it));
+            return from <= v && v <= to;
+        } else {
+            return false;
         }
-    },
+    };
+}
 
-    result(resolution: { firepower: number, shift: number }, roll: number) {
-        const col = this.column(resolution);
+export const fireTable = {
+    column(resolution: { firepower?: number; shift: number }, state: State) {
+        const colIndex = resolution.firepower !== undefined
+            ? areaColumn(resolution.firepower)
+            : pColumn(state);
+        return effectiveColumn(colIndex, resolution.shift);
+    },
+    result(resolution: { firepower?: number; shift: number }, roll: number, state: State) {
+        const col = this.column(resolution, state);
         const row = firetable.find(([, ...rols]) => inRange(rols[col.index], roll)) ?? firetable[0]
+        if(state.firererType === 'point' && row[0] ==='Morale Check') {
+            return 'No Effect';
+        }
         return row[0];
+    },
+}
+function areaColumn(firepower: number) {
+    return rawColumns.findIndex(isInRangePredicate(firepower));
+}
+function pColumn(state: State) {
+    const inRangePredicate = isInRangePredicate(state.firererSteps ?? NaN);
+    const [,aColumn] = pColumns.find(([pFireSteps])=> inRangePredicate(pFireSteps)) ?? [0,0]
+    return rawColumns.indexOf(aColumn);
+}
+function effectiveColumn(index:number, shift: number) {
+    const effectiveIndex = Math.min(index + shift, rawColumns.length - 1)
+    return {
+        index: effectiveIndex,
+        label: String(rawColumns[effectiveIndex])
     }
 }
 

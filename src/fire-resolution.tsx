@@ -136,7 +136,68 @@ function spotted(state: State) {
     return spottingRange(state) > (state.distance ?? Infinity);
 }
 
+export function pointFireRange(state:State){
+    const {distance = NaN, pRange = NaN} = state;
+    if (distance < Math.round(pRange / 2)) {
+        return +5;
+    } else if (distance <= pRange) {
+        return +3;
+    } else if (pRange < distance && distance <= pRange * 2) {
+        return 0;
+    } else {
+        return NaN;
+    }
+}
+function pointFireResolution(state: State) {
+    const pointFireDifferential: Record<number, number> = {
+        [+3]: 3,
+        [+2]: 2,
+        [+1]: 1,
+        [0]: 0,
+        [-1]: -2,
+        [-2]: -4,
+        [-3]: -8,
+        [-4]: -12,
+        [-5]: NaN,
+    };
+    const {lowestPFire = NaN, bestPDefence = NaN} = state;
+    const differential = Math.min(Math.max(-5,lowestPFire - bestPDefence),3);
+    const differentialShift = pointFireDifferential[differential] ?? NaN;
+    const spotRange = spottingRange(state);
+    const noLOS = isNoLOS(state);
+
+    const shift = differentialShift
+        + targetTerrainPosture(state)
+        + pointFireRange(state)
+        + otherModifiers(state)
+        + (state.extraShift ?? 0);
+    return {
+        differential,
+        shift,
+        spotRange,
+        noLOS,
+        dbg: {
+            spotted: spotted(state),
+            infFirepowerDistanceBonus: infFirepowerDistanceBonus(state),
+            targetTerrainPosture: targetTerrainPosture(state),
+            otherModifiers: otherModifiers(state),
+        },
+    };
+}
+
 export function fireResolution(state: State) {
+    if (state.firererType === 'point') {
+        return pointFireResolution(state);
+    } else {
+        return areaFireResolution(state);
+    }
+}
+
+function isNoLOS(state: State) {
+    return state.targetEnv.includes('night') && (state.distance ?? Infinity) > 2;
+}
+
+function areaFireResolution(state: State) {
     const baseFirepower = state.firepower.filter(isDefined)
         .reduce((a: number, b: number) => a + b, 0) as number;
     const spotRange = spottingRange(state);
@@ -146,7 +207,7 @@ export function fireResolution(state: State) {
         + targetTerrainPosture(state)
         + otherModifiers(state)
         + (state.extraShift ?? 0);
-    const noLOS = state.targetEnv.includes('night') && (state.distance ?? Infinity) > 2;
+    const noLOS = isNoLOS(state);
     return {
         firepower,
         shift,
