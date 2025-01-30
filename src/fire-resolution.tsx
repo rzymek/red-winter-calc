@@ -138,7 +138,7 @@ function spotted(state: State) {
 
 export function pointFireRange(state:State){
     const {distance = NaN, pRange = NaN} = state;
-    if (distance < Math.round(pRange / 2)) {
+    if (distance < Math.ceil(pRange / 2)) {
         return +5;
     } else if (distance <= pRange) {
         return +3;
