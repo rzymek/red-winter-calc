@@ -29,7 +29,7 @@ export function App() {
     function distanceColor(distance: number) {
         if (state.firererType !== 'point' || state.pRange === undefined) {
             return undefined;
-        } else if (distance < Math.round(state.pRange / 2)) {
+        } else if (distance < Math.ceil(state.pRange / 2)) {
             return 'lightgreen';
         } else if (distance <= state.pRange) {
             return 'lightseagreen';
