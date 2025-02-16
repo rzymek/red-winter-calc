@@ -127,10 +127,10 @@ function areaTargetStacking(state: State): number {
         "20+": 10,
     }
     const value = modifier[state.targetSteps ?? "5-7"] ?? 0;
-    const noPenalty = state.firererType === 'arty' || (
+    const possiblePenalty = state.firererType === 'arty' || (
         includesLowTrajectory(state) && !spotted(state) && state.distance !== 0
     )
-    return noPenalty ? Math.max(0, value) : value;
+    return possiblePenalty ? value : Math.max(0, value);
 }
 
 function spotted(state: State) {
