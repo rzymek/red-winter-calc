@@ -181,8 +181,10 @@ function pointFireResolution(state: State) {
         noLOS,
         dbg: {
             spotted: spotted(state),
-            infFirepowerDistanceBonus: infFirepowerDistanceBonus(state),
+            differential,
+            differentialShift,
             targetTerrainPosture: targetTerrainPosture(state),
+            pointFireRange: pointFireRange(state),
             otherModifiers: otherModifiers(state),
         },
     };

@@ -34,9 +34,20 @@ export function RollAndResolve(props: {
                 {resolution.noLOS
                     ? <span>No LOS</span>
                     :
-                    <span>Spotting range: {resolution.spotRange} {(props.state.distance ?? NaN) < resolution.spotRange &&
+                    <span>Spotting range: {resolution.spotRange} {resolution.dbg.spotted &&
                         <b> - Spotted</b>}<br/>
                         {'firepower' in resolution && <>Firepower: {resolution.firepower}<br/></>}
+                        {'areaFireRangeShift' in resolution.dbg ? <>
+                            Inf firepower: +{resolution.dbg.infFirepowerDistanceBonus}<br/>
+                            Area target stacking: {resolution.dbg.areaTargetStacking}<br/>
+                            Area fire range: {resolution.dbg.areaFireRangeShift}<br/>
+                        </> :<>
+                            Point fire range: {resolution.dbg.pointFireRange}<br/>
+                            Point fire diff: {resolution.dbg.differential}<br/>
+                            Point fire diff shift: {resolution.dbg.differentialShift}<br/>
+                        </>}
+                        Target terrain/posture: {resolution.dbg.targetTerrainPosture}<br/>
+                        Other mods: {resolution.dbg.otherModifiers}<br/>
                         Shift: {resolution.shift}<br/>
                     Column: {fireTable.column(resolution, props.state)?.label}<br/>
                     Effect: <b>{result} ({roll})</b>
