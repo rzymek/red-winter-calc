@@ -54,21 +54,19 @@ function targetTerrainPosture(state: State): number {
     if (state.targetTerrain === undefined || state.targetPosture === undefined) {
         return 0;
     }
-    const spotRange = spottingRange(state);
-    const spotted = {
+    const spottedTable = {
         billiard: [+4, +2, -1],
         open: [+2, 0, -2],
         partly: [0, -2, -4],
         protective: [-1, -3, -5]
     }
-    const unspotted = {
+    const unspottedTable = {
         billiard: [+2, 0, -3],
         open: [0, -2, -5],
         partly: [-2, -5, -7],
         protective: [-3, -6, -8]
     }
-    const aboveSpottingRange = (state.distance ?? Infinity) <= spotRange;
-    const table = (aboveSpottingRange && includesLowTrajectory(state)) ? spotted : unspotted;
+    const table = (!spotted(state) && includesLowTrajectory(state)) ? unspottedTable : spottedTable;
     const index = {
         move: 0,
         fire: 1,
@@ -80,17 +78,26 @@ function targetTerrainPosture(state: State): number {
 }
 
 function otherModifiers(state: State) {
+    const isAssault = state.distance === 0;
     let shift = 0;
-    if (state.targetEnv.includes('night') && state.firererType !== 'arty') {
-        shift += -2;
-    }
-    if (state.targetEnv.includes('illum / twilight') && state.firererType !== 'arty') {
-        shift += -1;
+    if(state.firererType !== 'arty'/*11.3f*/) {
+        if (state.targetEnv.includes('night')) {
+            shift += -2;
+        }
+        if (state.targetEnv.includes('illum / twilight')) {
+            shift += -1;
+        }
+        if (state.targetEnv.includes('arty zone')) {
+            shift += -2;
+        }
+        if (state.firererEnv.includes('smoke')) {
+            shift += -1;
+        }
     }
     if (state.targetEnv.includes('road move') && (state.firererEnv.includes('overwatch') || state.firererType === 'arty')) {
         shift += +2;
     }
-    if (state.targetEnv.includes('all sup/par') && state.distance !== 0) {
+    if (state.targetEnv.includes('all sup/par') && !isAssault) {
         shift += -1;
     }
     if (state.targetEnv.includes('P+2 in hex') && includesLowTrajectory(state)) {
@@ -99,14 +106,8 @@ function otherModifiers(state: State) {
     if (state.firererEnv.includes('any sup/par')) {
         shift += -2;
     }
-    if (state.firererEnv.includes('cross fire') && state.distance !== 0 && includesLowTrajectory(state)) {
+    if (state.firererEnv.includes('cross fire') && !isAssault && includesLowTrajectory(state)) {
         shift += +4;
-    }
-    if (state.targetEnv.includes('arty zone') && state.firererType !== 'arty') {
-        shift += -2;
-    }
-    if (state.firererEnv.includes('smoke') && state.firererType !== 'arty') {
-        shift += -1;
     }
     return shift;
 }
@@ -127,16 +128,17 @@ function areaTargetStacking(state: State): number {
     }
     const value = modifier[state.targetSteps ?? "5-7"] ?? 0;
     const noPenalty = state.firererType === 'arty' || (
-        includesLowTrajectory(state) && spotted(state) && state.distance !== 0
+        includesLowTrajectory(state) && !spotted(state) && state.distance !== 0
     )
     return noPenalty ? Math.max(0, value) : value;
 }
 
 function spotted(state: State) {
-    return spottingRange(state) > (state.distance ?? Infinity);
+    const {distance = Infinity} = state;
+    return distance <= spottingRange(state);
 }
 
-export function pointFireRange(state:State){
+export function pointFireRange(state: State) {
     const {distance = NaN, pRange = NaN} = state;
     if (distance < Math.ceil(pRange / 2)) {
         return +5;
@@ -148,6 +150,7 @@ export function pointFireRange(state:State){
         return NaN;
     }
 }
+
 function pointFireResolution(state: State) {
     const pointFireDifferential: Record<number, number> = {
         [+3]: 3,
@@ -161,7 +164,7 @@ function pointFireResolution(state: State) {
         [-5]: NaN,
     };
     const {lowestPFire = NaN, bestPDefence = NaN} = state;
-    const differential = Math.min(Math.max(-5,lowestPFire - bestPDefence),3);
+    const differential = Math.min(Math.max(-5, lowestPFire - bestPDefence), 3);
     const differentialShift = pointFireDifferential[differential] ?? NaN;
     const spotRange = spottingRange(state);
     const noLOS = isNoLOS(state);
@@ -194,7 +197,8 @@ export function fireResolution(state: State) {
 }
 
 function isNoLOS(state: State) {
-    return state.targetEnv.includes('night') && (state.distance ?? Infinity) > 2;
+    return (state.targetEnv.includes('night') && (state.distance ?? Infinity) > 2)
+        || (state.firererEnv.includes('overwatch') && !spotted(state));
 }
 
 function areaFireResolution(state: State) {
