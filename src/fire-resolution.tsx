@@ -90,17 +90,23 @@ function otherModifiers(state: State) {
         if (state.targetEnv.includes('arty zone')) {
             shift += -2;
         }
+        if (state.firererEnv.includes('arty zone')) {
+            shift += -2;
+        }
         if (state.firererEnv.includes('smoke')) {
+            shift += -1;
+        }
+        if (state.targetEnv.includes('smoke')) {
             shift += -1;
         }
     }
     if (state.targetEnv.includes('road move') && (state.firererEnv.includes('overwatch') || state.firererType === 'arty')) {
         shift += +2;
     }
-    if (state.targetEnv.includes('all sup/par') && !isAssault) {
-        shift += -1;
-    }
     if (state.targetEnv.includes('P+2 in hex') && includesLowTrajectory(state)) {
+        shift += -2;
+    }
+    if (state.targetEnv.includes('all sup/par') && !isAssault) {
         shift += -2;
     }
     if (state.firererEnv.includes('any sup/par')) {
