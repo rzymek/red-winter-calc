@@ -60,11 +60,11 @@ export function App() {
         </> : <>
             {state.firepower.map((_, idx) =>
                 <PickFirepower index={idx} key={idx}/>)}
-            {(state.firererType === 'inf' && isDefined(state.distance) && state.distance <= 1) &&
-                <PickOne field="firererSteps"/>}
             <PickOne field="targetSteps"/>
         </>}
         <PickOne field="distance" color={distanceColor}/>
+        {(state.firererType === 'inf' && isDefined(state.distance) && state.distance <= 1) &&
+            <PickOne field="firererSteps"/>}
         <PickOne field="targetTerrain"/>
         <PickOne field="targetPosture"/>
         <PickMany field="firererEnv"/>
