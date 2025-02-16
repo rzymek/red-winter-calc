@@ -28,5 +28,13 @@
     "vite": "^5.0.8",
     "vite-plugin-pwa": "^0.17.4",
     "vitest": "^1.0.4"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ],
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   }
 }
