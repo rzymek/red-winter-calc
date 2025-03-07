@@ -5,7 +5,7 @@ import {VitePWA} from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: '/tcs-calc',
+    base: '/$SHORT_NAME',
     test: {
         environment: "node",
     },
@@ -14,9 +14,9 @@ export default defineConfig({
         VitePWA({
             registerType: 'autoUpdate',
             manifest: {
-                name: "TCS Calculator",
-                short_name: 'tcs-calc',
-                description: "TCS Calculator",
+                name: "$NAME",
+                short_name: '$SHORT_NAME',
+                description: "$NAME",
                 theme_color: "#FFFFE0",
                 icons: [{
                     src: "pwa-64x64.png",
