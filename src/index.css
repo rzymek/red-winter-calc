@@ -10,6 +10,7 @@
 }
 
 body {
+    user-select: none;
     margin: 3mm;
     padding: 0;
 }
