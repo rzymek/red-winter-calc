@@ -35,10 +35,10 @@ const hexPositions = [
     {x: centerX - horizontalDistance, y: centerY + (verticalDistance / 2)}, // Bottom left
     {x: centerX - horizontalDistance, y: centerY - (verticalDistance / 2)}, // Top left
 ];
-const colors = {
-    lake: '#eeeff4',
-    other: '#82886e',
-}
+// const colors = {
+//     lake: '#eeeff4',
+//     other: '#82886e',
+// }
 
 function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
     const pos = hexPositions[props.index];
