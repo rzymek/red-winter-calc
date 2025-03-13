@@ -1,6 +1,8 @@
 import './app.css'
+import {HexagonBoard} from "./redwinter/HexagonBoard.tsx";
 
 export function App() {
-    return <div>RW</div>
+    return <div><HexagonBoard/>
+    </div>
 }
 
