@@ -35,9 +35,9 @@ export function App() {
             </CenterColumn>
 
             <SideColumn>
-                <Button/>
-                <Button/>
-                <Button/>
+                <Button>)(</Button>
+                <Button>🧊</Button>
+                <Button>🌲</Button>
             </SideColumn>
         </div>
     </div>
