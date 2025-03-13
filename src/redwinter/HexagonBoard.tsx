@@ -34,7 +34,6 @@ const hexPositions = [
     {x: centerX - horizontalDistance, y: centerY - (verticalDistance / 2)}, // Top left
 ];
 
-
 export function HexagonBoard() {
     return (
         <svg width={width}
@@ -49,7 +48,20 @@ export function HexagonBoard() {
                     fill={fill}
                 />
             ))}
+            <Bridge/>
         </svg>
     );
 }
 
+function Bridge() {
+    return (
+        <g transform="matrix(0,0.42,-0.42,0,293,509) translate(-1026,291)">
+            <polyline
+                style="fill:none;stroke:#000;stroke-width:7.5"
+                points="3 95 20 63 127 63 143 95"/>
+            <polyline
+                style="fill:none;stroke:#000;stroke-width:7.5"
+                points="3 2 20 34 127 34 143 2"/>
+        </g>
+    );
+}
