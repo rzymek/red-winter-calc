@@ -17,7 +17,7 @@ export function Button(props: { children?: ComponentChildren, style?: CSSPropert
         style={{
             width: '10mm',
             height: '10mm',
-            boxShadow: selected ? glowShadow(3, '#3636aa') : '', // Inset shadow when pressed
+            boxShadow: selected ? glowShadow(3, '#849aa4') : '', // Inset shadow when pressed
             transition: 'all 0.1s ease',
             borderRadius: 3,
             ...props.style,
