@@ -1,14 +1,31 @@
 import {ComponentChildren} from "preact";
 import type {CSSProperties} from "preact/compat";
+import {useState} from "preact/hooks";
+
+function glowShadow(s: number, color: string) {
+    return [
+        [` ${s}px  ${s}px ${s}px ${color}`],
+        [`-${s}px  ${s}px ${s}px ${color}`],
+        [`-${s}px -${s}px ${s}px ${color}`],
+        [` ${s}px -${s}px ${s}px ${color}`],
+    ].join();
+}
 
 export function Button(props: { children?: ComponentChildren, style?: CSSProperties, disabled?: boolean }) {
-    return <button style={{
-        border: '1px solid black',
-        width: '10mm',
-        height: '10mm',
-        borderRadius: 3,
-        ...props.style,
-    }} disabled={props.disabled}>
+    const [selected, setSelected] = useState(false)
+    return <button
+        style={{
+            width: '10mm',
+            height: '10mm',
+            boxShadow: selected ? glowShadow(3, '#3636aa') : '', // Inset shadow when pressed
+            transition: 'all 0.1s ease',
+            borderRadius: 3,
+            ...props.style,
+        }}
+        disabled={props.disabled}
+        selected={selected}
+        onClick={() => setSelected(!selected)}
+    >
         {props.children}
     </button>
 }
