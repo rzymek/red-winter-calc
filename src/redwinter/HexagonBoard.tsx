@@ -1,8 +1,10 @@
+import {useState} from "preact/hooks";
+
 const width = 300;
 const height = 300;
 const viewBox = `0 0 ${width} ${height}`;
 const hexSize = 50;
-const fill = 'none';
+const fill = 'white';
 
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];
@@ -33,21 +35,37 @@ const hexPositions = [
     {x: centerX - horizontalDistance, y: centerY + (verticalDistance / 2)}, // Bottom left
     {x: centerX - horizontalDistance, y: centerY - (verticalDistance / 2)}, // Top left
 ];
+const colors = {
+    lake: '#eeeff4',
+    other: '#82886e',
+}
+
+function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
+    const pos = hexPositions[props.index];
+    return <polygon
+        data-testid={props.index}
+        points={generateHexPoints(pos.x, pos.y, hexSize)}
+        stroke={props.stroke ?? 'black'}
+        fill={fill}
+        style={{cursor: 'pointer', strokeWidth: 3}}
+        onClick={()=>{
+            console.log(props.index);
+            props.onClick?.()
+        }}
+    />;
+}
 
 export function HexagonBoard() {
+    const [selected, setSelected] = useState(0);
     return (
         <svg width={width}
              height={height}
              viewBox={viewBox}
              xmlns="http://www.w3.org/2000/svg">
-            {hexPositions.map((pos, index) => (
-                <polygon
-                    key={index}
-                    points={generateHexPoints(pos.x, pos.y, hexSize)}
-                    stroke={'black'}
-                    fill={fill}
-                />
+            {hexPositions.map((_,index) => (
+                index !== selected && <Hex index={index} key={index} onClick={() => setSelected(index)}/>
             ))}
+            <Hex index={selected} stroke={'blue'}/>
             <Bridge/>
         </svg>
     );
@@ -55,7 +73,7 @@ export function HexagonBoard() {
 
 function Bridge() {
     return (
-        <g transform="matrix(0,0.42,-0.42,0,293,509) translate(-1026,291)">
+        <g transform="matrix(0,0.42,-0.42,0,293,509) translate(-1026,291)" style="pointer-events: none;">
             <polyline
                 style="fill:none;stroke:#000;stroke-width:7.5"
                 points="3 95 20 63 127 63 143 95"/>
