@@ -52,14 +52,12 @@ function Row(props: { children: ComponentChildren }) {
 export function App() {
     return <div style={{display: 'flex', flexDirection: 'column', gap: '1.6mm'}}>
         <Row>
-            {range(1, 5).map(v => <CSButton>{v}</CSButton>)}
-        </Row>
-        <Row>
-            {range(1, 4).map(v => <CSButton type='MG'>{v}</CSButton>)}
+            {[5, 7, 8, 10].map(v => <CSButton type='armor'>{v}</CSButton>)}
             <CSButton type='mortar'>{1}</CSButton>
         </Row>
+        <Row>{range(1, 5).map(v => <CSButton>{v}</CSButton>)}</Row>
         <Row>
-            {[5, 7, 8, 10].map(v => <CSButton type='armor'>{v}</CSButton>)}
+            {range(1, 4).map(v => <CSButton type='MG'>{v}</CSButton>)}
             <Button>⌫</Button>
         </Row>
         <div style={{display: 'flex', flex: 1}}>
