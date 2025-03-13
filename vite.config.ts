@@ -7,7 +7,7 @@ import {VitePWA} from 'vite-plugin-pwa'
 export default defineConfig({
     base: '/redwinter',
     test: {
-        environment: "node",
+        environment: "jsdom",
     },
     plugins: [
         preact(),
