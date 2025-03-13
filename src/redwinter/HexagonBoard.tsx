@@ -58,11 +58,9 @@ function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
 export function HexagonBoard() {
     const [selected, setSelected] = useState(0);
     return (
-        <svg width={width}
-             height={height}
-             viewBox={viewBox}
-             xmlns="http://www.w3.org/2000/svg">
-            {hexPositions.map((_,index) => (
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox={viewBox}>
+            {hexPositions.map((_, index) => (
                 index !== selected && <Hex index={index} key={index} onClick={() => setSelected(index)}/>
             ))}
             <Hex index={selected} stroke={'blue'}/>
