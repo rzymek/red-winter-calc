@@ -3,6 +3,7 @@ import {HexagonBoard} from "./redwinter/HexagonBoard.tsx";
 import {Button} from "./ui/Button.tsx";
 import {ComponentChildren} from "preact";
 import {SideColumn} from "./ui/SideColumn.tsx";
+import {CSSProperties} from "preact/compat";
 
 function CenterColumn(props: { children: ComponentChildren }) {
     return <div style={{flexGrow: 1, flexShrink: 0}}>
@@ -23,22 +24,22 @@ function range(start: number, end: number): number[] {
 }
 
 const CSButtonStyles = {
-    MG:{
+    MG: {
         backgroundColor: 'black',
         color: 'white',
     },
-    mortar:{
-    },
-    armor:{
+    mortar: {},
+    armor: {
         backgroundColor: '#c63026',
         color: 'white',
     }
 } as const;
-function CSButton(props:{children: number, type?:keyof typeof CSButtonStyles}) {
+
+function CSButton(props: { children: number, type?: keyof typeof CSButtonStyles }) {
     return <Button style={props.type ? CSButtonStyles[props.type] : ({})}>
-        {props.type==='mortar' && '('}
+        {props.type === 'mortar' && '('}
         {props.children}
-        {props.type==='mortar' && ')'}
+        {props.type === 'mortar' && ')'}
     </Button>
 }
 
@@ -47,17 +48,20 @@ function Row(props: { children: ComponentChildren }) {
         {props.children}
     </div>
 }
+
 export function App() {
-    return <div style={{display: 'flex', flexDirection: 'column', gap:'1.6mm'}}>
+    return <div style={{display: 'flex', flexDirection: 'column', gap: '1.6mm'}}>
         <Row>
-            {range(1,5).map(v => <CSButton>{v}</CSButton>)}
-            {range(1,4).map(v => <CSButton type='MG'>{v}</CSButton>)}
+            {range(1, 5).map(v => <CSButton>{v}</CSButton>)}
         </Row>
         <Row>
+            {range(1, 4).map(v => <CSButton type='MG'>{v}</CSButton>)}
             <CSButton type='mortar'>{1}</CSButton>
-            {[5,7,8,10].map(v => <CSButton type='armor'>{v}</CSButton>)}
+        </Row>
+        <Row>
+            {[5, 7, 8, 10].map(v => <CSButton type='armor'>{v}</CSButton>)}
             <Button>⌫</Button>
-            </Row>
+        </Row>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
                 <Button>\_/</Button>
@@ -76,9 +80,52 @@ export function App() {
                 <Button>)(</Button>
                 <Button>🧊</Button>
                 <Button>🌲</Button>
+                <Button>🏚️</Button>
             </SideColumn>
         </div>
+        {range(1, 5).map(day => range(7 * day - 8, 7 * day - 2)).map(r =>
+            <Row>{r.map(v => <TurnButton>{v}</TurnButton>)}</Row>
+        )}
     </div>
 }
 
+const DayParts = [
+    'dawn',
+    'morning3',
+    'morning4',
+    'day',
+    'day',
+    'dusk',
+    'night',
+] as const;
 
+type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType[number];
+const TurnButtonColors: Record<ArrayElement<typeof DayParts>, CSSProperties> = {
+    dawn: {
+        backgroundColor: '#657d97',
+    },
+    morning3: {
+        backgroundColor: '#7b9aba',
+    },
+    morning4: {
+        backgroundColor: '#96b6e1',
+    },
+    day: {
+        backgroundColor: '#d2e7fd',
+    },
+    dusk: {
+        backgroundColor: `#657d97`,
+    },
+    night: {
+        backgroundColor: '#010720',
+        color: 'white',
+    }
+}
+
+function TurnButton(props: { children: number }) {
+    const day = props.children;
+    const part = DayParts[(day + 1) % DayParts.length];
+    return <Button style={TurnButtonColors[part]} disabled={day <= 0}>{
+        day > 0 ? day : ''
+    }</Button>
+}
