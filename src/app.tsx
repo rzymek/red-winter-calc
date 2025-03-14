@@ -79,6 +79,8 @@ export function App() {
                 <Button>🧊</Button>
                 <Button>🌲</Button>
                 <Button>🏚️</Button>
+                <Button>🇫🇮</Button>
+                <Button>☭</Button>
             </SideColumn>
         </div>
         {range(1, 5).map(day => range(7 * day - 8, 7 * day - 2)).map(r =>
