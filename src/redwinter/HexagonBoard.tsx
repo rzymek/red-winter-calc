@@ -1,5 +1,7 @@
 import {useState} from "preact/hooks";
 import {range} from "remeda";
+import {Bonfire} from "./Bonfire.tsx";
+import {Suppression} from "./Suppression.tsx";
 
 const width = 300;
 const height = 300;
@@ -55,6 +57,9 @@ function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
                 props.onClick?.()
             }}
         />
+        <Suppression {...pos}
+                     level={props.index % 4}
+                     side={props.index % 2 === 0 ? 'soviet':'finnish'}/>
     </>
 }
 
@@ -81,9 +86,7 @@ function Counters(props: { index: number, onClick?: () => void, stroke?: string 
                     padding: '0 3px',
                     outline: '1px solid lightgray',
                     outlineOffset: -1,
-                }}>
-                    {i}
-                </div>
+                }}>{i}</div>
             )}
         </div>
     </foreignObject>
@@ -95,15 +98,33 @@ export function HexagonBoard() {
         <svg xmlns="http://www.w3.org/2000/svg"
              viewBox={viewBox}>
             {hexPositions.map((_, index) => (
-                index !== selected && <Hex index={index} key={index} onClick={() => setSelected(index)}/>
+                index !== selected &&
+                <Hex index={index} key={index} onClick={() => setSelected(index)}/>
             ))}
             <Hex index={selected} stroke={'blue'}/>
+            <Bonfire/>
             <Bridge/>
+            <DugIn/>
             {hexPositions.map((_, index) => (
                 <Counters index={index} key={index}/>
             ))}
+            <Assault/>
         </svg>
     );
+}
+
+function DugIn() {
+    return <path
+        style="fill:#f19022;fill-opacity:1;stroke:#000000;stroke-width:0.999999;stroke-opacity:1"
+        d="m 127.26208,178.23048 v 4.2582 h 8.92207 l 2.64154,7.10181 h 22.48574 l 3.06522,-7.12951 h 8.98189 v -4.29339 h -11.91013 l -2.35204,6.98626 h -17.69748 l -2.50005,-6.93293 z"
+    />
+}
+
+function Assault() {
+    return <path
+        style="opacity:0.572366;fill:#ff0f00;fill-opacity:1;stroke:none;stroke-width:1;stroke-dasharray:none;stroke-opacity:1"
+        d="m 125.29217,93.550811 24.69846,24.698469 24.71721,-24.71721 z"
+    />
 }
 
 function Bridge() {

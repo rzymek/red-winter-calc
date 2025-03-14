@@ -29,6 +29,7 @@ const CSButtonStyles = {
         color: 'white',
     },
     mortar: {},
+    pajari: {},
     armor: {
         backgroundColor: '#c63026',
         color: 'white',
@@ -38,7 +39,7 @@ const CSButtonStyles = {
 function CSButton(props: { children: number, type?: keyof typeof CSButtonStyles }) {
     return <Button style={props.type ? CSButtonStyles[props.type] : ({})}>
         {props.type === 'mortar' && '('}
-        {props.children}
+        {props.type === 'pajari' ? '🎖️' : props.children}
         {props.type === 'mortar' && ')'}
     </Button>
 }
@@ -54,6 +55,7 @@ export function App() {
         <Row>
             {[5, 7, 8, 10].map(v => <CSButton type='armor'>{v}</CSButton>)}
             <CSButton type='mortar'>{1}</CSButton>
+            <CSButton type='pajari'>{1}</CSButton>
         </Row>
         <Row>{range(1, 5).map(v => <CSButton>{v}</CSButton>)}</Row>
         <Row>
@@ -65,7 +67,6 @@ export function App() {
                 <Button>\_/</Button>
                 <Button>⬇</Button>
                 <Button>🎖️</Button>
-                <Button>💪</Button>
                 <Button>💣🗡</Button>
                 <Button>🔥</Button>
             </SideColumn>
