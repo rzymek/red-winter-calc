@@ -1,10 +1,11 @@
 import {useState} from "preact/hooks";
+import {range} from "remeda";
 
 const width = 300;
 const height = 300;
 const viewBox = `0 0 ${width} ${height}`;
 const hexSize = 50;
-const fill = 'white';
+const fill = '#eeeff4';
 
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];
@@ -42,17 +43,48 @@ const hexPositions = [
 
 function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
     const pos = hexPositions[props.index];
-    return <polygon
-        data-testid={props.index}
-        points={generateHexPoints(pos.x, pos.y, hexSize)}
-        stroke={props.stroke ?? 'black'}
-        fill={fill}
-        style={{cursor: 'pointer', strokeWidth: 3}}
-        onClick={()=>{
-            console.log(props.index);
-            props.onClick?.()
-        }}
-    />;
+    return <>
+        <polygon
+            data-testid={props.index}
+            points={generateHexPoints(pos.x, pos.y, hexSize)}
+            stroke={props.stroke ?? 'black'}
+            fill={fill}
+            style={{cursor: 'pointer', strokeWidth: 3}}
+            onClick={() => {
+                console.log(props.index);
+                props.onClick?.()
+            }}
+        />
+    </>
+}
+
+function Counters(props: { index: number, onClick?: () => void, stroke?: string }) {
+    const pos = hexPositions[props.index];
+    return <foreignObject
+        x={pos.x - hexSize / 2}
+        y={pos.y - (30)}
+        width={75}
+        height={75}
+        textAnchor="middle"
+        dominantBaseline="central"
+        alignmentBaseline="middle"
+    >
+        <div style={{
+            width: hexSize, height: hexSize, display: 'flex',
+            justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 2
+        }}>
+            {range(1, 6 + 3 + 1 - props.index * 2).map(i =>
+                <div style={{
+                    background: 'black',
+                    color: 'white',
+                    padding: '0 3px',
+                    // border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}>
+                    {i}
+                </div>
+            )}
+        </div>
+    </foreignObject>
 }
 
 export function HexagonBoard() {
@@ -65,6 +97,9 @@ export function HexagonBoard() {
             ))}
             <Hex index={selected} stroke={'blue'}/>
             <Bridge/>
+            {hexPositions.map((_, index) => (
+                <Counters index={index} key={index}/>
+            ))}
         </svg>
     );
 }
@@ -73,10 +108,16 @@ function Bridge() {
     return (
         <g transform="matrix(0,0.42,-0.42,0,293,509) translate(-1026,291)" style="pointer-events: none;">
             <polyline
-                style="fill:none;stroke:#000;stroke-width:7.5"
+                style="fill:none;stroke:#fff;stroke-width:12"
                 points="3 95 20 63 127 63 143 95"/>
             <polyline
-                style="fill:none;stroke:#000;stroke-width:7.5"
+                style="fill:none;stroke:#fff;stroke-width:12"
+                points="3 2 20 34 127 34 143 2"/>
+            <polyline
+                style="fill:none;stroke:#000;stroke-width:8"
+                points="3 95 20 63 127 63 143 95"/>
+            <polyline
+                style="fill:none;stroke:#000;stroke-width:8"
                 points="3 2 20 34 127 34 143 2"/>
         </g>
     );

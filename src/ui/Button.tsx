@@ -1,15 +1,7 @@
 import {ComponentChildren} from "preact";
 import type {CSSProperties} from "preact/compat";
 import {useState} from "preact/hooks";
-
-function glowShadow(s: number, color: string) {
-    return [
-        [` ${s}px  ${s}px ${s}px ${color}`],
-        [`-${s}px  ${s}px ${s}px ${color}`],
-        [`-${s}px -${s}px ${s}px ${color}`],
-        [` ${s}px -${s}px ${s}px ${color}`],
-    ].join();
-}
+import {glowShadow} from "./GlowShadow.tsx";
 
 export function Button(props: { children?: ComponentChildren, style?: CSSProperties, disabled?: boolean }) {
     const [selected, setSelected] = useState(false)
