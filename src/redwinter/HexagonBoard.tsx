@@ -6,7 +6,10 @@ const height = 300;
 const viewBox = `0 0 ${width} ${height}`;
 const hexSize = 50;
 const fill = '#eeeff4';
-
+// const colors = {
+//     lake: '#eeeff4',
+//     other: '#82886e',
+// }
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];
     for (let i = 0; i < 6; i++) {
@@ -36,10 +39,7 @@ const hexPositions = [
     {x: centerX - horizontalDistance, y: centerY + (verticalDistance / 2)}, // Bottom left
     {x: centerX - horizontalDistance, y: centerY - (verticalDistance / 2)}, // Top left
 ];
-// const colors = {
-//     lake: '#eeeff4',
-//     other: '#82886e',
-// }
+
 
 function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
     const pos = hexPositions[props.index];
@@ -68,6 +68,7 @@ function Counters(props: { index: number, onClick?: () => void, stroke?: string 
         textAnchor="middle"
         dominantBaseline="central"
         alignmentBaseline="middle"
+        style={{pointerEvents: 'none'}}
     >
         <div style={{
             width: hexSize, height: hexSize, display: 'flex',
@@ -78,7 +79,8 @@ function Counters(props: { index: number, onClick?: () => void, stroke?: string 
                     background: 'black',
                     color: 'white',
                     padding: '0 3px',
-                    // border: '1px solid rgba(255, 255, 255, 0.2)',
+                    outline: '1px solid lightgray',
+                    outlineOffset: -1,
                 }}>
                     {i}
                 </div>
