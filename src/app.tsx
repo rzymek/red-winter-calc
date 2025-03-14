@@ -64,10 +64,9 @@ export function App() {
         </Row>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
-                <Button>\_/</Button>
-                <Button>⬇</Button>
-                <Button>🎖️</Button>
-                <Button>💣🗡</Button>
+                <Button>dug in </Button>
+                <Button>assa ult</Button>
+                <Button>sup 🡻</Button>
                 <Button>🔥</Button>
             </SideColumn>
 

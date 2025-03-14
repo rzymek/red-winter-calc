@@ -7,11 +7,7 @@ const width = 300;
 const height = 300;
 const viewBox = `0 0 ${width} ${height}`;
 const hexSize = 50;
-const fill = '#eeeff4';
-// const colors = {
-//     lake: '#eeeff4',
-//     other: '#82886e',
-// }
+
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];
     for (let i = 0; i < 6; i++) {
@@ -42,15 +38,19 @@ const hexPositions = [
     {x: centerX - horizontalDistance, y: centerY - (verticalDistance / 2)}, // Top left
 ];
 
+const hexColors = {
+    lake: '#b0b8f3',
+    other: '#82886e',
+}
 
-function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
+function Hex(props: { index: number, onClick?: () => void, stroke?: string, type: keyof typeof hexColors }) {
     const pos = hexPositions[props.index];
     return <>
         <polygon
             data-testid={props.index}
             points={generateHexPoints(pos.x, pos.y, hexSize)}
             stroke={props.stroke ?? 'black'}
-            fill={fill}
+            fill={hexColors[props.type]}
             style={{cursor: 'pointer', strokeWidth: 3}}
             onClick={() => {
                 console.log(props.index);
@@ -59,7 +59,7 @@ function Hex(props: { index: number, onClick?: () => void, stroke?: string }) {
         />
         <Suppression {...pos}
                      level={props.index % 4}
-                     side={props.index % 2 === 0 ? 'soviet':'finnish'}/>
+                     side={props.index % 2 === 0 ? 'soviet' : 'finnish'}/>
     </>
 }
 
@@ -99,9 +99,9 @@ export function HexagonBoard() {
              viewBox={viewBox}>
             {hexPositions.map((_, index) => (
                 index !== selected &&
-                <Hex index={index} key={index} onClick={() => setSelected(index)}/>
+                <Hex index={index} key={index} onClick={() => setSelected(index)} type={index < 4 ? 'lake' : 'other'}/>
             ))}
-            <Hex index={selected} stroke={'blue'}/>
+            <Hex index={selected} stroke={'blue'} type={"other"}/>
             <Bonfire/>
             <Bridge/>
             <DugIn/>
