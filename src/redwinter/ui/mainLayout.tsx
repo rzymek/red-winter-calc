@@ -1,15 +1,14 @@
-import './app.css'
-import {HexagonBoard} from "./ui/HexagonBoard.tsx";
-import {Button} from "../ui/Button.tsx";
-import {SideColumn} from "../ui/SideColumn.tsx";
-import {range} from "../generic/range.tsx";
-import {TurnButton} from "./ui/TurnButton.tsx";
-import {Row} from "../ui/row.tsx";
-import {CSButton} from "./ui/CSButton.tsx";
-import {CenterColumn} from "../ui/centerColumn.tsx";
+import {HexagonBoard} from "./HexagonBoard.tsx";
+import {Button} from "../../ui/Button.tsx";
+import {SideColumn} from "../../ui/SideColumn.tsx";
+import {range} from "../../generic/range.tsx";
+import {TurnButton} from "./TurnButton.tsx";
+import {Row} from "../../ui/row.tsx";
+import {CSButton} from "./CSButton.tsx";
+import {CenterColumn} from "../../ui/centerColumn.tsx";
 
 
-export function App() {
+export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column', gap: '1.6mm'}}>
         <Row>
             {[5, 7, 8, 10].map(v => <CSButton type='armor'>{v}</CSButton>)}

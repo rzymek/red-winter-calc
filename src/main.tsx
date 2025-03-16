@@ -1,5 +1,5 @@
 import { render } from 'preact'
-import { App } from './redwinter/app.tsx'
+import { MainLayout } from './redwinter/ui/mainLayout.tsx'
 import './index.css'
 
-render(<App />, document.getElementById('app')!)
+render(<MainLayout />, document.getElementById('app')!)
