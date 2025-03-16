@@ -6,7 +6,19 @@ import {TurnButton} from "./TurnButton.tsx";
 import {Row} from "../../ui/row.tsx";
 import {CSButton} from "./CSButton.tsx";
 import {CenterColumn} from "../../ui/centerColumn.tsx";
+import {HexType, state} from "../../state.ts";
+import {update} from "../../update.ts";
 
+
+function setHexType(type: HexType) {
+    return () => {
+        if (state.selectedHex === undefined) {
+            state.map = state.map.map(_ => type);
+        } else {
+            return state.map[state.selectedHex] = type;
+        }
+    };
+}
 
 export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column', gap: '1.6mm'}}>
@@ -34,8 +46,8 @@ export function MainLayout() {
 
             <SideColumn>
                 <Button>)(</Button>
-                <Button>🧊</Button>
-                <Button>🌲</Button>
+                <Button onClick={update(setHexType('lake'))}>🧊</Button>
+                <Button onClick={update(setHexType('other'))}>🌲</Button>
                 <Button>🏚️</Button>
                 <Button>🇫🇮</Button>
                 <Button>☭</Button>

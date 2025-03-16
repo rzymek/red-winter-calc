@@ -9,7 +9,7 @@ export function Suppression({x, y, level, side}: { x: number, y: number, level: 
         'm 5.43686,13.73506 v 6.65375 l -3.16209,-3.16207 -1.83782,1.83782 6.50696,6.50693 6.58689,-6.58692 -1.92849,-1.92849 -3.41016,3.41014 v -6.7866 z',
         'm 5.43686,27.09943 v 6.65375 l -3.16209,-3.16207 -1.83782,1.83782 6.50696,6.50693 6.58689,-6.58692 -1.92849,-1.92849 -3.41016,3.41014 v -6.7866 z',
     ]
-    return <g transform={`translate(${x - 39},${y - 20})`}>
+    return <g transform={`translate(${x - 39},${y - 20})`} style={{pointerEvents: 'none'}}>
         {levels.slice(0, level).map(d => <path
             style={{
                 fill: colors[side],

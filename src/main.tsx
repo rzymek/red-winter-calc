@@ -2,4 +2,10 @@ import { render } from 'preact'
 import { MainLayout } from './redwinter/ui/mainLayout.tsx'
 import './index.css'
 
-render(<MainLayout />, document.getElementById('app')!)
+const app = document.getElementById('app');
+
+export function rerender() {
+    console.log('rerender')
+    render(<MainLayout/>, app!)
+}
+rerender();

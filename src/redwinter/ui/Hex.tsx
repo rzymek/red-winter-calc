@@ -1,6 +1,7 @@
 import {hexPositions} from "./HexPositions.tsx";
 import {hexSize} from "../config.ts";
 import {Suppression} from "../graphics/Suppression.tsx";
+import {HexType} from "../../state.ts";
 
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];
@@ -15,12 +16,12 @@ function generateHexPoints(centerX: number, centerY: number, size: number): stri
 }
 
 
-const hexColors = {
+const hexColors:Record<HexType, string> = {
     lake: '#b0b8f3',
     other: '#82886e',
 }
 
-export function Hex(props: { index: number, onClick?: () => void, stroke?: string, type: keyof typeof hexColors }) {
+export function Hex(props: { index: number, onClick?: () => void, stroke?: string, type: HexType }) {
     const pos = hexPositions[props.index];
     return <>
         <polygon
@@ -30,7 +31,6 @@ export function Hex(props: { index: number, onClick?: () => void, stroke?: strin
             fill={hexColors[props.type]}
             style={{cursor: 'pointer', strokeWidth: 3}}
             onClick={() => {
-                console.log(props.index);
                 props.onClick?.()
             }}
         />
