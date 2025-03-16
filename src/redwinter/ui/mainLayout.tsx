@@ -34,10 +34,13 @@ export function MainLayout() {
         </Row>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
-                <Button>dug in </Button>
-                <Button>assa ult</Button>
-                <Button>sup 🡻</Button>
-                <Button>🔥</Button>
+                <Button selected={state.dugIn} onClick={update(() => state.dugIn = !state.dugIn)}>dug in </Button>
+                <Button selected={state.assault} onClick={update(() => state.assault = !state.assault)}>assa
+                    ult</Button>
+                <Button
+                    onClick={update(() => state.suppression[state.selectedHex ?? 0] = (state.suppression[state.selectedHex ?? 0] + 1) % 4)}>sup
+                    🡻</Button>
+                <Button selected={state.bonfire} onClick={update(() => state.bonfire = !state.bonfire)}>🔥</Button>
             </SideColumn>
 
             <CenterColumn>
@@ -45,7 +48,7 @@ export function MainLayout() {
             </CenterColumn>
 
             <SideColumn>
-                <Button>)(</Button>
+                <Button selected={state.bridge} onClick={update(() => state.bridge = !state.bridge)}>)(</Button>
                 <Button onClick={update(setHexType('lake'))}>🧊</Button>
                 <Button onClick={update(setHexType('other'))}>🌲</Button>
                 <Button>🏚️</Button>

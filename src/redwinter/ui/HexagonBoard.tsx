@@ -24,13 +24,13 @@ export function HexagonBoard() {
                 <Hex index={selected} stroke={'blue'} type={state.map[selected]}
                      onClick={update(() => state.selectedHex = undefined)}/>
             }
-            <Bonfire/>
-            <Bridge/>
-            <DugIn/>
+            {state.bonfire && <Bonfire/>}
+            {state.bridge && <Bridge/>}
+            {state.dugIn && <DugIn/>}
             {hexPositions.map((_, index) => (
                 <Counters index={index} key={index}/>
             ))}
-            <Assault/>
+            {state.assault && <Assault/>}
         </svg>
     );
 }
