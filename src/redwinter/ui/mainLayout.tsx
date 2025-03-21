@@ -115,7 +115,8 @@ export function MainLayout() {
                             </tbody>
                         </table>
                     </Row>
-                    <Row>{[1, 2, 3, 4, 5, 6, 8].map(v => <CSButton>{v}</CSButton>)}</Row>
+                    <Row>{range(1,4).map(v => <CSButton>{v}</CSButton>)}</Row>
+                    <Row>{range(5,8).map(v => <CSButton>{v}</CSButton>)}</Row>
                 </CenterColumn>
             </div>
         </div>
