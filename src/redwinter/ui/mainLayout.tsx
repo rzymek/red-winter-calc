@@ -67,7 +67,8 @@ export function MainLayout() {
             border: '2px solid #aaa',
             borderRadius: 8,
             position: 'relative',
-            padding: '0 6px',
+            padding: 8,
+            marginBottom: 8,
         }}>
         <span style={{
             color: '#aaa',
@@ -77,17 +78,51 @@ export function MainLayout() {
             background: 'lightgray',
             padding: '0 5px',
         }}>RAT</span>
-            <div style={{transform: 'scale(0.7)', transformOrigin: 'center left', display: 'flex', flexDirection:'column', gap: 8}}>
-                <label><input type="checkbox"/> MG/Armor</label>
-                <label><input type="checkbox"/> self spotting</label>
-                <label><input type="checkbox"/> non-adjacent spotter</label>
-                <label><input type="checkbox"/> range 3+</label>
+            <div style={{
+                fontSize: '70%',
+                display: 'flex',
+            }}>
+                <SideColumn>
+                    <label><input type="radio"/> mortar/IG/Arty</label>
+                    <label><input type="radio"/> MG/Armor</label>
+                    <label><input type="checkbox"/> self spotting</label>
+                    <label><input type="checkbox"/> non-adjacent spotter</label>
+                    <label><input type="checkbox"/> range 3+</label>
+                </SideColumn>
+                <CenterColumn>
+                    <Row>
+                        <table width='50%'>
+                            <tbody>
+                            <tr>
+                                <td>Suppressed:</td>
+                                <td>8+</td>
+                                <td>75%</td>
+                            </tr>
+                            <tr>
+                                <td>Supp. -1 step:</td>
+                                <td>12+</td>
+                                <td>3%</td>
+                            </tr>
+                            <tr>
+                                <td>Supp. -2 step:</td>
+                                <td>14+</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>LOS:</td>
+                                <td colSpan={2}>3</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </Row>
+                    <Row>{[1, 2, 3, 4, 5, 6, 8].map(v => <CSButton>{v}</CSButton>)}</Row>
+                </CenterColumn>
             </div>
         </div>
         <CenterColumn>
-        {range(1, 5).map(day => range(7 * day - 8, 7 * day - 2)).map(r =>
-            <Row>{r.map(v => <TurnButton>{v}</TurnButton>)}</Row>
-        )}
+            {range(1, 5).map(day => range(7 * day - 8, 7 * day - 2)).map(r =>
+                <Row>{r.map(v => <TurnButton>{v}</TurnButton>)}</Row>
+            )}
         </CenterColumn>
     </div>
 }

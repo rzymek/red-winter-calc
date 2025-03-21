@@ -19,3 +19,7 @@ body {
     margin: 0 auto;
     max-width: 16cm;
 }
+label {
+    background: #bbb;
+    padding: 1mm 0;
+}
