@@ -84,8 +84,10 @@ export function MainLayout() {
                 <label><input type="checkbox"/> range 3+</label>
             </div>
         </div>
+        <CenterColumn>
         {range(1, 5).map(day => range(7 * day - 8, 7 * day - 2)).map(r =>
             <Row>{r.map(v => <TurnButton>{v}</TurnButton>)}</Row>
         )}
+        </CenterColumn>
     </div>
 }
