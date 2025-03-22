@@ -48,7 +48,7 @@ export function MainLayout() {
                 </WButton>
                 <WButton
                     onClick={update(() => state.suppression[state.selectedHex ?? 0] = (state.suppression[state.selectedHex ?? 0] + 1) % 4)}>
-                    sup 🡻
+                    suppressed
                 </WButton>
                 <Button selected={state.bonfire} onClick={update(() => state.bonfire = !state.bonfire)}>🔥</Button>
             </SideColumn>
@@ -91,7 +91,7 @@ export function MainLayout() {
                 </SideColumn>
                 <CenterColumn>
                     <Row>
-                        <table width='50%'>
+                        <table style={{minWidth:'6mmm0%'}}>
                             <tbody>
                             <tr>
                                 <td>Suppressed:</td>
