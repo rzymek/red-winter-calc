@@ -1,11 +1,12 @@
 import {hexPositions} from "./HexPositions.tsx";
 import {hexSize} from "../config.ts";
-import {range} from "remeda";
+import {state} from "../../state.ts";
+import {CSStyles} from "./CSStyles.tsx";
 
 export function Counters(props: { index: number, onClick?: () => void, stroke?: string }) {
     const pos = hexPositions[props.index];
     return <foreignObject
-        x={pos.x - hexSize / 2}
+        x={pos.x - hexSize / 2 - 5}
         y={pos.y - (30)}
         width={75}
         height={75}
@@ -15,17 +16,15 @@ export function Counters(props: { index: number, onClick?: () => void, stroke?: 
         style={{pointerEvents: 'none'}}
     >
         <div style={{
-            width: hexSize, height: hexSize, display: 'flex',
+            width: hexSize+10, height: hexSize, display: 'flex',
             justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 2
         }}>
-            {range(1, 6 + 3 + 1 - props.index * 2).map(i =>
-                <div style={{
-                    background: 'black',
-                    color: 'white',
+            {state.cs[props.index].map(cs => <div style={{
+                    ...CSStyles[cs.type],
                     padding: '0 3px',
                     outline: '1px solid lightgray',
                     outlineOffset: -1,
-                }}>{i}</div>
+                }}>{cs.value}</div>
             )}
         </div>
     </foreignObject>

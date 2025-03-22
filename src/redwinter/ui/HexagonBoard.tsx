@@ -1,6 +1,5 @@
 import {Bonfire} from "../graphics/Bonfire.tsx";
 import {DugIn} from "../graphics/DugIn.tsx";
-import {Assault} from "../graphics/Assault.tsx";
 import {Bridge} from "../graphics/Bridge.tsx";
 import {viewBox} from "../config.ts";
 import {hexPositions} from "./HexPositions.tsx";
@@ -25,12 +24,11 @@ export function HexagonBoard() {
                      onClick={update(() => state.selectedHex = undefined)}/>
             }
             {state.bonfire && <Bonfire/>}
-            {state.bridge && <Bridge/>}
+            {state.bridge !== undefined && <Bridge position={state.bridge}/>}
             {state.dugIn && <DugIn/>}
             {hexPositions.map((_, index) => (
                 <Counters index={index} key={index}/>
             ))}
-            {state.assault && <Assault/>}
         </svg>
     );
 }

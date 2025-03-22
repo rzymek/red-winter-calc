@@ -1,20 +1,8 @@
 import {Button} from "../../ui/Button.tsx";
+import {CSStyles, CSType} from "./CSStyles.tsx";
 
-const CSButtonStyles = {
-    MG: {
-        backgroundColor: 'black',
-        color: 'white',
-    },
-    mortar: {},
-    pajari: {},
-    armor: {
-        backgroundColor: '#c63026',
-        color: 'white',
-    }
-} as const;
-
-export function CSButton(props: { children: number, type?: keyof typeof CSButtonStyles }) {
-    return <Button style={props.type ? CSButtonStyles[props.type] : ({})}>
+export function CSButton(props: { children: number, type?: CSType, onClick?: () => void }) {
+    return <Button style={props.type ? CSStyles[props.type] : ({})} onClick={props.onClick}>
         {props.type === 'mortar' && '('}
         {props.type === 'pajari' ? '🎖️' : props.children}
         {props.type === 'mortar' && ')'}
