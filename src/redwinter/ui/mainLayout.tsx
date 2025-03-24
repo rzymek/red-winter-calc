@@ -66,7 +66,7 @@ export function MainLayout() {
         <span style={{
             color: '#aaa',
             position: 'absolute',
-            top: -10,
+            top: -12,
             left: 10,
             background: 'lightgray',
             padding: '0 5px',
