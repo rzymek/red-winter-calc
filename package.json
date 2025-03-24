@@ -19,7 +19,7 @@
     "jsdom": "^26.0.0",
     "preact": "^10.19.3",
     "react-dice-roll": "^1.2.2",
-    "remeda": "^1.30.0"
+    "remeda": "^2.21.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx-source": "^7.23.3",

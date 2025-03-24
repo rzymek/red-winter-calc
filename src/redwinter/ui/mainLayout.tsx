@@ -10,6 +10,7 @@ import {update} from "../../update.ts";
 import {toggleTool} from "./toggleTool.tsx";
 import {RAT} from "./RAT.tsx";
 import {TurnTrack} from "./turnTrack.tsx";
+import {CombatStats} from "../calc/combatStats.tsx";
 
 export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -58,6 +59,7 @@ export function MainLayout() {
             </SideColumn>
         </div>
         <RAT/>
+        <CombatStats/>
         <CenterColumn>
             <TurnTrack/>
         </CenterColumn>
