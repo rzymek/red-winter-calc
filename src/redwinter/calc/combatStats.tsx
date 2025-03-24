@@ -54,7 +54,7 @@ export function CombatStats() {
             ratio,
             effectiveRatio,
             effectiveShift,
-            shift,
+            shift: shift.map(it=>`${it.type}: ${it.value}`),
         }, null, 1)
     }</pre>
 }
