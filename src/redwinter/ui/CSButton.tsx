@@ -1,10 +1,17 @@
 import {Button} from "../../ui/Button.tsx";
-import {CSStyles, CSType} from "./CSStyles.tsx";
+import {CSStyles} from "./CSStyles.tsx";
+import {CS, state} from "../../state.ts";
+import {toggleTool} from "./toggleTool.tsx";
+import {equals} from 'remeda';
 
-export function CSButton(props: { children: number, type?: CSType, onClick?: () => void }) {
-    return <Button style={props.type ? CSStyles[props.type] : ({})} onClick={props.onClick}>
-        {props.type === 'mortar' && '('}
-        {props.type === 'pajari' ? '🎖️' : props.children}
-        {props.type === 'mortar' && ')'}
+export function CSButton(props: { cs: CS }) {
+    return <Button
+        selected={equals(props.cs, state.selectedTool)}
+        style={props.cs.type ? CSStyles[props.cs.type] : ({})}
+        onClick={toggleTool(props.cs)}
+    >
+        {props.cs.type === 'mortar' && '('}
+        {props.cs.type === 'pajari' ? '🎖️' : props.cs.value}
+        {props.cs.type === 'mortar' && ')'}
     </Button>
 }

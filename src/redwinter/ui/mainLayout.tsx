@@ -6,48 +6,9 @@ import {TurnButton} from "./TurnButton.tsx";
 import {Row} from "../../ui/row.tsx";
 import {CSButton} from "./CSButton.tsx";
 import {CenterColumn} from "../../ui/centerColumn.tsx";
-import {HexType, state} from "../../state.ts";
+import {state} from "../../state.ts";
 import {update} from "../../update.ts";
-import {CSType} from "./CSStyles.tsx";
-
-
-function setHexType(type: HexType) {
-    return () => {
-        if (state.selectedHex === undefined) {
-            state.map = state.map.map(_ => type);
-        } else {
-            return state.map[state.selectedHex] = type;
-        }
-    };
-}
-
-function selected(states: boolean[], selectedHex: number | undefined) {
-    return selectedHex !== undefined && states[selectedHex];
-}
-
-function toggle(states: boolean[], selectedHex: number | undefined) {
-    if (selectedHex === undefined) {
-        return
-    }
-    ;
-    states[selectedHex] = !states[selectedHex];
-}
-
-function toggleBridge() {
-    if (state.bridge == state.selectedHex) {
-        state.bridge = undefined;
-    } else {
-        state.bridge = state.selectedHex;
-    }
-}
-
-function addCS(value: number, type: CSType) {
-    return () => {
-        if (state.selectedHex !== undefined) {
-            state.cs[state.selectedHex].push({value, type,});
-        }
-    }
-}
+import {toggleTool} from "./toggleTool.tsx";
 
 export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -58,30 +19,26 @@ export function MainLayout() {
             </SideColumn>
             <CenterColumn>
                 <Row>
-                    {[5, 7, 8, 10].map(value =>
-                        <CSButton type='armor'
-                                  onClick={update(addCS(value, 'armor'))}>
-                            {value}
-                        </CSButton>)}
-                    <CSButton type='mortar' onClick={update(addCS(1, 'mortar'))}>{1}</CSButton>
-                    <CSButton type='pajari' onClick={update(addCS(1, 'pajari'))}>{1}</CSButton>
+                    {[5, 7, 8, 10].map(value => <CSButton cs={{value, type: 'armor'}}/>)}
+                    <CSButton cs={{value: 1, type: 'mortar'}}/>
+                    <CSButton cs={{value: 1, type: 'pajari'}}/>
                 </Row>
-                <Row>{range(1, 5).map(v => <CSButton onClick={update(addCS(v, 'infantry'))}>{v}</CSButton>)}</Row>
+                <Row>{range(1, 5).map(v => <CSButton cs={{value: v, type: 'infantry'}}/>)}</Row>
                 <Row>
-                    {range(1, 4).map(v => <CSButton type='MG' onClick={update(addCS(v, 'MG'))}>{v}</CSButton>)}
-                    <Button onClick={update(() => state.selectedHex !== undefined && state.cs[state.selectedHex].pop())}>⌫</Button>
+                    {range(1, 4).map(v => <CSButton cs={{value: v, type: 'MG'}}/>)}
+                    <Button selected={state.selectedTool === 'backspace'} onClick={toggleTool('backspace')}>⌫</Button>
                 </Row>
             </CenterColumn>
         </div>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
-                <WButton selected={selected(state.dugIn, state.selectedHex)}
-                         onClick={update(() => toggle(state.dugIn, state.selectedHex))}>dug in </WButton>
+                <WButton selected={state.selectedTool === 'dugIn'}
+                         onClick={toggleTool('dugIn')}>dug in </WButton>
                 <WButton selected={state.assault} onClick={update(() => state.assault = !state.assault)}>
                     assault
                 </WButton>
-                <WButton
-                    onClick={update(() => state.suppression[state.selectedHex ?? 0] = (state.suppression[state.selectedHex ?? 0] + 1) % 4)}>
+                <WButton selected={state.selectedTool === 'suppress'}
+                         onClick={toggleTool('suppress')}>
                     suppressed
                 </WButton>
                 <Button selected={state.bonfire} onClick={update(() => state.bonfire = !state.bonfire)}>🔥</Button>
@@ -92,11 +49,9 @@ export function MainLayout() {
             </CenterColumn>
 
             <SideColumn>
-                <Button selected={state.selectedHex !== undefined && state.bridge === state.selectedHex}
-                        disabled={state.selectedHex === undefined || state.selectedHex == 0}
-                        onClick={update(toggleBridge)}>)(</Button>
-                <Button onClick={update(setHexType('lake'))}>🧊</Button>
-                <Button onClick={update(setHexType('other'))}>🌲</Button>
+                <Button selected={state.selectedTool === 'bridge'}
+                        onClick={toggleTool('bridge')}>)(</Button>
+                <Button selected={state.selectedTool === 'terrain'} onClick={toggleTool('terrain')}>🌲</Button>
                 <Button selected={state.hotel}
                         onClick={update(() => state.hotel = !state.hotel)}>🏚️</Button>
             </SideColumn>
@@ -153,8 +108,8 @@ export function MainLayout() {
                             </tbody>
                         </table>
                     </Row>
-                    <Row>{range(1, 4).map(v => <CSButton>{v}</CSButton>)}</Row>
-                    <Row>{range(5, 8).map(v => <CSButton>{v}</CSButton>)}</Row>
+                    <Row>{range(1, 4).map(v => <Button>{v}</Button>)}</Row>
+                    <Row>{range(5, 8).map(v => <Button>{v}</Button>)}</Row>
                 </CenterColumn>
             </div>
         </div>
