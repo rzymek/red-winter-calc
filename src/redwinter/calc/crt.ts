@@ -15,6 +15,15 @@ Roll 2d6 | 1:4  | 1:3  | 1:2  | 1:1  | 2:1  | 3:1  | 4:1  | 5:1  | 6:1
 `
 
 
+const crtBy2d6 = crt.split('\n')
+    .slice(3)
+    .map(line => line.trim())
+    .filter(line => line)// Skip the header row
+    .map(line => line.split('|').slice(1).map(cell => cell.trim()));
+export function combatResult(roll2d6: number, ratio: string) {
+    return crtBy2d6[roll2d6 - 2][ratios.indexOf(ratio)];
+}
+
 const ratios = crt
     .split('\n')[1] // Get the header row
     .split('|') // Split the header by '|'
