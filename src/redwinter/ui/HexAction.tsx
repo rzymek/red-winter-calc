@@ -2,7 +2,6 @@ import {state} from "../../state.ts";
 import {assertNever} from "../../generic/AssertNever.tsx";
 
 export function hexAction(hexIndex: number) {
-    console.log({hexIndex})
     if (state.selectedTool === undefined) {
         return;
     } else if (state.selectedTool === 'dugIn') {
@@ -23,6 +22,8 @@ export function hexAction(hexIndex: number) {
         state.map[hexIndex] = state.map[hexIndex] === 'lake' ? 'other' : 'lake';
     } else if (state.selectedTool === 'backspace') {
         state.cs[hexIndex].pop();
+    } else if (state.selectedTool === 'rat') {
+        state.rat.targetHex = hexIndex;
     } else {
         assertNever(state.selectedTool);
     }

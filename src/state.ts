@@ -8,10 +8,9 @@ export interface CS {
     type: CSType,
 }
 
-export type Tool = undefined | 'terrain' | 'bridge' | 'dugIn' | 'suppress' | CS | 'backspace';
+export type Tool = undefined | 'terrain' | 'bridge' | 'dugIn' | 'suppress' | CS | 'backspace' | 'rat';
 const totalHexes = 7;
 export const state = {
-    selectedHex: undefined as number | undefined,
     bridge: undefined as number | undefined,
     map: range(0, totalHexes).map(_ => 'other' as HexType),
     suppression: range(0, totalHexes).map(_ => 0),
@@ -21,5 +20,15 @@ export const state = {
     hotel: false,
     cs: range(0, totalHexes).map(_ => [] as CS[]),
     selectedTool: undefined as Tool,
+    rat: {
+        modifiers: {
+            direct: true,
+            selfSpotting: false,
+            nonAdjacentSpotter: false,
+            longRange: false,
+        },
+        rs: 2,
+        targetHex: undefined as number | undefined,
+    }
 }
 

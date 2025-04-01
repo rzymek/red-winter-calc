@@ -3,6 +3,18 @@ import {CenterColumn} from "../../ui/centerColumn.tsx";
 import {Row} from "../../ui/row.tsx";
 import {range} from "../../generic/range.tsx";
 import {Button} from "../../ui/Button.tsx";
+import {state} from "../../state.ts";
+import {update} from "../../update.ts";
+
+function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: string }) {
+    const {modifiers} = state.rat;
+    return <label>
+        <input type="checkbox"
+               checked={modifiers[props.value]}
+               onClick={update(() => modifiers[props.value] = !modifiers[props.value])}/>
+        {props.children}
+    </label>
+}
 
 export function RAT() {
     return <div style={{
@@ -25,15 +37,17 @@ export function RAT() {
             display: 'flex',
         }}>
             <SideColumn>
-                <label><input type="radio"/> mortar/IG/Arty</label>
-                <label><input type="radio"/> MG/Armor</label>
-                <label><input type="checkbox"/> self spotting</label>
-                <label><input type="checkbox"/> non-adjacent spotter</label>
-                <label><input type="checkbox"/> range 3+</label>
+                <label><input type="radio" checked={!state.rat.modifiers.direct}
+                              onClick={update(() => state.rat.modifiers.direct = false)}/> mortar/IG/Arty</label>
+                <label><input type="radio" checked={state.rat.modifiers.direct}
+                              onClick={update(() => state.rat.modifiers.direct = true)}/> MG/Armor</label>
+                <Checkbox value='selfSpotting'>self spotting</Checkbox>
+                <Checkbox value='nonAdjacentSpotter'>non-adj.spotter</Checkbox>
+                <Checkbox value='longRange'>range 3+</Checkbox>
             </SideColumn>
             <CenterColumn>
                 <Row>
-                    <table style={{minWidth: '6mmm0%'}}>
+                    <table style={{minWidth: '60%'}}>
                         <tbody>
                         <tr>
                             <td>Suppressed:</td>
@@ -57,9 +71,19 @@ export function RAT() {
                         </tbody>
                     </table>
                 </Row>
-                <Row>{range(1, 4).map(v => <Button>{v}</Button>)}</Row>
-                <Row>{range(5, 8).map(v => <Button>{v}</Button>)}</Row>
+                <Row>{range(1, 4).map(v => <RATButton>{v}</RATButton>)}</Row>
+                <Row>{range(5, 8).map(v => <RATButton>{v}</RATButton>)}</Row>
             </CenterColumn>
         </div>
     </div>
+}
+
+function RATButton(props: { children: number }) {
+    return <Button selected={state.selectedTool === 'rat' && state.rat.rs === props.children}
+                   onClick={update(() => {
+                       state.selectedTool = 'rat';
+                       state.rat.rs = props.children;
+                   })}>
+        {props.children}
+    </Button>
 }
