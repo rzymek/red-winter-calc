@@ -5,6 +5,7 @@ import {range} from "../../generic/range.tsx";
 import {Button} from "../../ui/Button.tsx";
 import {state} from "../../state.ts";
 import {update} from "../../update.ts";
+import {ratDRM} from "../calc/rat.ts";
 
 function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: string }) {
     const {modifiers} = state.rat;
@@ -16,7 +17,33 @@ function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: st
     </label>
 }
 
+function probability2d6(need: number) {
+    if (need <= 2) return '100%';
+    if (need > 12) return '0%';
+
+    const totalOutcomes = 36;
+    let successfulOutcomes = 0;
+    for (let i = 1; i <= 6; i++) {
+        for (let j = 1; j <= 6; j++) {
+            if (i + j >= need) {
+                successfulOutcomes++;
+            }
+        }
+    }
+
+    return (Math.round((successfulOutcomes / totalOutcomes) * 1000) / 10) + '%';
+}
+
+function RATResult(props: { need: number, children: string }) {
+    return <tr>
+        <td>{props.children}</td>
+        <td>{props.need}+</td>
+        <td>{probability2d6(props.need)}</td>
+    </tr>
+}
+
 export function RAT() {
+    const drm = ratDRM();
     return <div style={{
         border: '2px solid #aaa',
         borderRadius: 8,
@@ -49,21 +76,9 @@ export function RAT() {
                 <Row>
                     <table style={{minWidth: '60%'}}>
                         <tbody>
-                        <tr>
-                            <td>Suppressed:</td>
-                            <td>8+</td>
-                            <td>75%</td>
-                        </tr>
-                        <tr>
-                            <td>Supp. -1 step:</td>
-                            <td>12+</td>
-                            <td>3%</td>
-                        </tr>
-                        <tr>
-                            <td>Supp. -2 step:</td>
-                            <td>14+</td>
-                            <td>0%</td>
-                        </tr>
+                        <RATResult need={14-drm}>Suppressed</RATResult>
+                        <RATResult need={17-drm}>Supp. -1 step</RATResult>
+                        <RATResult need={19-drm}>Supp. -2 step</RATResult>
                         <tr>
                             <td>LOS:</td>
                             <td colSpan={2}>3</td>

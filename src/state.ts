@@ -21,6 +21,7 @@ export const state = {
     cs: range(0, totalHexes).map(_ => [] as CS[]),
     selectedTool: undefined as Tool,
     rat: {
+        firer: 'MG' as 'mortar' | 'IG' | 'armored' | 'infantry' | 'MG' | 'arty',
         modifiers: {
             direct: true,
             selfSpotting: false,
@@ -29,6 +30,7 @@ export const state = {
         },
         rs: 2,
         targetHex: undefined as number | undefined,
-    }
+    },
+    combatDefenderNationality: 'finnish' as 'finnish' | 'soviet'
 }
 
