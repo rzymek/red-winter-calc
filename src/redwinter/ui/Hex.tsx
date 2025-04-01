@@ -2,6 +2,7 @@ import {hexPositions} from "./HexPositions.tsx";
 import {hexSize} from "../config.ts";
 import {Suppression} from "../graphics/Suppression.tsx";
 import {HexType, state} from "../../state.ts";
+import {otherNationality} from "../calc/otherNationality.ts";
 
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];
@@ -36,6 +37,6 @@ export function Hex(props: { index: number, onClick?: () => void, stroke?: strin
         />
         <Suppression {...pos}
                      level={state.suppression[props.index]}
-                     side={props.index % 2 === 0 ? 'soviet' : 'finnish'}/>
+                     side={props.index === 0 ? state.combatDefenderNationality : otherNationality(state.combatDefenderNationality)}/>
     </>
 }

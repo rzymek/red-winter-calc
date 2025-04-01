@@ -1,5 +1,6 @@
 import {state} from "../../state.ts";
 import {pipe, sum} from "remeda";
+import {otherNationality} from "./otherNationality.ts";
 
 function numberOfInfantryCompanies(targetHex: number) {
     return state.cs[targetHex].filter(it => it.type === 'infantry').length;
@@ -7,10 +8,6 @@ function numberOfInfantryCompanies(targetHex: number) {
 
 function isCenterHex(targetHex: number) {
     return targetHex === 0;
-}
-
-function otherNationality(nationality: "finnish" | "soviet") {
-    return nationality === 'finnish' ? 'soviet' : 'finnish';
 }
 
 function ratTargetNationality(targetHex: number) {

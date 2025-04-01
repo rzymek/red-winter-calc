@@ -16,8 +16,11 @@ export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column'}}>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
-                <Button>🇫🇮</Button>
-                <Button>☭</Button>
+                <div>Defender:</div>
+                <Button onClick={update(() => state.combatDefenderNationality = 'finnish')}
+                        selected={state.combatDefenderNationality === 'finnish'}>🇫🇮</Button>
+                <Button onClick={update(() => state.combatDefenderNationality = 'soviet')}
+                        selected={state.combatDefenderNationality === 'soviet'}>☭</Button>
             </SideColumn>
             <CenterColumn>
                 <Row>
