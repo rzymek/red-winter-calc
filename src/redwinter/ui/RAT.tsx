@@ -3,7 +3,7 @@ import {CenterColumn} from "../../ui/centerColumn.tsx";
 import {Row} from "../../ui/row.tsx";
 import {range} from "../../generic/range.tsx";
 import {Button} from "../../ui/Button.tsx";
-import {state} from "../../state.ts";
+import {RATFirer, state} from "../../state.ts";
 import {update} from "../../update.ts";
 import {ratDRM} from "../calc/rat.ts";
 
@@ -20,7 +20,6 @@ function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: st
 function probability2d6(need: number) {
     if (need <= 2) return '100%';
     if (need > 12) return '0%';
-
     const totalOutcomes = 36;
     let successfulOutcomes = 0;
     for (let i = 1; i <= 6; i++) {
@@ -30,7 +29,6 @@ function probability2d6(need: number) {
             }
         }
     }
-
     return (Math.round((successfulOutcomes / totalOutcomes) * 1000) / 10) + '%';
 }
 
@@ -40,6 +38,18 @@ function RATResult(props: { need: number, children: string }) {
         <td>{props.need}+</td>
         <td>{probability2d6(props.need)}</td>
     </tr>
+}
+
+function RATFirerSelector() {
+    const options: RATFirer[] = [
+        'MG', 'mortar', 'infantry', 'arty', 'IG', 'armored',
+    ];
+    return <select onChange={e => update(() =>
+        state.rat.firer = (e.target as any).value)}>
+        {options.map(o =>
+            <option key={o}>{o}</option>
+        )}
+    </select>;
 }
 
 export function RAT() {
@@ -64,10 +74,7 @@ export function RAT() {
             display: 'flex',
         }}>
             <SideColumn>
-                <label><input type="radio" checked={!state.rat.modifiers.direct}
-                              onClick={update(() => state.rat.modifiers.direct = false)}/> mortar/IG/Arty</label>
-                <label><input type="radio" checked={state.rat.modifiers.direct}
-                              onClick={update(() => state.rat.modifiers.direct = true)}/> MG/Armor</label>
+                <RATFirerSelector/>
                 <Checkbox value='selfSpotting'>self spotting</Checkbox>
                 <Checkbox value='nonAdjacentSpotter'>non-adj.spotter</Checkbox>
                 <Checkbox value='longRange'>range 3+</Checkbox>
@@ -76,9 +83,9 @@ export function RAT() {
                 <Row>
                     <table style={{minWidth: '60%'}}>
                         <tbody>
-                        <RATResult need={14-drm}>Suppressed</RATResult>
-                        <RATResult need={17-drm}>Supp. -1 step</RATResult>
-                        <RATResult need={19-drm}>Supp. -2 step</RATResult>
+                        <RATResult need={14 - drm}>Suppressed</RATResult>
+                        <RATResult need={17 - drm}>Supp. -1 step</RATResult>
+                        <RATResult need={19 - drm}>Supp. -2 step</RATResult>
                         <tr>
                             <td>LOS:</td>
                             <td colSpan={2}>3</td>

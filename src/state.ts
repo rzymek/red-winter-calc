@@ -9,6 +9,7 @@ export interface CS {
 }
 
 export type Tool = undefined | 'terrain' | 'bridge' | 'dugIn' | 'suppress' | CS | 'backspace' | 'rat';
+export type RATFirer = 'mortar' | 'IG' | 'armored' | 'infantry' | 'MG' | 'arty';
 const totalHexes = 7;
 export const state = {
     bridge: undefined as number | undefined,
@@ -21,9 +22,8 @@ export const state = {
     cs: range(0, totalHexes).map(_ => [] as CS[]),
     selectedTool: undefined as Tool,
     rat: {
-        firer: 'MG' as 'mortar' | 'IG' | 'armored' | 'infantry' | 'MG' | 'arty',
+        firer: 'MG' as RATFirer,
         modifiers: {
-            direct: true,
             selfSpotting: false,
             nonAdjacentSpotter: false,
             longRange: false,
