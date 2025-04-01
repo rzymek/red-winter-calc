@@ -1,6 +1,7 @@
 import {state} from "../../state.ts";
 import {pipe, sum} from "remeda";
 import {otherNationality} from "./otherNationality.ts";
+import {getTimeOfDay, TimeOfDay} from "../ui/timeOfDay.tsx";
 
 function numberOfInfantryCompanies(targetHex: number) {
     return state.cs[targetHex].filter(it => it.type === 'infantry').length;
@@ -58,8 +59,16 @@ function dugIn(targetHex: number) {
     return 0;
 }
 
-function nightTurn() {
-    return 0; // TODO
+function visibility() {
+    const timeOfDay = getTimeOfDay(state.turn);
+    const fog:TimeOfDay[] = ['morning3','morning4'];
+    const lowVisibility:TimeOfDay[] = ['dawn',...fog, 'dusk'];
+    if(lowVisibility.includes(timeOfDay)) {
+        return -1;
+    }else if(timeOfDay === 'night'){
+        return -2
+    }
+    return 0;
 }
 
 function longRange() {
@@ -86,7 +95,7 @@ export function ratDRM() {
         indirectSelfSpotting(),
         nonAdjacentSpotter(),
         dugIn(targetHex),
-        nightTurn(),
+        visibility(),
         longRange(),
     ], sum());
 }

@@ -1,18 +1,8 @@
-import {ArrayElement} from "../../generic/arrayElement.tsx";
 import {CSSProperties} from "preact/compat";
 import {Button} from "../../ui/Button.tsx";
+import {getTimeOfDay, TimeOfDay} from "./timeOfDay.tsx";
 
-const DayParts = [
-    'dawn',
-    'morning3',
-    'morning4',
-    'day',
-    'day',
-    'dusk',
-    'night',
-] as const;
-
-const TurnButtonColors: Record<ArrayElement<typeof DayParts>, CSSProperties> = {
+const TurnButtonColors: Record<TimeOfDay, CSSProperties> = {
     dawn: {
         backgroundColor: '#657d97',
     },
@@ -34,10 +24,11 @@ const TurnButtonColors: Record<ArrayElement<typeof DayParts>, CSSProperties> = {
     }
 }
 
-export function TurnButton(props: { children: number }) {
-    const day = props.children;
-    const part = DayParts[(day + 1) % DayParts.length];
-    return <Button style={TurnButtonColors[part]} disabled={day <= 0}>{
-        day > 0 ? day : ''
+export function TurnButton(props: { children: number, selected: boolean, onClick: () => void }) {
+    const {children, ...buttonProps} = props;
+    const turn = children;
+    const part = getTimeOfDay(turn);
+    return <Button {...buttonProps} style={TurnButtonColors[part]} disabled={turn <= 0}>{
+        turn > 0 ? turn : ''
     }</Button>
 }

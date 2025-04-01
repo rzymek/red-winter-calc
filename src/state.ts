@@ -31,6 +31,7 @@ export const state = {
         rs: 2,
         targetHex: undefined as number | undefined,
     },
-    combatDefenderNationality: 'finnish' as 'finnish' | 'soviet'
+    combatDefenderNationality: 'finnish' as 'finnish' | 'soviet',
+    turn: 1
 }
 

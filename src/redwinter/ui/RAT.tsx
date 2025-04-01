@@ -6,11 +6,13 @@ import {Button} from "../../ui/Button.tsx";
 import {RATFirer, state} from "../../state.ts";
 import {update} from "../../update.ts";
 import {ratDRM} from "../calc/rat.ts";
+import {getLOS, getTimeOfDay} from "./timeOfDay.tsx";
 
-function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: string }) {
+function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
     const {modifiers} = state.rat;
     return <label>
         <input type="checkbox"
+               disabled={props.disabled}
                checked={modifiers[props.value]}
                onClick={update(() => modifiers[props.value] = !modifiers[props.value])}/>
         {props.children}
@@ -40,11 +42,11 @@ function RATResult(props: { need: number, children: string }) {
     </tr>
 }
 
-function RATFirerSelector() {
+function RATFirerSelector(props: { disabled?: boolean }) {
     const options: RATFirer[] = [
         'MG', 'mortar', 'infantry', 'arty', 'IG', 'armored',
     ];
-    return <select onChange={e => update(() =>
+    return <select {...props} onChange={e => update(() =>
         state.rat.firer = (e.target as any).value)}>
         {options.map(o =>
             <option key={o}>{o}</option>
@@ -53,6 +55,7 @@ function RATFirerSelector() {
 }
 
 export function RAT() {
+    const noRAS = getTimeOfDay(state.turn) === 'night';
     const drm = ratDRM();
     return <div style={{
         border: '2px solid #aaa',
@@ -74,10 +77,10 @@ export function RAT() {
             display: 'flex',
         }}>
             <SideColumn>
-                <RATFirerSelector/>
-                <Checkbox value='selfSpotting'>self spotting</Checkbox>
-                <Checkbox value='nonAdjacentSpotter'>non-adj.spotter</Checkbox>
-                <Checkbox value='longRange'>range 3+</Checkbox>
+                <RATFirerSelector disabled={noRAS}/>
+                <Checkbox value='selfSpotting' disabled={noRAS}>self spotting</Checkbox>
+                <Checkbox value='nonAdjacentSpotter' disabled={noRAS}>non-adj.spotter</Checkbox>
+                <Checkbox value='longRange' disabled={noRAS}>range 3+</Checkbox>
             </SideColumn>
             <CenterColumn>
                 <Row>
@@ -88,24 +91,23 @@ export function RAT() {
                         <RATResult need={19 - drm}>Supp. -2 step</RATResult>
                         <tr>
                             <td>LOS:</td>
-                            <td colSpan={2}>3</td>
+                            <td colSpan={2}>{getLOS(state.turn)}</td>
                         </tr>
                         </tbody>
                     </table>
                 </Row>
-                <Row>{range(1, 4).map(v => <RATButton>{v}</RATButton>)}</Row>
-                <Row>{range(5, 8).map(v => <RATButton>{v}</RATButton>)}</Row>
+                <Row>{range(1, 4).map(v => <RATButton disabled={noRAS}>{v}</RATButton>)}</Row>
+                <Row>{range(5, 8).map(v => <RATButton disabled={noRAS}>{v}</RATButton>)}</Row>
             </CenterColumn>
         </div>
     </div>
 }
 
-function RATButton(props: { children: number }) {
+function RATButton(props: { children: number, disabled?: boolean }) {
     return <Button selected={state.selectedTool === 'rat' && state.rat.rs === props.children}
+                   {...props}
                    onClick={update(() => {
                        state.selectedTool = 'rat';
                        state.rat.rs = props.children;
-                   })}>
-        {props.children}
-    </Button>
+                   })}/>
 }
