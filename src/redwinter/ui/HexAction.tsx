@@ -1,18 +1,45 @@
-import {state} from "../../state.ts";
+import {CS, state, Tool} from "../../state.ts";
 import {assertNever} from "../../generic/AssertNever.tsx";
+
+function isUnitToolSelected(tool: Tool): tool is CS {
+    return typeof (tool) === 'object';
+}
 
 export function hexAction(hexIndex: number) {
     if (state.selectedTool === undefined) {
         return;
     } else if (state.selectedTool === 'dugIn') {
         state.dugIn[hexIndex] = !state.dugIn[hexIndex];
+        state.map[hexIndex] = 'other';
     } else if (state.selectedTool === 'bridge') {
         if (hexIndex > 0) {
             state.bridge = state.bridge === hexIndex ? undefined : hexIndex;
+            state.map[hexIndex] = 'other';
+            state.map[0] = 'other';
         }
     } else if (state.selectedTool === 'suppress') {
         state.suppression[hexIndex] = (state.suppression[hexIndex] + 1) % 4
-    } else if (typeof (state.selectedTool) === 'object') {
+    } else if (isUnitToolSelected(state.selectedTool)) {
+        if (state.selectedTool.type === 'pajari') {
+            state.cs = state.cs.map(it => it.filter(unit => unit.type !== 'pajari'));
+            if (hexIndex === 0) {
+                state.combatDefenderNationality = 'finnish';
+            } else {
+                state.combatDefenderNationality = 'soviet';
+            }
+        } else if (state.selectedTool.type === 'armor') {
+            const selectedUnitCS = state.selectedTool.value;
+            state.cs = state.cs.map(it => {
+                return it.filter(unit =>
+                    unit.type !== 'armor' && unit.value === selectedUnitCS
+                );
+            });
+            if (hexIndex === 0) {
+                state.combatDefenderNationality = 'soviet';
+            } else {
+                state.combatDefenderNationality = 'finnish';
+            }
+        }
         const units = state.cs[hexIndex];
         units.push(state.selectedTool);
         if (state.cs[hexIndex].length > 9) {

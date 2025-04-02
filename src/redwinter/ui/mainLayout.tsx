@@ -5,18 +5,22 @@ import {range} from "../../generic/range.tsx";
 import {Row} from "../../ui/row.tsx";
 import {CSButton} from "./CSButton.tsx";
 import {CenterColumn} from "../../ui/centerColumn.tsx";
-import {state} from "../../state.ts";
+import {resetState, state} from "../../state.ts";
 import {update} from "../../update.ts";
 import {toggleTool} from "./toggleTool.tsx";
 import {RAT} from "./RAT.tsx";
 import {TurnTrack} from "./turnTrack.tsx";
 import {CombatStats} from "../calc/combatStats.tsx";
 
+const toggleHotel = update(() => {
+    state.map[0] = 'other';
+    state.hotel = !state.hotel;
+})
+
 export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column'}}>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
-                <div>Defender:</div>
                 <Button onClick={update(() => state.combatDefenderNationality = 'finnish')}
                         selected={state.combatDefenderNationality === 'finnish'}>🇫🇮</Button>
                 <Button onClick={update(() => state.combatDefenderNationality = 'soviet')}
@@ -31,22 +35,30 @@ export function MainLayout() {
                 <Row>{range(1, 5).map(v => <CSButton cs={{value: v, type: 'infantry'}}/>)}</Row>
                 <Row>
                     {range(1, 4).map(v => <CSButton cs={{value: v, type: 'MG'}}/>)}
-                    <Button selected={state.selectedTool === 'backspace'} onClick={toggleTool('backspace')}>⌫</Button>
+                    <Button selected={state.selectedTool === 'backspace'}
+                            selectionType='paint'
+                            onClick={toggleTool('backspace')}>⌫</Button>
                 </Row>
             </CenterColumn>
         </div>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
-                <WButton selected={state.selectedTool === 'dugIn'}
-                         onClick={toggleTool('dugIn')}>dug in </WButton>
-                <WButton selected={state.assault} onClick={update(() => state.assault = !state.assault)}>
+                <WButton selected={state.selectedTool === 'dugIn'} selectionType='paint'
+                         onClick={toggleTool('dugIn')}>
+                    dug in
+                </WButton>
+                <WButton selected={state.assault}
+                         onClick={update(() => state.assault = !state.assault)}>
                     assault
                 </WButton>
                 <WButton selected={state.selectedTool === 'suppress'}
+                         selectionType='paint'
                          onClick={toggleTool('suppress')}>
                     suppressed
                 </WButton>
-                <Button selected={state.bonfire} onClick={update(() => state.bonfire = !state.bonfire)}>🔥</Button>
+                <WButton onClick={update(resetState)}>
+                    reset
+                </WButton>
             </SideColumn>
 
             <CenterColumn>
@@ -55,10 +67,15 @@ export function MainLayout() {
 
             <SideColumn>
                 <Button selected={state.selectedTool === 'bridge'}
+                        selectionType='paint'
                         onClick={toggleTool('bridge')}>)(</Button>
-                <Button selected={state.selectedTool === 'terrain'} onClick={toggleTool('terrain')}>🌲</Button>
+                <Button selected={state.selectedTool === 'terrain'}
+                        selectionType='paint'
+                        onClick={toggleTool('terrain')}>🌲</Button>
+                <Button selected={state.bonfire}
+                        onClick={update(() => state.bonfire = !state.bonfire)}>🔥</Button>
                 <Button selected={state.hotel}
-                        onClick={update(() => state.hotel = !state.hotel)}>🏚️</Button>
+                        onClick={toggleHotel}>🏚️</Button>
             </SideColumn>
         </div>
         <RAT/>

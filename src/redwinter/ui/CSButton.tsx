@@ -7,6 +7,7 @@ import * as R from 'remeda';
 export function CSButton(props: { cs: CS }) {
     return <Button
         selected={R.isShallowEqual(props.cs, state.selectedTool)}
+        selectionType='paint'
         style={props.cs.type ? CSStyles[props.cs.type] : ({})}
         onClick={toggleTool(props.cs)}
     >

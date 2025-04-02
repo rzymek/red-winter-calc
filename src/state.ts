@@ -1,4 +1,4 @@
-import {range} from "remeda";
+import {clone, range} from "remeda";
 import {CSType} from "./redwinter/ui/CSStyles.tsx";
 
 export type HexType = 'lake' | 'other'
@@ -11,7 +11,8 @@ export interface CS {
 export type Tool = undefined | 'terrain' | 'bridge' | 'dugIn' | 'suppress' | CS | 'backspace' | 'rat';
 export type RATFirer = 'mortar' | 'IG' | 'armored' | 'infantry' | 'MG' | 'arty';
 const totalHexes = 7;
-export const state = {
+
+const initialState = {
     bridge: undefined as number | undefined,
     map: range(0, totalHexes).map(_ => 'other' as HexType),
     suppression: range(0, totalHexes).map(_ => 0),
@@ -33,5 +34,10 @@ export const state = {
     },
     combatDefenderNationality: 'finnish' as 'finnish' | 'soviet',
     turn: 1
-}
+};
 
+export const state = clone(initialState);
+
+export function resetState() {
+    Object.assign(state, initialState);
+}

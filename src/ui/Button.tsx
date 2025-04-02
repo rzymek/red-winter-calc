@@ -4,11 +4,17 @@ import {glowShadow} from "./GlowShadow.tsx";
 
 
 export interface ButtonProps {
-    children?: ComponentChildren;
-    style?: CSSProperties;
-    disabled?: boolean;
-    selected?: boolean;
-    onClick?: () => void;
+    children?: ComponentChildren,
+    style?: CSSProperties,
+    disabled?: boolean,
+    selected?: boolean,
+    onClick?: () => void,
+    selectionType?: 'paint' | 'toggle'
+}
+
+const selectionColor: Record<Exclude<ButtonProps['selectionType'], undefined>, string> = {
+    paint: '#192a96',
+    toggle: '#96191f',
 }
 
 export function Button(props: ButtonProps) {
@@ -17,7 +23,7 @@ export function Button(props: ButtonProps) {
             display: 'inline-block',
             width: '10mm',
             height: '10mm',
-            boxShadow: props.selected ? glowShadow(3, '#96191f') : '', // Inset shadow when pressed
+            boxShadow: props.selected ? glowShadow(3, selectionColor[props.selectionType ?? 'toggle']) : '', // Inset shadow when pressed
             borderRadius: 3,
             ...props.style,
         }}
