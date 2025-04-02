@@ -6,7 +6,7 @@ type Shift = { type: string, value: number };
 
 function defenderDugIn(): Shift[] {
     if (state.dugIn[0]) {
-        return [{type: 'dugIn', value: -1}];
+        return [{type: '7. Dug-In', value: -1}];
     }
     return [];
 }
@@ -24,15 +24,16 @@ function suppression() {
     );
     const suppression = between(-3, defenderSuppression - attackerSuppression, 3);
     if (suppression !== 0) {
-        return [{type: 'suppression', value: suppression}]
+        return [{type: '3. Suppression', value: suppression}]
     }
     return [];
 }
 
 function pajariLeaderBonus() {
+    const type = '6. Pajari';
     const pajariDefending = state.cs[0].some(it => it.type === 'pajari');
     if (pajariDefending) {
-        return [{type: 'pajari', value: -1}]
+        return [{type, value: -1}]
     }
     const pajariAttacking = R.pipe(
         state.cs,
@@ -42,16 +43,23 @@ function pajariLeaderBonus() {
         R.hasAtLeast(1)
     )
     if (pajariAttacking) {
-        return [{type: 'pajari', value: 1}]
+        return [{type, value: 1}]
     }
     return [];
 }
 
 function bonfireBonus() {
     if (state.bonfire) {
-        return [{type: 'bonfire', value: 2}]
+        return [{type: '11. Bonfire', value: 2}]
     }
     return [];
+}
+
+function defenderInLake() {
+    if (state.map[0] !== 'lake') {
+        return [];
+    }
+    return [{type: '5. Frozen lake', value: state.combatDefenderNationality === 'soviet' ? 4 : 3}]
 }
 
 function concentricAttackBonus() {
@@ -83,9 +91,38 @@ function concentricAttackBonus() {
 
     if (opposingAttack || evenlySpacedAttack) {
         console.log({attackingHexes, opposingAttack, evenlySpacedAttack})
-        return [{type: 'concentricAttack', value: 1}];
+        return [{type: '4. Concentric attack', value: 1}];
     }
 
+    return [];
+}
+
+function moraleBonus() {
+    const type = '8. Morale';
+    const value = state.assault ? 2 : 1;
+    if(state.turn <= 5) {
+        if(state.combatDefenderNationality === 'soviet') {
+            return [{type, value: -value}]
+        }else{
+            return [{type, value}]
+        }
+    }
+    if(20 <= state.turn) {
+        if(state.combatDefenderNationality === 'finnish') {
+            return [{type, value: -value}]
+        }else{
+            return [{type, value}]
+        }
+    }
+    return [];
+}
+
+function armor() {
+    const type = '9. Armor';
+    if(state.cs[0].some(unit => unit.type === 'armor') && state.combatDefenderNationality === 'soviet') {
+        return [{type,value:1}];
+    }
+    // TODO
     return [];
 }
 
@@ -93,8 +130,11 @@ export function shifts() {
     return [
         ...suppression(),
         ...concentricAttackBonus(),
+        ...defenderInLake(),
         ...pajariLeaderBonus(),
         ...defenderDugIn(),
+        ...moraleBonus(),
+        ...armor(),
         ...bonfireBonus(),
     ];
 }

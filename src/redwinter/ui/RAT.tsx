@@ -7,16 +7,15 @@ import {RATFirer, state} from "../../state.ts";
 import {update} from "../../update.ts";
 import {ratDRM} from "../calc/rat.ts";
 import {getLOS, getTimeOfDay} from "./timeOfDay.tsx";
+import {Checkbox} from "./Checkbox.tsx";
 
-function Checkbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
+function RATCheckbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
     const {modifiers} = state.rat;
-    return <label>
-        <input type="checkbox"
-               disabled={props.disabled}
-               checked={modifiers[props.value]}
-               onClick={update(() => modifiers[props.value] = !modifiers[props.value])}/>
+    return <Checkbox disabled={props.disabled}
+                     checked={modifiers[props.value]}
+                     onClick={update(() => modifiers[props.value] = !modifiers[props.value])}>
         {props.children}
-    </label>
+    </Checkbox>
 }
 
 function probability2d6(need: number) {
@@ -78,9 +77,9 @@ export function RAT() {
         }}>
             <SideColumn>
                 <RATFirerSelector disabled={noRAS}/>
-                <Checkbox value='selfSpotting' disabled={noRAS}>self spotting</Checkbox>
-                <Checkbox value='nonAdjacentSpotter' disabled={noRAS}>non-adj.spotter</Checkbox>
-                <Checkbox value='longRange' disabled={noRAS}>range 3+</Checkbox>
+                <RATCheckbox value='selfSpotting' disabled={noRAS}>self spotting</RATCheckbox>
+                <RATCheckbox value='nonAdjacentSpotter' disabled={noRAS}>non-adj.spotter</RATCheckbox>
+                <RATCheckbox value='longRange' disabled={noRAS}>range 3+</RATCheckbox>
             </SideColumn>
             <CenterColumn>
                 <Row>

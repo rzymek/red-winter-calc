@@ -11,6 +11,7 @@ import {toggleTool} from "./toggleTool.tsx";
 import {RAT} from "./RAT.tsx";
 import {TurnTrack} from "./turnTrack.tsx";
 import {CombatStats} from "../calc/combatStats.tsx";
+import {Checkbox} from "./Checkbox.tsx";
 
 const toggleHotel = update(() => {
     state.map[0] = 'other';
@@ -81,6 +82,10 @@ export function MainLayout() {
         <RAT/>
         <CombatStats/>
         <CenterColumn>
+            <Row style={{fontSize: '80%'}}>
+                <Checkbox onClick={() => 0}>Finnish Op Stance</Checkbox>
+                <Checkbox onClick={() => 0}>Full ☭ inf & MG on map &lt; 12</Checkbox>
+            </Row>
             <TurnTrack/>
         </CenterColumn>
         <pre>{JSON.stringify(state, null, 1)}</pre>

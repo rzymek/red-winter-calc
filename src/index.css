@@ -19,7 +19,39 @@ body {
     margin: 0 auto;
     max-width: 16cm;
 }
+
 label {
     background: #bbb;
     padding: 1mm 0;
+}
+
+table.border, .border th, .border td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.compact td, .compact th {
+    padding: 0 2px;
+}
+
+.shifts th {
+    text-align: left;
+}
+
+.shifts td {
+    text-align: center;
+}
+.crt td {
+    text-align: center;
+}
+
+.crt th {
+    background-color: #aaa;
+}
+
+.compact {
+    font-size: 70%;
+}
+
+table.crt tr:nth-child(odd) {
+    background-color: #9fbacd;
 }
