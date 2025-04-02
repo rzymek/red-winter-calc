@@ -1,9 +1,11 @@
 import {CS, state} from "../../state.ts";
 import * as R from "remeda";
+import {range} from "remeda";
 import {attackerHexes} from "./attackerHexes.tsx";
 import {shifts} from "./shifts.ts";
 import {combatResult, shiftRatio} from "./crt.ts";
-import {range} from "remeda";
+import {Flag} from "./flag.tsx";
+import {otherNationality} from "./otherNationality.ts";
 
 function frozenLakeOrBridgePenalty(units: CS[], hexIndex: number) {
     console.log('frozenLakeOrBridgePenalty', units, hexIndex)
@@ -111,6 +113,14 @@ export function CombatStats() {
                 <table class="shifts compact border">
                     <tbody>
                     <tr>
+                        <th>Attacker CS <Flag nationality={otherNationality(state.combatDefenderNationality)}/></th>
+                        <td>{attacker}</td>
+                    </tr>
+                    <tr>
+                        <th>Defender CS <Flag nationality={state.combatDefenderNationality}/></th>
+                        <td>{defender}</td>
+                    </tr>
+                    <tr>
                         <th>Effective column</th>
                         <td>{effectiveRatio}</td>
                     </tr>
@@ -128,15 +138,5 @@ export function CombatStats() {
                 </table>
             </div>
         </div>
-        <pre>{
-            JSON.stringify({
-                defender,
-                shift,
-                attacker,
-                ratio,
-                effectiveRatio,
-                effectiveShift,
-            }, null, 1)
-        }</pre>
     </>
 }
