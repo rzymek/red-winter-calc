@@ -47,6 +47,9 @@ export function hexAction(hexIndex: number) {
         }
     } else if (state.selectedTool === 'terrain') {
         state.map[hexIndex] = state.map[hexIndex] === 'lake' ? 'other' : 'lake';
+        if (state.map[hexIndex] === 'lake' && (state.bridge === hexIndex || hexIndex === 0)) {
+            state.bridge = undefined;
+        }
     } else if (state.selectedTool === 'backspace') {
         state.cs[hexIndex].pop();
     } else if (state.selectedTool === 'rat') {
