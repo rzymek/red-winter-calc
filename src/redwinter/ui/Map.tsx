@@ -9,8 +9,9 @@ import {state} from "../../state.ts";
 import {update} from "../../update.ts";
 import {hexAction} from "./HexAction.tsx";
 import {map, pipe, sortBy} from "remeda";
+import {Hotel} from "../graphics/Hotel.tsx";
 
-export function HexagonBoard() {
+export function Map() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox}>
             {pipe(hexPositions,
@@ -25,6 +26,7 @@ export function HexagonBoard() {
                          type={state.map[index]}/>
                 )
             )}
+            {state.hotel && <Hotel/>}
             {state.bonfire && <Bonfire/>}
             {state.dugIn && <DugIn/>}
             {state.bridge !== undefined && <Bridge position={state.bridge}/>}

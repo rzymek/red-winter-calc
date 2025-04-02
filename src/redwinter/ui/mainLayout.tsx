@@ -1,4 +1,4 @@
-import {HexagonBoard} from "./HexagonBoard.tsx";
+import {Map} from "./Map.tsx";
 import {Button, WButton} from "../../ui/Button.tsx";
 import {SideColumn} from "../../ui/SideColumn.tsx";
 import {range} from "../../generic/range.tsx";
@@ -50,7 +50,7 @@ export function MainLayout() {
             </SideColumn>
 
             <CenterColumn>
-                <HexagonBoard/>
+                <Map/>
             </CenterColumn>
 
             <SideColumn>
