@@ -1,5 +1,5 @@
-import {state} from "../../state.ts";
 import {defenderLosses} from "./DefenderLosses.tsx";
+import {mandatoryAttackerLosses} from "./AttackerLosses.tsx";
 
 export type CombatColumn = {
     roll2d6: number;
@@ -34,13 +34,4 @@ export function CRTView(props: { value: CombatColumn }) {
 function EmptyZero(props: { children: number }) {
     return <>{props.children === 0 ? '' : props.children}</>
 }
-
-function mandatoryAttackerLosses(attacker: number) {
-    if (state.assault) {
-        return attacker;
-    } else {
-        return attacker > 0 ? 1 : 0
-    }
-}
-
 
