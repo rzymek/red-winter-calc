@@ -41,8 +41,9 @@ const ratios = crt
 export function shiftRatio(baseRatio: string, shift: number) {
     const normalisedRatio = baseRatio.split(':')
         .map(Number)
-        .map((val, idx) => Math.max(1, Math.min(val, idx === 0 ? 6 : 4))
-        ).join(':');
+        .map((val, idx) =>
+            Math.max(1, Math.min(val, idx === 0 ? 6 : 4)))
+        .join(':');
     const baseIndex = ratios.indexOf(normalisedRatio); // Find the index of the base ratio
     let newIndex = baseIndex + shift; // Calculate the shifted index
     if (newIndex < 0) {
