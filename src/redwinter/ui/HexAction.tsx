@@ -31,7 +31,7 @@ export function hexAction(hexIndex: number) {
             const selectedUnitCS = state.selectedTool.value;
             state.cs = state.cs.map(it => {
                 return it.filter(unit =>
-                    unit.type !== 'armor' && unit.value === selectedUnitCS
+                    !(unit.type === 'armor' && unit.value === selectedUnitCS)
                 );
             });
             if (hexIndex === 0) {
