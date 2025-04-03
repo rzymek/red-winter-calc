@@ -1,14 +1,12 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { CombatProbability } from "./combatProbability.tsx";
 import { render } from "@testing-library/preact";
-import { state } from "../../state.ts";
+import {resetState, state} from "../../state.ts";
 
 describe('CombatProbability', () => {
-  // Reset state before each test
   beforeEach(() => {
-    // Reset state
-    state.hotel = false;
-    state.assault = false;
+    resetState();
+    document.body.innerHTML = '';
   });
 
   it('should calculate attacker loss probability', () => {
@@ -62,7 +60,7 @@ describe('CombatProbability', () => {
     // Attacker only loss should be for roll 2 (1/36 = 0.028 = 2.8%)
     const element = getByText("Attacker only loss").closest('tr');
     expect(element).toBeTruthy();
-    expect(element?.textContent).toContain(['Attacker only loss','2.8%'].join(''));
+    expect(element?.textContent).toContain(['Attacker only loss','3%'].join(''));
   });
 
   it('should calculate defender loss probability', () => {
@@ -90,7 +88,7 @@ describe('CombatProbability', () => {
     // Total: 12/36 = 0.333 = 33.3%
     const element = getByText("Defender loss").closest('tr');
     expect(element).toBeTruthy();
-    expect(element?.textContent).toContain(['Defender loss','33.3%'].join(''));
+    expect(element?.textContent).toContain(['Defender loss','33%'].join(''));
   });
 
   it('should calculate defender only loss probability', () => {
@@ -118,7 +116,7 @@ describe('CombatProbability', () => {
     // Total: 9/36 = 0.25 = 25.0%
     const element = getByText("Defender loss only").closest('tr');
     expect(element).toBeTruthy();
-    expect(element?.textContent).toContain(['Defender loss only','25.0%'].join(''));
+    expect(element?.textContent).toContain(['Defender loss only','25%'].join(''));
   });
 
   it('should handle empty combat column', () => {
@@ -131,7 +129,7 @@ describe('CombatProbability', () => {
     // Assert - all probabilities should be 0%
     const element = getByText("Attacker loss").closest('tr');
     expect(element).toBeTruthy();
-    expect(element?.textContent).toContain(['Attacker loss','0.0%'].join(''));
+    expect(element?.textContent).toContain(['Attacker loss','0%'].join(''));
   });
 
   it('should verify probability sum is correct for all possible outcomes', () => {
@@ -160,14 +158,14 @@ describe('CombatProbability', () => {
     // Total: 21/36 = 0.583 = 58.3%
     const attackerElement = getByText("Attacker loss").closest('tr');
     expect(attackerElement).toBeTruthy();
-    expect(attackerElement?.textContent).toContain(['Attacker loss','58.3%'].join(''));
+    expect(attackerElement?.textContent).toContain(['Attacker loss','58%'].join(''));
 
     // Defender loss probability should be sum of rolls 2-6
     // Roll 2: 1/36, Roll 3: 2/36, Roll 4: 3/36, Roll 5: 4/36, Roll 6: 5/36
     // Total: 15/36 = 0.417 = 41.7%
     const defenderElement = getByText("Defender loss").closest('tr');
     expect(defenderElement).toBeTruthy();
-    expect(defenderElement?.textContent).toContain(['Defender loss','41.7%'].join(''));
+    expect(defenderElement?.textContent).toContain(['Defender loss','42%'].join(''));
   });
 
   it('should handle hotel state effect', () => {
@@ -197,7 +195,7 @@ describe('CombatProbability', () => {
     // Total defender loss probability: 1/36 = 0.028 = 2.8%
     const element = getByText("Defender loss").closest('tr');
     expect(element).toBeTruthy();
-    expect(element?.textContent).toContain(['Defender loss','2.8%'].join('')); // Only roll 2 counts (1/36)
+    expect(element?.textContent).toContain(['Defender loss','3%'].join('')); // Only roll 2 counts (1/36)
   });
 
   it('should handle assault state effect', () => {
@@ -223,9 +221,9 @@ describe('CombatProbability', () => {
     // Assert
     // Attacker loss should be for rolls 2 and 3
     // Roll 2: probability = 1/36, Roll 3: probability = 2/36
-    // Total: 3/36 = 0.083 = 8.3%
     const element = getByText("Attacker loss").closest('tr');
+    // Total: 3/36 = 0.083 = 8.3%
     expect(element).toBeTruthy();
-    expect(element?.textContent).toContain(['Attacker loss','8.3%'].join(''));
+    expect(element?.textContent).toContain(['Attacker loss','8%'].join(''));
   });
 });
