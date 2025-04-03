@@ -6,6 +6,7 @@ import {shifts} from "./shifts.ts";
 import {combatResult, shiftRatio} from "./crt.ts";
 import {Explanation} from "./explanation.tsx";
 import {CRTView} from "./CRTView.tsx";
+import {CombatProbability} from "./combatProbability.tsx";
 
 export function CombatStats() {
     const defender = R.pipe(
@@ -44,9 +45,13 @@ export function CombatStats() {
             <div style={{flex: 1}}>
                 <CRTView value={combatColumn}/>
             </div>
-            <div style={{flex: 1}}>
-                <Explanation attacker={attacker} defender={defender} effectiveRatio={effectiveRatio} ratio={ratio}
+            <div style={{flex: 1, display: 'flex', gap: '3mm', flexDirection: 'column', justifyContent:'space-between'}}>
+                <Explanation attacker={attacker}
+                             defender={defender}
+                             effectiveRatio={effectiveRatio}
+                             ratio={ratio}
                              shift={shift}/>
+                <CombatProbability combatColumn={combatColumn}/>
             </div>
         </div>
     </>

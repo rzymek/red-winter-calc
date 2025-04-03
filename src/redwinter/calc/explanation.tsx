@@ -9,7 +9,7 @@ export function Explanation(props: {
     ratio: string,
     shift: { type: string, value: number }[]
 }) {
-    return <table class="shifts compact border">
+    return <table class="vertical compact border">
         <tbody>
         <tr>
             <th>Attacker CS <Flag nationality={otherNationality(state.combatDefenderNationality)}/></th>

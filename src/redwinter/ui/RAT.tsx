@@ -8,6 +8,8 @@ import {update} from "../../update.ts";
 import {ratDRM} from "../calc/rat.ts";
 import {getLOS, getTimeOfDay} from "./timeOfDay.tsx";
 import {Checkbox} from "./Checkbox.tsx";
+import {atLeast2d6} from "./AtLeast2d6.tsx";
+import {Percent} from "./Percent.tsx";
 
 function RATCheckbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
     const {modifiers} = state.rat;
@@ -18,26 +20,11 @@ function RATCheckbox(props: { value: keyof typeof state.rat.modifiers, children:
     </Checkbox>
 }
 
-function probability2d6(need: number) {
-    if (need <= 2) return '100%';
-    if (need > 12) return '0%';
-    const totalOutcomes = 36;
-    let successfulOutcomes = 0;
-    for (let i = 1; i <= 6; i++) {
-        for (let j = 1; j <= 6; j++) {
-            if (i + j >= need) {
-                successfulOutcomes++;
-            }
-        }
-    }
-    return (Math.round((successfulOutcomes / totalOutcomes) * 1000) / 10) + '%';
-}
-
 function RATResult(props: { need: number, children: string }) {
     return <tr>
         <th>{props.children}</th>
         <td>{props.need}+</td>
-        <th>{probability2d6(props.need)}</th>
+        <th><Percent value={atLeast2d6(props.need)}/></th>
     </tr>
 }
 

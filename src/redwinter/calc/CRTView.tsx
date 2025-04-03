@@ -1,12 +1,13 @@
 import {state} from "../../state.ts";
+import {defenderLosses} from "./DefenderLosses.tsx";
 
-export interface CombatColumn {
+export type CombatColumn = {
     roll2d6: number;
     defender: number;
     attacker: number;
-}
+}[]
 
-export function CRTView(props: { value: CombatColumn[] }) {
+export function CRTView(props: { value: CombatColumn }) {
     const combatColumns = props.value;
     return <table class="crt border compact">
         <thead>
@@ -38,15 +39,8 @@ function mandatoryAttackerLosses(attacker: number) {
     if (state.assault) {
         return attacker;
     } else {
-        return Math.max(0, attacker - 1);
+        return attacker > 0 ? 1 : 0
     }
 }
 
 
-function defenderLosses(combatResult: { defender: number }) {
-    if (state.hotel) {
-        return Math.max(0, combatResult.defender - 1)
-    } else {
-        return combatResult.defender;
-    }
-}

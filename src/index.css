@@ -39,11 +39,11 @@ table.border, .border th, .border td {
     padding: 0 2px;
 }
 
-.shifts th {
+.vertical th {
     text-align: left;
 }
 
-.shifts td {
+.vertical td {
     text-align: center;
 }
 .crt td {
