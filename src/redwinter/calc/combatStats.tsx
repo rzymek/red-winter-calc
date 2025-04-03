@@ -2,7 +2,7 @@ import {CS, state} from "../../state.ts";
 import * as R from "remeda";
 import {range} from "remeda";
 import {attackerHexes} from "./attackerHexes.tsx";
-import {shifts} from "./shifts.ts";
+import {combatShifts} from "./combatShiftsCalculation.ts";
 import {combatResult, shiftRatio} from "./crt.ts";
 import {Explanation} from "./explanation.tsx";
 import {CRTView} from "./CRTView.tsx";
@@ -26,7 +26,7 @@ export function CombatStats() {
     );
 
     const ratio = formatCombatRatio(attacker, defender);
-    const shift = shifts();
+    const shift = combatShifts();
     const effectiveShift = R.pipe(
         shift,
         R.values(),

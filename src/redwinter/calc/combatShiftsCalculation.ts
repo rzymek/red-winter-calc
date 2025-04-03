@@ -167,7 +167,7 @@ function finnishSMG() {
     return [];
 }
 
-export function shifts() {
+export function combatShifts() {
     return [
         ...suppression(),
         ...concentricAttackBonus(),
