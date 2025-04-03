@@ -28,19 +28,17 @@ const TurnButtonColors: Record<TimeOfDay, CSSProperties> = {
 
 
 function turnMarkers(turn: number) {
-    const sovietColor = '#bd2d2d';
-    const finnishColor = '#3161e4';
     const borderWidth = 5;
     const TurnMarkers: Record<keyof typeof state.turnMarker, CSSProperties> = {
         sovietMoraleCollapse: {
-            borderLeftColor: sovietColor,
-            borderRightColor: sovietColor,
+            borderLeftColor: nationalityColors.soviet,
+            borderRightColor: nationalityColors.soviet,
             borderLeftWidth: borderWidth,
             borderRightWidth: borderWidth,
         },
         changeOfFinnishOperationalStance: {
-            borderTopColor: finnishColor,
-            borderBottomColor: finnishColor,
+            borderTopColor: nationalityColors.finnish,
+            borderBottomColor: nationalityColors.finnish,
             borderTopWidth: borderWidth,
             borderBottomWidth: borderWidth,
         }
