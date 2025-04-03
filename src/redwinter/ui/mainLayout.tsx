@@ -11,7 +11,6 @@ import {toggleTool} from "./toggleTool.tsx";
 import {RAT} from "./RAT.tsx";
 import {TurnTrack} from "./turnTrack.tsx";
 import {CombatStats} from "../calc/combatStats.tsx";
-import {Checkbox} from "./Checkbox.tsx";
 import {Flag} from "../calc/flag.tsx";
 
 const toggleHotel = update(() => {
@@ -21,16 +20,16 @@ const toggleHotel = update(() => {
 
 function toggleTurnMarker(key: keyof typeof state.turnMarker) {
     return update(() => {
-        if (state.turnMarker[key] === undefined) {
-            state.turnMarker[key] = state.turn;
-        } else {
+        if (state.turnMarker[key] === state.turn) {
             state.turnMarker[key] = undefined;
+        } else {
+            state.turnMarker[key] = state.turn;
         }
     })
 }
 
 export function MainLayout() {
-    return <div style={{display: 'flex', flexDirection: 'column'}}>
+    return <div style={{display: 'flex', flexDirection: 'column', gap: '1.8mm'}}>
         <div style={{display: 'flex', flex: 1}}>
             <SideColumn>
                 <Button onClick={update(() => state.combatDefenderNationality = 'soviet')}
@@ -90,22 +89,22 @@ export function MainLayout() {
                         onClick={toggleHotel}>🏚️</Button>
             </SideColumn>
         </div>
+
         <RAT/>
+
         <CombatStats/>
+
         <CenterColumn>
-            <Row style={{fontSize: '80%', marginTop: 5}}>
-                <Checkbox onClick={toggleTurnMarker('changeOfFinnishOperationalStance')}
-                          checked={state.turnMarker.changeOfFinnishOperationalStance !== undefined}>
-                    <Flag nationality="finnish"/> Op. Stance changed
-                </Checkbox>
-                <Checkbox onClick={toggleTurnMarker('sovietMoraleCollapse')}
-                          checked={state.turnMarker.sovietMoraleCollapse !== undefined}>
-                    Full <Flag nationality='soviet'/> Inf & MG on map &lt; 12
-                </Checkbox>
-            </Row>
             <TurnTrack/>
+            <Row style={{fontSize: '80%'}}>
+                <Button onClick={toggleTurnMarker('changeOfFinnishOperationalStance')}
+                        style={{width: undefined}}><Flag nationality="finnish"/> Op. Stance changed</Button>
+                <Button onClick={toggleTurnMarker('sovietMoraleCollapse')}
+                        style={{width: undefined}}>
+                    <Flag nationality='soviet'/> Full Inf & MG on map &lt; 12
+                </Button>
+            </Row>
         </CenterColumn>
-        {/*<pre>{JSON.stringify(state, null, 1)}</pre>*/}
     </div>
 }
 

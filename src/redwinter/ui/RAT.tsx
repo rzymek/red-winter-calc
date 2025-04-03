@@ -61,7 +61,6 @@ export function RAT() {
         borderRadius: 8,
         position: 'relative',
         padding: 8,
-        marginBottom: 8,
     }}>
         <span style={{
             color: '#aaa',
