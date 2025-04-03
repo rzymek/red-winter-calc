@@ -45,5 +45,5 @@ const initialState = {
 export const state = clone(initialState);
 
 export function resetState() {
-    Object.assign(state, initialState);
+    Object.assign(state, clone(initialState));
 }
