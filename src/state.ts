@@ -12,6 +12,8 @@ export type Tool = undefined | 'terrain' | 'bridge' | 'dugIn' | 'suppress' | CS 
 export type RATFirer = 'mortar' | 'IG' | 'armored' | 'infantry' | 'MG' | 'arty';
 const totalHexes = 7;
 
+export type Nationality = 'finnish' | 'soviet';
+
 const initialState = {
     bridge: undefined as number | undefined,
     map: range(0, totalHexes).map(_ => 'other' as HexType),
@@ -32,7 +34,7 @@ const initialState = {
         rs: 2,
         targetHex: undefined as number | undefined,
     },
-    combatDefenderNationality: 'finnish' as 'finnish' | 'soviet',
+    combatDefenderNationality: 'finnish' as Nationality,
     turn: 1,
     turnMarker: {
         changeOfFinnishOperationalStance: undefined as number | undefined,

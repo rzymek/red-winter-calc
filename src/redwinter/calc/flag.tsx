@@ -1,3 +1,5 @@
-export function Flag(props: { nationality: 'finnish' | 'soviet' }) {
+import {Nationality} from "../../state.ts";
+
+export function Flag(props: { nationality: Nationality }) {
     return <>{props.nationality === 'finnish' ? '🇫🇮' : '☭'}</>
 }
