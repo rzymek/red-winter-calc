@@ -61,3 +61,7 @@ table.border, .border th, .border td {
 table.crt tr:nth-child(odd) {
     background-color: #9fbacd;
 }
+
+table.rat th {
+    text-align: left;
+}

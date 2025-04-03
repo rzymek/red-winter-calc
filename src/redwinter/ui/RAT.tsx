@@ -35,9 +35,9 @@ function probability2d6(need: number) {
 
 function RATResult(props: { need: number, children: string }) {
     return <tr>
-        <td>{props.children}</td>
+        <th>{props.children}</th>
         <td>{props.need}+</td>
-        <td>{probability2d6(props.need)}</td>
+        <th>{probability2d6(props.need)}</th>
     </tr>
 }
 
@@ -82,15 +82,15 @@ export function RAT() {
             </SideColumn>
             <CenterColumn>
                 <Row>
-                    <table style={{minWidth: '60%'}}>
+                    <table style={{minWidth: '60%'}} class="rat">
                         <tbody>
+                        <tr>
+                            <th>LOS:</th>
+                            <td colSpan={2}>{getLOS(state.turn)}</td>
+                        </tr>
                         <RATResult need={14 - drm}>Suppressed</RATResult>
                         <RATResult need={17 - drm}>Supp. -1 step</RATResult>
                         <RATResult need={19 - drm}>Supp. -2 step</RATResult>
-                        <tr>
-                            <td>LOS:</td>
-                            <td colSpan={2}>{getLOS(state.turn)}</td>
-                        </tr>
                         </tbody>
                     </table>
                 </Row>
