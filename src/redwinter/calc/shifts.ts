@@ -160,7 +160,7 @@ function sovietMoraleCollapse() {
 function finnishSMG() {
     if (state.assault && state.map[0] === 'other') {
         return [{
-            type: '10. Finnish SMG',
+            type: '15. Finnish SMG',
             value: state.combatDefenderNationality === 'finnish' ? -1 : 1
         }]
     }
