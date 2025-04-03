@@ -1,6 +1,8 @@
 import {CSSProperties} from "preact/compat";
 import {Button} from "../../ui/Button.tsx";
 import {getTimeOfDay, TimeOfDay} from "./timeOfDay.tsx";
+import {state} from "../../state.ts";
+import {filter, keys, map, mergeAll, pipe} from "remeda";
 
 const TurnButtonColors: Record<TimeOfDay, CSSProperties> = {
     dawn: {
@@ -24,11 +26,59 @@ const TurnButtonColors: Record<TimeOfDay, CSSProperties> = {
     }
 }
 
+
+function turnMarkers(turn: number) {
+    const sovietColor = '#bd2d2d';
+    const finnishColor = '#3161e4';
+    const borderWidth = 5;
+    const TurnMarkers: Record<keyof typeof state.turnMarker, CSSProperties> = {
+        sovietMoraleCollapse: {
+            borderLeftColor: sovietColor,
+            borderRightColor: sovietColor,
+            borderLeftWidth: borderWidth,
+            borderRightWidth: borderWidth,
+        },
+        changeOfFinnishOperationalStance: {
+            borderTopColor: finnishColor,
+            borderBottomColor: finnishColor,
+            borderTopWidth: borderWidth,
+            borderBottomWidth: borderWidth,
+        }
+    }
+    const defaultColor = '#888';
+    const defaultWidth = 2;
+    const defaultStyle = {
+        borderStyle: 'solid',
+        borderLeftColor: defaultColor,
+        borderRightColor: defaultColor,
+        borderTopColor: defaultColor,
+        borderBottomColor: defaultColor,
+        borderLeftWidth: defaultWidth,
+        borderRightWidth: defaultWidth,
+        borderTopWidth: defaultWidth,
+        borderBottomWidth: defaultWidth,
+    }
+    return {
+        ...defaultStyle,
+        ...pipe(
+            keys(state.turnMarker),
+            filter((key) => state.turnMarker[key] === turn),
+            map(key => TurnMarkers[key]),
+            mergeAll,
+        )
+    }
+}
+
 export function TurnButton(props: { children: number, selected: boolean, onClick: () => void }) {
     const {children, ...buttonProps} = props;
     const turn = children;
     const part = getTimeOfDay(turn);
-    return <Button {...buttonProps} style={TurnButtonColors[part]} disabled={turn <= 0}>{
+    return <Button {...buttonProps}
+                   style={{
+                       ...turnMarkers(turn),
+                       ...TurnButtonColors[part]
+                   }}
+                   disabled={turn <= 0}>{
         turn > 0 ? turn : ''
     }</Button>
 }

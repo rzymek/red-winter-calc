@@ -19,6 +19,16 @@ const toggleHotel = update(() => {
     state.hotel = !state.hotel;
 })
 
+function toggleTurnMarker(key: keyof typeof state.turnMarker) {
+    return update(() => {
+        if (state.turnMarker[key] === undefined) {
+            state.turnMarker[key] = state.turn;
+        } else {
+            state.turnMarker[key] = undefined;
+        }
+    })
+}
+
 export function MainLayout() {
     return <div style={{display: 'flex', flexDirection: 'column'}}>
         <div style={{display: 'flex', flex: 1}}>
@@ -83,9 +93,15 @@ export function MainLayout() {
         <RAT/>
         <CombatStats/>
         <CenterColumn>
-            <Row style={{fontSize: '80%'}}>
-                <Checkbox onClick={() => 0}><Flag nationality="finnish"/> Op. Stance changed</Checkbox>
-                <Checkbox onClick={() => 0}>Full <Flag nationality='soviet'/> Inf & MG on map &lt; 12</Checkbox>
+            <Row style={{fontSize: '80%', marginTop: 5}}>
+                <Checkbox onClick={toggleTurnMarker('changeOfFinnishOperationalStance')}
+                          checked={state.turnMarker.changeOfFinnishOperationalStance !== undefined}>
+                    <Flag nationality="finnish"/> Op. Stance changed
+                </Checkbox>
+                <Checkbox onClick={toggleTurnMarker('sovietMoraleCollapse')}
+                          checked={state.turnMarker.sovietMoraleCollapse !== undefined}>
+                    Full <Flag nationality='soviet'/> Inf & MG on map &lt; 12
+                </Checkbox>
             </Row>
             <TurnTrack/>
         </CenterColumn>

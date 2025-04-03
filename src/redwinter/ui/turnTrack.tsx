@@ -9,6 +9,7 @@ export function TurnTrack() {
         .map(day => range(7 * day - 8, 7 * day - 2))
         .map(r =>
             <Row>{r.map(v => <TurnButton
+                key={v}
                 selected={state.turn === v}
                 onClick={update(() => state.turn = v)}>
                 {v}

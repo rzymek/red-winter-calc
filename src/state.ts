@@ -33,7 +33,11 @@ const initialState = {
         targetHex: undefined as number | undefined,
     },
     combatDefenderNationality: 'finnish' as 'finnish' | 'soviet',
-    turn: 1
+    turn: 1,
+    turnMarker: {
+        changeOfFinnishOperationalStance: undefined as number | undefined,
+        sovietMoraleCollapse: undefined as number | undefined,
+    }
 };
 
 export const state = clone(initialState);
