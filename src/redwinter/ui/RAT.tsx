@@ -32,7 +32,7 @@ function RATFirerSelector(props: { disabled?: boolean }) {
     const options: RATFirer[] = [
         'MG', 'mortar', 'infantry', 'arty', 'IG', 'armored',
     ];
-    return <select {...props} onChange={e => update(() =>
+    return <select {...props} style={{height: '8mm'}} onChange={e => update(() =>
         state.rat.firer = (e.target as any).value)}>
         {options.map(o =>
             <option key={o}>{o}</option>
