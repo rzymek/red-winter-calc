@@ -5,7 +5,8 @@ import {update} from "../../update.ts";
 
 export function TurnMarkersToolbars() {
     return <>
-        <Button onClick={toggleTurnMarker('changeOfFinnishOperationalStance')}
+        <Button disabled={state.turn < 20}
+            onClick={toggleTurnMarker('changeOfFinnishOperationalStance')}
                 style={{width: undefined}}><Flag nationality="finnish"/> Op. Stance changed</Button>
         <Button onClick={toggleTurnMarker('sovietMoraleCollapse')}
                 style={{width: undefined}}>
