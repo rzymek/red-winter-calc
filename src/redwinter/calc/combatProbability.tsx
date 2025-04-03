@@ -5,25 +5,22 @@ import {filter, map, pipe, sum} from "remeda";
 import {exactly2d6} from "../ui/probability2d6.tsx";
 import {defenderLosses} from "./DefenderLosses.tsx";
 
+const rows: { label: string, predicate: (it: ElementOf<CombatColumn>) => boolean }[] = [
+    {label: "Attacker loss", predicate: it => it.attacker > 0},
+    {label: "Attacker only loss", predicate: it => it.attacker > 0 && defenderLosses(it) === 0},
+    {label: "Defender loss", predicate: it => defenderLosses(it) > 0},
+    {label: "Defender loss only", predicate: it => it.attacker == 0 && defenderLosses(it) > 0}
+];
+
 export function CombatProbability({combatColumn}: { combatColumn: CombatColumn }) {
     return <table class="vertical border compact">
         <thead>
-        <tr>
-            <th>Attacker loss</th>
-            <td><Percent value={probability(combatColumn, it => it.attacker > 0)}/></td>
-        </tr>
-        <tr>
-            <th>Attacker only loss</th>
-            <td><Percent value={probability(combatColumn, it => it.attacker > 0 && defenderLosses(it) === 0)}/></td>
-        </tr>
-        <tr>
-            <th>Defender loss</th>
-            <td><Percent value={probability(combatColumn, it => defenderLosses(it) > 0)}/></td>
-        </tr>
-        <tr>
-            <th>Defender loss only</th>
-            <td><Percent value={probability(combatColumn, it => it.attacker == 0 && defenderLosses(it) > 0)}/></td>
-        </tr>
+        {rows.map(row => (
+            <tr key={row.label}>
+                <th>{row.label}</th>
+                <td><Percent value={probability(combatColumn, row.predicate)}/></td>
+            </tr>
+        ))}
         </thead>
     </table>
 }
@@ -31,9 +28,8 @@ export function CombatProbability({combatColumn}: { combatColumn: CombatColumn }
 function probability(combatColumn: CombatColumn, predicate: (it: ElementOf<CombatColumn>) => boolean) {
     return pipe(
         combatColumn,
-        map((it, index) => ({match: predicate(it), roll2d6: index + 2})),
-        filter(({match}) => match),
-        map(({roll2d6}) => exactly2d6(roll2d6)),
+        filter(predicate),
+        map(it => exactly2d6(it.roll2d6)),
         sum()
-    )
+    );
 }
