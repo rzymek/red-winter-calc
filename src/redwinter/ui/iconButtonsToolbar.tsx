@@ -16,7 +16,7 @@ export function IconButtonsToolbar() {
                 onClick={toggleTool('bridge')}>)(</Button>
         <Button selected={state.selectedTool === 'terrain'}
                 selectionType='paint'
-                onClick={toggleTool('terrain')}>🌲</Button>
+                onClick={toggleTool('terrain')}>🧊</Button>
         <Button selected={state.bonfire}
                 onClick={update(() => state.bonfire = !state.bonfire)}>🔥</Button>
         <Button selected={state.hotel}
