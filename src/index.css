@@ -25,6 +25,12 @@ label {
     padding: 1mm 0;
 }
 
+th {
+    font-weight: normal;
+}
+td {
+    font-weight: bold;
+}
 table.border, .border th, .border td {
     border: 1px solid black;
     border-collapse: collapse;

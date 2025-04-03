@@ -22,23 +22,6 @@ function halvedCS(units: CS[]) {
         value: Math.ceil(unit.value / 2),
     }));
 }
-/*
-function attackerReductions(attacker: number) {
-    if (state.assault) {
-        return attacker;
-    } else {
-        return attacker > 0 ? 1 : 0;
-    }
-}
-
-function attackerLosses(attacker: number) {
-    if (state.assault) {
-        return 0;
-    } else {
-        return (attacker > 1) ? attacker - 1 : 0;
-    }
-}
- */
 
 function formatShift(value: number) {
     if (value < 0) {
@@ -53,6 +36,26 @@ function formatCombatRatio(attacker: number, defender: number) {
         return defender !== 0 ? `${Math.floor(attacker / defender)}:1` : '1:1';
     } else {
         return attacker !== 0 ? `1:${Math.ceil(defender / attacker)}` : '1:1';
+    }
+}
+
+function mandatoryAttackerLosses(attacker: number) {
+    if (state.assault) {
+        return attacker;
+    } else {
+        return Math.max(0, attacker - 1);
+    }
+}
+
+function EmptyZero(props: { children: number }) {
+    return <>{props.children === 0 ? '' : props.children}</>
+}
+
+function defenderLosses(combatResult: { defender: number }) {
+    if (state.hotel) {
+        return Math.max(0, combatResult.defender - 1)
+    } else {
+        return combatResult.defender;
     }
 }
 
@@ -95,6 +98,7 @@ export function CombatStats() {
                     <tr>
                         <th>2d6</th>
                         <th>Attacker</th>
+                        <th style={{fontSize: '75%'}}>attacker reductions</th>
                         <th>Defender</th>
                     </tr>
                     </thead>
@@ -102,8 +106,9 @@ export function CombatStats() {
                     {combatColumn.map(combatResult => (
                         <tr key={combatResult.roll2d6}>
                             <td>{combatResult.roll2d6}</td>
-                            <td>{combatResult.attacker}</td>
-                            <td>{combatResult.defender}</td>
+                            <td><EmptyZero>{combatResult.attacker}</EmptyZero></td>
+                            <td><EmptyZero>{mandatoryAttackerLosses(combatResult.attacker)}</EmptyZero></td>
+                            <td><EmptyZero>{defenderLosses(combatResult)}</EmptyZero></td>
                         </tr>
                     ))}
                     </tbody>
