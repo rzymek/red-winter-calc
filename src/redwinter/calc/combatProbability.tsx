@@ -2,7 +2,7 @@ import {CombatColumn} from "./CRTView.tsx";
 import {Percent} from "../ui/Percent.tsx";
 import {ElementOf} from "./elementOf.tsx";
 import {filter, map, pipe, sum} from "remeda";
-import {exactly2d6} from "../ui/AtLeast2d6.tsx";
+import {exactly2d6} from "../ui/probability2d6.tsx";
 import {defenderLosses} from "./DefenderLosses.tsx";
 
 export function CombatProbability({combatColumn}: { combatColumn: CombatColumn }) {

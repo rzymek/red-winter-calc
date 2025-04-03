@@ -8,7 +8,7 @@ import {update} from "../../update.ts";
 import {ratDRM} from "../calc/rat.ts";
 import {getLOS, getTimeOfDay} from "./timeOfDay.tsx";
 import {Checkbox} from "./Checkbox.tsx";
-import {atLeast2d6} from "./AtLeast2d6.tsx";
+import {atLeast2d6} from "./probability2d6.tsx";
 import {Percent} from "./Percent.tsx";
 
 function RATCheckbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
