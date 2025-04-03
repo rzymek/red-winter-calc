@@ -9,7 +9,7 @@ const rows: { label: string, predicate: (it: ElementOf<CombatColumn>) => boolean
     {label: "Attacker loss", predicate: it => it.attacker > 0},
     {label: "Attacker only loss", predicate: it => it.attacker > 0 && defenderLosses(it) === 0},
     {label: "Defender loss", predicate: it => defenderLosses(it) > 0},
-    {label: "Defender loss only", predicate: it => it.attacker == 0 && defenderLosses(it) > 0}
+    {label: "Defender loss only", predicate: it => it.attacker === 0 && defenderLosses(it) > 0}
 ];
 
 export function CombatProbability({combatColumn}: { combatColumn: CombatColumn }) {
