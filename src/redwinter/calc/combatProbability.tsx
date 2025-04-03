@@ -3,7 +3,7 @@ import {Percent} from "../ui/Percent.tsx";
 import {ElementOf} from "./elementOf.tsx";
 import {filter, map, pipe, sum} from "remeda";
 import {exactly2d6} from "../ui/probability2d6.tsx";
-import {defenderLosses} from "./DefenderLosses.tsx";
+import {defenderLosses} from "./defenderLosses.tsx";
 
 const rows: { label: string, predicate: (it: ElementOf<CombatColumn>) => boolean }[] = [
     {label: "Attacker loss", predicate: it => it.attacker > 0},
