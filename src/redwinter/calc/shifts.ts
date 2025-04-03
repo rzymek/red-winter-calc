@@ -1,6 +1,7 @@
 import {state} from "../../state.ts";
 import * as R from "remeda";
 import {attackerHexes} from "./attackerHexes.tsx";
+import {CSType} from "../ui/CSStyles.tsx";
 
 type Shift = { type: string, value: number };
 
@@ -29,37 +30,40 @@ function suppression() {
     return [];
 }
 
-function pajariLeaderBonus() {
-    const type = '6. Pajari';
-    const pajariDefending = state.cs[0].some(it => it.type === 'pajari');
-    if (pajariDefending) {
-        return [{type, value: -1}]
-    }
-    const pajariAttacking = R.pipe(
+function isOneOfDefenders(type: CSType) {
+    return state.cs[0].some(it => it.type === type);
+}
+
+function isOneOfAttackers(type: CSType) {
+    return R.pipe(
         state.cs,
         R.filter(attackerHexes),
         R.flat(),
-        R.filter(it => it.type === 'pajari'),
+        R.filter(it => it.type === type),
         R.hasAtLeast(1)
     )
-    if (pajariAttacking) {
-        return [{type, value: 1}]
-    }
-    return [];
+
 }
 
-function bonfireBonus() {
-    if (state.bonfire) {
-        return [{type: '11. Bonfire', value: 2}]
-    }
-    return [];
-}
 
 function defenderInLake() {
     if (state.map[0] !== 'lake') {
         return [];
     }
-    return [{type: '5. Frozen lake', value: state.combatDefenderNationality === 'soviet' ? 4 : 3}]
+    return [{
+        type: '5. Frozen lake',
+        value: state.combatDefenderNationality === 'soviet' ? 4 : 3
+    }]
+}
+
+function pajariLeaderBonus() {
+    const type = '6. Pajari';
+    if (isOneOfAttackers('pajari')) {
+        return [{type, value: -1}]
+    } else if (isOneOfDefenders('pajari')) {
+        return [{type, value: 1}]
+    }
+    return [];
 }
 
 function concentricAttackBonus() {
@@ -100,17 +104,17 @@ function concentricAttackBonus() {
 function moraleBonus() {
     const type = '8. Morale';
     const value = state.assault ? 2 : 1;
-    if(state.turn <= 5) {
-        if(state.combatDefenderNationality === 'soviet') {
+    if (state.turn <= 5) {
+        if (state.combatDefenderNationality === 'soviet') {
             return [{type, value: -value}]
-        }else{
+        } else {
             return [{type, value}]
         }
     }
-    if(20 <= state.turn) {
-        if(state.combatDefenderNationality === 'finnish') {
+    if (20 <= state.turn) {
+        if (state.combatDefenderNationality === 'finnish') {
             return [{type, value: -value}]
-        }else{
+        } else {
             return [{type, value}]
         }
     }
@@ -119,10 +123,47 @@ function moraleBonus() {
 
 function armor() {
     const type = '9. Armor';
-    if(state.cs[0].some(unit => unit.type === 'armor') && state.combatDefenderNationality === 'soviet') {
-        return [{type,value:1}];
+    if (isOneOfDefenders('armor')) {
+        return [{type, value: -1}];
+    } else if (isOneOfAttackers('armor')) {
+        return [{type, value: 1}];
     }
-    // TODO
+    return [];
+}
+
+function changeOfFinnishOperationalStance() {
+    if (state.turn === state.turnMarker.changeOfFinnishOperationalStance) {
+        return [{
+            type: '10. Change of Finnish Operational Stance',
+            value: state.combatDefenderNationality === 'finnish' ? -1 : 1
+        }]
+    }
+    return [];
+}
+
+function bonfireBonus() {
+    if (state.bonfire) {
+        return [{type: '11. Bonfire', value: 2}]
+    }
+    return [];
+}
+
+function sovietMoraleCollapse() {
+    if (state.combatDefenderNationality === 'soviet' && state.turnMarker.sovietMoraleCollapse !== undefined) {
+        if (state.turn >= state.turnMarker.sovietMoraleCollapse) {
+            return [{type: '12. Soviet morale collapse', value: 1}]
+        }
+    }
+    return [];
+}
+
+function finnishSMG() {
+    if (state.assault && state.map[0] === 'other') {
+        return [{
+            type: '10. Finnish SMG',
+            value: state.combatDefenderNationality === 'finnish' ? -1 : 1
+        }]
+    }
     return [];
 }
 
@@ -135,6 +176,9 @@ export function shifts() {
         ...defenderDugIn(),
         ...moraleBonus(),
         ...armor(),
+        ...changeOfFinnishOperationalStance(),
         ...bonfireBonus(),
+        ...sovietMoraleCollapse(),
+        ...finnishSMG()
     ];
 }
