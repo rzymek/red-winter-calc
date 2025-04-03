@@ -28,7 +28,6 @@ export function Button(props: ButtonProps) {
             ...props.style,
         }}
         disabled={props.disabled}
-        selected={props.selected}
         onClick={props.onClick}
     >
         {props.children}
