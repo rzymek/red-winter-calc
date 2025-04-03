@@ -7,7 +7,6 @@ import {CombatColumn} from "./CRTView.tsx";
 import {ElementOf} from "./elementOf.tsx";
 
 describe('CombatProbability', () => {
-    // Reset state before each test
     beforeEach(() => {
         resetState();
         document.body.innerHTML = '';
@@ -15,22 +14,22 @@ describe('CombatProbability', () => {
 
 
     it('should calculate attacker loss probability', () => {
-        // Arrange - Attacker loss on rolls 2 and 4
+        // given
         const combatColumn = givenCombatColumn({
             2: {attacker: 1},
             4: {defender: 1, attacker: 1}
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert - 4/36 = 11.1% rounded to 11%
+        // then
         assertProbability(renderResult, "Attacker loss", "11%",
             "Attacker loss should be for rolls 2 and 4 (1/36 + 3/36 = 4/36 = 11.1%)");
     });
 
     it('should calculate attacker only loss probability', () => {
-        // Arrange - Attacker only loss on roll 2
+        // given
         const combatColumn = givenCombatColumn({
             2: {attacker: 1},
             4: {defender: 1, attacker: 1}, // Both attacker and defender loss
@@ -38,16 +37,16 @@ describe('CombatProbability', () => {
             6: {defender: 2}
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert - 1/36 = 2.8% rounded to 3%
+        // then
         assertProbability(renderResult, "Attacker only loss", "3%",
             "Attacker only loss should be for roll 2 (1/36 = 2.8%)");
     });
 
     it('should calculate defender loss probability', () => {
-        // Arrange - Defender loss on rolls 4, 5, and 6
+        // given
         const combatColumn = givenCombatColumn({
             2: {attacker: 1},
             4: {defender: 1, attacker: 1},
@@ -55,16 +54,16 @@ describe('CombatProbability', () => {
             6: {defender: 2}
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert - 12/36 = 33.3% rounded to 33%
+        // then
         assertProbability(renderResult, "Defender loss", "33%",
             "Defender loss should be for rolls 4, 5, and 6 (3/36 + 4/36 + 5/36 = 12/36 = 33.3%)");
     });
 
     it('should calculate defender only loss probability', () => {
-        // Arrange - Defender only loss on rolls 5 and 6
+        // given
         const combatColumn = givenCombatColumn({
             2: {attacker: 1},
             4: {defender: 1, attacker: 1}, // Both attacker and defender loss
@@ -72,27 +71,27 @@ describe('CombatProbability', () => {
             6: {defender: 2}  // Defender only loss
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert - 9/36 = 25%
+        // then
         assertProbability(renderResult, "Defender loss only", "25%",
             "Defender only loss should be for rolls 5 and 6 (4/36 + 5/36 = 9/36 = 25%)");
     });
 
     it('should handle empty combat column', () => {
-        // Arrange
+        // given
         const combatColumn: CombatColumn = [];
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert - all probabilities should be 0%
+        // then
         assertProbability(renderResult, "Attacker loss", "0%", "Empty column should have 0% probability");
     });
 
     it('should verify probability sum is correct for all possible outcomes', () => {
-        // Arrange - Create a complete combat column with all possible 2d6 rolls (2-12)
+        // given - Create a complete combat column with all possible 2d6 rolls (2-12)
         // Defender losses on rolls 2-6, attacker losses on rolls 7-12
         const combatColumn = givenCombatColumn({
             2: {defender: 1},
@@ -108,21 +107,18 @@ describe('CombatProbability', () => {
             12: {attacker: 1}
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert
-        // Attacker loss: rolls 7-12 = 21/36 = 58.3% rounded to 58%
+        // then
         assertProbability(renderResult, "Attacker loss", "58%",
             "Attacker loss should be sum of rolls 7-12 (21/36 = 58.3%)");
-
-        // Defender loss: rolls 2-6 = 15/36 = 41.7% rounded to 42%
         assertProbability(renderResult, "Defender loss", "42%",
             "Defender loss should be sum of rolls 2-6 (15/36 = 41.7%)");
     });
 
     it('should handle hotel state effect', () => {
-        // Arrange
+        // given
         state.hotel = true;
         const combatColumn = givenCombatColumn({
             2: {defender: 2},
@@ -130,18 +126,17 @@ describe('CombatProbability', () => {
             4: {attacker: 1}
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert
+        // then
         // With hotel effect, defender losses are reduced by 1
-        // Only roll 2 counts (1/36 = 2.8% rounded to 3%)
         assertProbability(renderResult, "Defender loss", "3%",
             "With hotel effect, only roll 2 counts as defender loss (1/36 = 2.8%)");
     });
 
     it('should handle assault state effect', () => {
-        // Arrange
+        // given
         state.assault = true;
         const combatColumn = givenCombatColumn({
             2: {attacker: 2},
@@ -149,11 +144,10 @@ describe('CombatProbability', () => {
             4: {defender: 1}
         });
 
-        // Act
+        // when
         const renderResult = render(<CombatProbability combatColumn={combatColumn}/>);
 
-        // Assert
-        // Attacker loss on rolls 2 and 3 (3/36 = 8.3% rounded to 8%)
+        // then
         assertProbability(renderResult, "Attacker loss", "8%",
             "Attacker loss should be for rolls 2 and 3 (3/36 = 8.3%)");
     });
