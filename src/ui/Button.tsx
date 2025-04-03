@@ -12,7 +12,7 @@ export interface ButtonProps {
     selectionType?: 'paint' | 'toggle'
 }
 
-const selectionColor: Record<Exclude<ButtonProps['selectionType'], undefined>, string> = {
+const selectionColor: Record<Required<ButtonProps>['selectionType'], string> = {
     paint: '#192a96',
     toggle: '#96191f',
 }
