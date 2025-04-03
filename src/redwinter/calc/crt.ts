@@ -26,9 +26,6 @@ const crtBy2d6 = crt.split('\n')
             .map(([attacker, defender]) => ({attacker, defender}))
     )
 
-export function combatResult(roll2d6: number, ratio: string) {
-    return crtBy2d6[roll2d6 - 2][ratios.indexOf(ratio)];
-}
 
 const ratios = crt
     .split('\n')[1] // Get the header row
@@ -36,6 +33,11 @@ const ratios = crt
     .slice(1) // Ignore the first content (column title "Roll 2d6")
     .map((value) => value.trim())
     .filter((value) => value !== '');
+
+
+export function combatResult(roll2d6: number, ratio: string) {
+    return crtBy2d6[roll2d6 - 2][ratios.indexOf(ratio)];
+}
 
 
 export function shiftRatio(baseRatio: string, shift: number) {
