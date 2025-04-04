@@ -11,6 +11,40 @@ import {Checkbox} from "./Checkbox.tsx";
 import {atLeast2d6} from "./probability2d6.tsx";
 import {Percent} from "./Percent.tsx";
 
+export function RASPanel() {
+    const noRAS = getTimeOfDay(state.turn) === 'night';
+    const drm = ratDRM();
+
+    return <div style={{
+        fontSize: '70%',
+        display: 'flex',
+    }}>
+        <SideColumn>
+            <RATFirerSelector disabled={noRAS}/>
+            <RATCheckbox value='selfSpotting' disabled={noRAS}>self spotting</RATCheckbox>
+            <RATCheckbox value='nonAdjacentSpotter' disabled={noRAS}>non-adj.spotter</RATCheckbox>
+            <RATCheckbox value='longRange' disabled={noRAS}>range 3+</RATCheckbox>
+        </SideColumn>
+        <CenterColumn>
+            <Row>
+                <table style={{minWidth: '60%'}} class="rat">
+                    <tbody>
+                    <tr>
+                        <th>LOS:</th>
+                        <td colSpan={2}>{getLOS(state.turn)}</td>
+                    </tr>
+                    <RATResult need={14 - drm}>Suppressed</RATResult>
+                    <RATResult need={17 - drm}>Supp. -1 step</RATResult>
+                    <RATResult need={19 - drm}>Supp. -2 step</RATResult>
+                    </tbody>
+                </table>
+            </Row>
+            <Row>{range(1, 4).map(v => <RATButton disabled={noRAS}>{v}</RATButton>)}</Row>
+            <Row>{range(5, 8).map(v => <RATButton disabled={noRAS}>{v}</RATButton>)}</Row>
+        </CenterColumn>
+    </div>;
+}
+
 function RATCheckbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
     const {modifiers} = state.rat;
     return <Checkbox disabled={props.disabled}
@@ -40,53 +74,6 @@ function RATFirerSelector(props: { disabled?: boolean }) {
     </select>;
 }
 
-export function RAT() {
-    const noRAS = getTimeOfDay(state.turn) === 'night';
-    const drm = ratDRM();
-    return <div style={{
-        border: '2px solid #aaa',
-        borderRadius: 8,
-        position: 'relative',
-        padding: 8,
-    }}>
-        <span style={{
-            color: '#aaa',
-            position: 'absolute',
-            top: -12,
-            left: 10,
-            background: 'lightgray',
-            padding: '0 5px',
-        }}>RAT</span>
-        <div style={{
-            fontSize: '70%',
-            display: 'flex',
-        }}>
-            <SideColumn>
-                <RATFirerSelector disabled={noRAS}/>
-                <RATCheckbox value='selfSpotting' disabled={noRAS}>self spotting</RATCheckbox>
-                <RATCheckbox value='nonAdjacentSpotter' disabled={noRAS}>non-adj.spotter</RATCheckbox>
-                <RATCheckbox value='longRange' disabled={noRAS}>range 3+</RATCheckbox>
-            </SideColumn>
-            <CenterColumn>
-                <Row>
-                    <table style={{minWidth: '60%'}} class="rat">
-                        <tbody>
-                        <tr>
-                            <th>LOS:</th>
-                            <td colSpan={2}>{getLOS(state.turn)}</td>
-                        </tr>
-                        <RATResult need={14 - drm}>Suppressed</RATResult>
-                        <RATResult need={17 - drm}>Supp. -1 step</RATResult>
-                        <RATResult need={19 - drm}>Supp. -2 step</RATResult>
-                        </tbody>
-                    </table>
-                </Row>
-                <Row>{range(1, 4).map(v => <RATButton disabled={noRAS}>{v}</RATButton>)}</Row>
-                <Row>{range(5, 8).map(v => <RATButton disabled={noRAS}>{v}</RATButton>)}</Row>
-            </CenterColumn>
-        </div>
-    </div>
-}
 
 function RATButton(props: { children: number, disabled?: boolean }) {
     return <Button selected={state.selectedTool === 'rat' && state.rat.rs === props.children}
@@ -96,3 +83,4 @@ function RATButton(props: { children: number, disabled?: boolean }) {
                        state.rat.rs = props.children;
                    })}/>
 }
+

@@ -36,7 +36,7 @@ export function Button(props: ButtonProps) {
 
 export function WButton(props: ButtonProps) {
     return <Button style={{
-        ...props.style,
         width: '20mm',
+        ...props.style,
     }} {...props} />
 }

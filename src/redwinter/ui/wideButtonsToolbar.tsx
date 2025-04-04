@@ -16,7 +16,7 @@ export function WideButtonsToolbar() {
         <WButton selected={state.selectedTool === 'suppress'}
                  selectionType='paint'
                  onClick={toggleTool('suppress')}>
-            suppressed
+            <span style={{fontSize:'80%'}}>suppressed</span>
         </WButton>
         <WButton onClick={update(resetState)}>
             reset
