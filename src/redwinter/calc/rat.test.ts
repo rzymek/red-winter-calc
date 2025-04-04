@@ -8,7 +8,7 @@ describe('isIndirectFirer', () => {
     { firer: 'mortar', isIndirect: true } as const,
     { firer: 'IG', isIndirect: true } as const,
     { firer: 'arty', isIndirect: true } as const,
-      
+
     { firer: 'MG', isIndirect: false } as const,
     { firer: 'infantry', isIndirect: false } as const,
     { firer: 'armored', isIndirect: false } as const,

@@ -120,6 +120,7 @@ describe('CombatProbability', () => {
     it('should handle hotel state effect', () => {
         // given
         state.hotel = true;
+        state.cs[0]=[{type:'MG',value:1}]
         const combatColumn = givenCombatColumn({
             2: {defender: 2},
             3: {defender: 1},
