@@ -1,12 +1,12 @@
-import {CS, state} from "../../state.ts";
+import {CS, state} from "../state.ts";
 import * as R from "remeda";
 import {range} from "remeda";
-import {attackerHexes} from "./attackerHexes.tsx";
+import {attackerHexesFilter} from "./attackerHexesFilter.tsx";
 import {combatShifts} from "./combatShiftsCalculation.ts";
 import {combatResult, shiftRatio} from "./crt.ts";
-import {Explanation} from "./explanation.tsx";
-import {CRTView} from "./CRTView.tsx";
-import {CombatProbability} from "./combatProbability.tsx";
+import {Explanation} from "../ui/explanation.tsx";
+import {CRTView} from "../ui/CRTView.tsx";
+import {CombatProbability} from "../ui/combatProbability.tsx";
 
 export function CombatStats() {
     const defender = R.pipe(
@@ -18,7 +18,7 @@ export function CombatStats() {
     const attacker = R.pipe(
         state.cs,
         R.map(frozenLakeOrBridgePenalty),
-        R.filter(attackerHexes),
+        R.filter(attackerHexesFilter),
         R.flat(),
         R.filter(it => it.type !== 'mortar'),
         R.map(it => it.value),

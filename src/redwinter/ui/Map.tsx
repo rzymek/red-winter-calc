@@ -5,7 +5,7 @@ import {viewBox} from "../config.ts";
 import {hexPositions} from "./HexPositions.tsx";
 import {Counters} from "./Counters.tsx";
 import {Hex} from "./Hex.tsx";
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import {update} from "../../update.ts";
 import {hexAction} from "./HexAction.tsx";
 import {map, pipe, sortBy} from "remeda";

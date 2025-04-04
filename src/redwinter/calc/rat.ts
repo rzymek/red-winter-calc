@@ -1,7 +1,7 @@
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import {pipe, sum} from "remeda";
 import {otherNationality} from "./otherNationality.ts";
-import {getTimeOfDay, TimeOfDay} from "../ui/timeOfDay.tsx";
+import {getTimeOfDay, TimeOfDay} from "./timeOfDay.tsx";
 
 function numberOfInfantryCompanies(targetHex: number) {
     return state.cs[targetHex].filter(it => it.type === 'infantry').length;

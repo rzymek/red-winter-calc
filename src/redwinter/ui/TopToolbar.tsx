@@ -1,13 +1,13 @@
 import {SideColumn} from "../../ui/SideColumn.tsx";
 import {Button} from "../../ui/Button.tsx";
 import {update} from "../../update.ts";
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import {CenterColumn} from "../../ui/centerColumn.tsx";
 import {Row} from "../../ui/row.tsx";
 import {CSButton} from "./CSButton.tsx";
 import {range} from "../../generic/range.tsx";
 import {toggleTool} from "./toggleTool.tsx";
-import {RoundedPanel} from "./RoundedPanel.tsx";
+import {RoundedPanel} from "../../ui/RoundedPanel.tsx";
 
 function AttackerNationality() {
     return <RoundedPanel label="Attack"

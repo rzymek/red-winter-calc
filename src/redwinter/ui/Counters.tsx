@@ -1,9 +1,9 @@
 import {hexPositions} from "./HexPositions.tsx";
 import {hexSize} from "../config.ts";
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import {CSStyles} from "./CSStyles.tsx";
 import {otherNationality} from "../calc/otherNationality.ts";
-import {isDefenderHex} from "./IsDefenderHex.tsx";
+import {isDefenderHex} from "../calc/IsDefenderHex.tsx";
 import {nationalityColors} from "./nationalityColors.tsx";
 
 export function Counters(props: { index: number, onClick?: () => void, stroke?: string }) {

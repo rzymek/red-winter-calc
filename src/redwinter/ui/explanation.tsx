@@ -1,6 +1,6 @@
 import {Flag} from "./flag.tsx";
-import {otherNationality} from "./otherNationality.ts";
-import {state} from "../../state.ts";
+import {otherNationality} from "../calc/otherNationality.ts";
+import {state} from "../state.ts";
 
 export function Explanation(props: {
     attacker: number,

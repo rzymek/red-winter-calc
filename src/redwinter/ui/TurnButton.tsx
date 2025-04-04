@@ -1,7 +1,7 @@
 import {CSSProperties} from "preact/compat";
 import {Button} from "../../ui/Button.tsx";
-import {getTimeOfDay, TimeOfDay} from "./timeOfDay.tsx";
-import {state} from "../../state.ts";
+import {getTimeOfDay, TimeOfDay} from "../calc/timeOfDay.tsx";
+import {state} from "../state.ts";
 import {filter, keys, map, mergeAll, pipe} from "remeda";
 import {nationalityColors} from "./nationalityColors.tsx";
 

@@ -1,4 +1,4 @@
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 
 export function defenderLosses(combatResult: { defender: number }) {
     if (state.hotel) {

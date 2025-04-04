@@ -1,6 +1,6 @@
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import * as R from "remeda";
-import {attackerHexes} from "./attackerHexes.tsx";
+import {attackerHexesFilter} from "./attackerHexesFilter.tsx";
 import {CSType} from "../ui/CSStyles.tsx";
 
 type Shift = { type: string, value: number };
@@ -20,7 +20,7 @@ function suppression() {
     const defenderSuppression = state.suppression[0];
     const attackerSuppression = R.pipe(
         state.suppression,
-        R.filter(attackerHexes),
+        R.filter(attackerHexesFilter),
         R.sum(),
     );
     const suppression = between(-3, defenderSuppression - attackerSuppression, 3);
@@ -37,7 +37,7 @@ function isOneOfDefenders(type: CSType) {
 function isOneOfAttackers(type: CSType) {
     return R.pipe(
         state.cs,
-        R.filter(attackerHexes),
+        R.filter(attackerHexesFilter),
         R.flat(),
         R.filter(it => it.type === type),
         R.hasAtLeast(1)

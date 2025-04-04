@@ -1,9 +1,9 @@
 import {hexPositions} from "./HexPositions.tsx";
 import {hexSize} from "../config.ts";
 import {Suppression} from "../graphics/Suppression.tsx";
-import {HexType, state} from "../../state.ts";
+import {HexType, state} from "../state.ts";
 import {otherNationality} from "../calc/otherNationality.ts";
-import {isDefenderHex} from "./IsDefenderHex.tsx";
+import {isDefenderHex} from "../calc/IsDefenderHex.tsx";
 
 function generateHexPoints(centerX: number, centerY: number, size: number): string {
     const points = [];

@@ -1,6 +1,6 @@
 import {Button} from "../../ui/Button.tsx";
 import {CSStyles} from "./CSStyles.tsx";
-import {CS, state} from "../../state.ts";
+import {CS, state} from "../state.ts";
 import {toggleTool} from "./toggleTool.tsx";
 import * as R from 'remeda';
 

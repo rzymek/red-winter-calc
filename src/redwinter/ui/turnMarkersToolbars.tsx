@@ -1,6 +1,6 @@
 import {Button} from "../../ui/Button.tsx";
-import {Flag} from "../calc/flag.tsx";
-import {state} from "../../state.ts";
+import {Flag} from "./flag.tsx";
+import {state} from "../state.ts";
 import {update} from "../../update.ts";
 
 export function TurnMarkersToolbars() {

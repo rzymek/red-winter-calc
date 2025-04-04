@@ -1,5 +1,5 @@
 import {clone, range} from "remeda";
-import {CSType} from "./redwinter/ui/CSStyles.tsx";
+import {CSType} from "./ui/CSStyles.tsx";
 
 export type HexType = 'lake' | 'other'
 

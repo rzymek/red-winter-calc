@@ -1,5 +1,5 @@
-import {defenderLosses} from "./defenderLosses.tsx";
-import {mandatoryAttackerLosses} from "./mandatoryAttackerLosses.tsx";
+import {defenderLosses} from "../calc/defenderLosses.tsx";
+import {mandatoryAttackerLosses} from "../calc/mandatoryAttackerLosses.tsx";
 
 export type CombatColumn = {
     roll2d6: number;

@@ -1,5 +1,5 @@
 import {Button} from "../../ui/Button.tsx";
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import {toggleTool} from "./toggleTool.tsx";
 import {update} from "../../update.ts";
 

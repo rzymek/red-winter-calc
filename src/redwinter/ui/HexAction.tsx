@@ -1,4 +1,4 @@
-import {CS, state, Tool} from "../../state.ts";
+import {CS, state, Tool} from "../state.ts";
 import {assertNever} from "../../generic/AssertNever.tsx";
 
 function isUnitToolSelected(tool: Tool): tool is CS {

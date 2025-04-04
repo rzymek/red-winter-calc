@@ -1,4 +1,4 @@
-import {state, Tool} from "../../state.ts";
+import {state, Tool} from "../state.ts";
 import {update} from "../../update.ts";
 
 export function toggleTool(type: Tool) {

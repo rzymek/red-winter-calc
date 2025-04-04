@@ -1,5 +1,5 @@
 import {describe, expect, it, beforeEach} from "vitest";
-import {resetState, state} from "../../state.ts";
+import {resetState, state} from "../state.ts";
 import {mandatoryAttackerLosses} from "./mandatoryAttackerLosses.tsx";
 
 describe('mandatoryAttackerLosses', () => {

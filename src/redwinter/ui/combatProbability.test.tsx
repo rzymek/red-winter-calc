@@ -2,9 +2,9 @@ import {describe, expect, it, beforeEach} from "vitest";
 import {range} from "remeda";
 import {CombatProbability} from "./combatProbability.tsx";
 import {render, RenderResult} from "@testing-library/preact";
-import {resetState, state} from "../../state.ts";
+import {resetState, state} from "../state.ts";
 import {CombatColumn} from "./CRTView.tsx";
-import {ElementOf} from "./elementOf.tsx";
+import {ElementOf} from "../../generic/elementOf.tsx";
 
 describe('CombatProbability', () => {
     beforeEach(() => {

@@ -1,5 +1,5 @@
 import {WButton} from "../../ui/Button.tsx";
-import {resetState, state} from "../../state.ts";
+import {resetState, state} from "../state.ts";
 import {toggleTool} from "./toggleTool.tsx";
 import {update} from "../../update.ts";
 

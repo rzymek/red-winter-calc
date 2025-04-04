@@ -1,6 +1,6 @@
 import {describe, expect, it, beforeEach} from "vitest";
 import {defenderLosses} from "./defenderLosses.tsx";
-import {resetState, state} from "../../state.ts";
+import {resetState, state} from "../state.ts";
 
 describe('defenderLosses', () => {
     beforeEach(() => {

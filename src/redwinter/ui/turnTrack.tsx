@@ -1,7 +1,7 @@
 import {range} from "../../generic/range.tsx";
 import {Row} from "../../ui/row.tsx";
 import {TurnButton} from "./TurnButton.tsx";
-import {state} from "../../state.ts";
+import {state} from "../state.ts";
 import {update} from "../../update.ts";
 
 export function TurnTrack() {

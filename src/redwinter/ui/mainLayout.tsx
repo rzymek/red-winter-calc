@@ -8,7 +8,7 @@ import {TurnMarkersToolbars} from "./turnMarkersToolbars.tsx";
 import {IconButtonsToolbar} from "./iconButtonsToolbar.tsx";
 import {WideButtonsToolbar} from "./wideButtonsToolbar.tsx";
 import {TopToolbar} from "./TopToolbar.tsx";
-import {RoundedPanel} from "./RoundedPanel.tsx";
+import {RoundedPanel} from "../../ui/RoundedPanel.tsx";
 import {RASPanel} from "./RASPanel.tsx";
 
 
