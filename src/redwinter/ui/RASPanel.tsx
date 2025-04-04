@@ -5,7 +5,7 @@ import {range} from "../../generic/range.tsx";
 import {Button} from "../../ui/Button.tsx";
 import {RATFirer, state} from "../state.ts";
 import {update} from "../../update.ts";
-import {ratDRM} from "../calc/rat.ts";
+import {isIndirectFirer, ratDRM} from "../calc/rat.ts";
 import {getLOS, getTimeOfDay} from "../calc/timeOfDay.tsx";
 import {Checkbox} from "../../ui/Checkbox.tsx";
 import {atLeast2d6} from "../../generic/probability2d6.tsx";
@@ -14,16 +14,28 @@ import {Percent} from "../../ui/Percent.tsx";
 export function RASPanel() {
     const noRAS = getTimeOfDay(state.turn) === 'night';
     const drm = ratDRM();
-
+    const {firer, modifiers} = state.rat;
+    const canSelfSpot = firer === 'mortar' || firer === 'IG';
+    const isMGorArmor = firer === 'MG' || firer === 'armored';
     return <div style={{
         fontSize: '70%',
         display: 'flex',
     }}>
         <SideColumn>
             <RATFirerSelector disabled={noRAS}/>
-            <RATCheckbox value='selfSpotting' disabled={noRAS}>self spotting</RATCheckbox>
-            <RATCheckbox value='nonAdjacentSpotter' disabled={noRAS}>non-adj.spotter</RATCheckbox>
-            <RATCheckbox value='longRange' disabled={noRAS}>range 3+</RATCheckbox>
+            <RATCheckbox value='selfSpotting'
+                         disabled={noRAS || !canSelfSpot}
+                         onChange={() => modifiers.nonAdjacentSpotter = false}>
+                self spotting
+            </RATCheckbox>
+            <RATCheckbox value='nonAdjacentSpotter'
+                         disabled={noRAS || !isIndirectFirer()}
+                         onChange={()=>modifiers.selfSpotting = false}>
+                non-adj.spotter
+            </RATCheckbox>
+            <RATCheckbox value='longRange' disabled={noRAS || !isMGorArmor}>
+                range 3+
+            </RATCheckbox>
         </SideColumn>
         <CenterColumn>
             <Row>
@@ -45,11 +57,19 @@ export function RASPanel() {
     </div>;
 }
 
-function RATCheckbox(props: { value: keyof typeof state.rat.modifiers, children: string, disabled?: boolean }) {
+function RATCheckbox(props: {
+    value: keyof typeof state.rat.modifiers,
+    children: string,
+    disabled?: boolean,
+    onChange?: () => void,
+}) {
     const {modifiers} = state.rat;
     return <Checkbox disabled={props.disabled}
                      checked={modifiers[props.value]}
-                     onClick={update(() => modifiers[props.value] = !modifiers[props.value])}>
+                     onChange={update(() => {
+                         modifiers[props.value] = !modifiers[props.value];
+                         props.onChange?.();
+                     })}>
         {props.children}
     </Checkbox>
 }
@@ -67,7 +87,7 @@ function RATFirerSelector(props: { disabled?: boolean }) {
         'MG', 'mortar', 'infantry', 'arty', 'IG', 'armored',
     ];
     return <select {...props} style={{height: '8mm'}} onChange={e => update(() =>
-        state.rat.firer = (e.target as any).value)}>
+        state.rat.firer = (e.target as any).value)()}>
         {options.map(o =>
             <option key={o}>{o}</option>
         )}

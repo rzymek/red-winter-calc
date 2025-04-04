@@ -37,7 +37,7 @@ function indirectSelfSpotting() {
     return 0;
 }
 
-function isIndirectFirer() {
+export function isIndirectFirer() {
     const {firer} = state.rat;
     const indirectFirer:typeof firer[] = ['mortar','IG','arty'];
     return indirectFirer.includes(firer);
