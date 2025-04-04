@@ -2,7 +2,6 @@ import {ComponentChildren} from "preact";
 import type {CSSProperties} from "preact/compat";
 import {glowShadow} from "./GlowShadow.tsx";
 
-
 export interface ButtonProps {
     children?: ComponentChildren,
     style?: CSSProperties,
