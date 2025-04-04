@@ -72,12 +72,13 @@ export function TurnButton(props: { children: number, selected: boolean, onClick
     const {children, ...buttonProps} = props;
     const turn = children;
     const part = getTimeOfDay(turn);
+    const validTurn = 1 <= turn && turn <= 32;
     return <Button {...buttonProps}
                    style={{
                        ...turnMarkers(turn),
                        ...TurnButtonColors[part]
                    }}
-                   disabled={turn <= 0}>{
-        turn > 0 ? turn : ''
+                   disabled={!validTurn}>{
+        validTurn ? turn : ''
     }</Button>
 }
