@@ -12,20 +12,20 @@ export function Explanation(props: {
     return <table class="vertical compact border">
         <tbody>
         <tr>
-            <th>Attacker CS <Flag nationality={otherNationality(state.combatDefenderNationality)}/></th>
-            <td>{props.attacker}</td>
-        </tr>
-        <tr>
-            <th>Defender CS <Flag nationality={state.combatDefenderNationality}/></th>
-            <td>{props.defender}</td>
-        </tr>
-        <tr>
-            <th>Effective column</th>
-            <td>{props.effectiveRatio}</td>
+            <th>
+                Attacker <Flag nationality={otherNationality(state.combatDefenderNationality)}/>
+                <> : </>
+                Defender <Flag nationality={state.combatDefenderNationality}/>
+            </th>
+            <td>{props.attacker}:{props.defender}</td>
         </tr>
         <tr>
             <th>Base column</th>
             <td>{props.ratio}</td>
+        </tr>
+        <tr>
+            <th>Effective column</th>
+            <td>{props.effectiveRatio}</td>
         </tr>
         {props.shift.map(it => (
             <tr key={it.type}>
