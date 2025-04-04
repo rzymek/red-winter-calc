@@ -45,5 +45,9 @@ const initialState = {
 export const state = clone(initialState);
 
 export function resetState() {
-    Object.assign(state, clone(initialState));
+    const preserve:Partial<typeof state> = {
+        turn: state.turn,
+        turnMarker: state.turnMarker
+    }
+    Object.assign(state, clone(initialState), preserve);
 }
