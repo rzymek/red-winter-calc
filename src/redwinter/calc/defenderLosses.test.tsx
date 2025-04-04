@@ -22,6 +22,7 @@ describe('defenderLosses', () => {
     it('should reduce defender value by 1 when hotel is true', () => {
         // given
         state.hotel = true;
+        state.cs[0] = [{type: 'infantry', value:4}]
         const combatResult = { defender: 3 };
 
         // when
@@ -31,9 +32,27 @@ describe('defenderLosses', () => {
         expect(result).toBe(2);
     });
 
+    it('should give not bonus in the hotel if there are not MG or Inf present', () => {
+        // given
+        state.hotel = true;
+        state.cs[0] = [
+            {type: 'armor', value:4},
+            {type: 'pajari', value:1},
+            {type: 'mortar', value:1},
+        ]
+        const combatResult = { defender: 3 };
+
+        // when
+        const result = defenderLosses(combatResult);
+
+        // then
+        expect(result).toBe(3);
+    });
+
     it('should return 0 when defender is 1 and hotel is true', () => {
         // given
         state.hotel = true;
+        state.cs[0] = [{type: 'MG', value:4}]
         const combatResult = { defender: 1 };
 
         // when
