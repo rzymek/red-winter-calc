@@ -2,6 +2,8 @@ import {state} from "../state.ts";
 import * as R from "remeda";
 import {attackerHexesFilter} from "./attackerHexesFilter.tsx";
 import {CSType} from "../ui/CSStyles.tsx";
+import {every} from "../../generic/every.ts";
+import {isDefenderHex} from "./IsDefenderHex.tsx";
 
 type Shift = { type: string, value: number };
 
@@ -50,11 +52,24 @@ function defenderInLake() {
     if (state.map[0] !== 'lake') {
         return [];
     }
-    // TODO: both on ice
-    return [{
-        type: '5. Frozen lake',
-        value: state.combatDefenderNationality === 'soviet' ? 4 : 3
-    }]
+    const allCombatHexesAreFrozenLake = R.pipe(
+        state.cs,
+        R.map((units, hexIndex) => ({units, hexIndex})),
+        R.filter(({units}) => units.length > 0),
+        R.map(({hexIndex}) => state.map[hexIndex]),
+        every(combatHex => combatHex === 'lake'),
+    );
+    if (allCombatHexesAreFrozenLake) {
+        return [{
+            type: '5. Frozen lake (all units)',
+            value: state.combatDefenderNationality === 'soviet' ? 1 : -1
+        }];
+    } else {
+        return [{
+            type: '5. Frozen lake',
+            value: state.combatDefenderNationality === 'soviet' ? 4 : 3
+        }];
+    }
 }
 
 function pajariLeaderBonus() {
@@ -70,11 +85,11 @@ function pajariLeaderBonus() {
 function concentricAttackBonus() {
     const attackingHexes = R.pipe(
         state.cs,
-        R.map(R.isNot(R.isEmpty)),
-        R.map((hasUnits, index) => hasUnits ? index : 0),
-        R.filter(hexIndex => hexIndex !== 0),
+        R.map((units, hexIndex) => ({units, hexIndex})),
+        R.filter(({hexIndex}) => !isDefenderHex(hexIndex)),
+        R.filter(({units}) => units.length > 0),
+        R.map(({hexIndex}) => hexIndex),
     );
-
     const opposingHexes: number[][] = [
         [1, 4],
         [2, 5],
@@ -95,7 +110,6 @@ function concentricAttackBonus() {
 
 
     if (opposingAttack || evenlySpacedAttack) {
-        console.log({attackingHexes, opposingAttack, evenlySpacedAttack})
         return [{type: '4. Concentric attack', value: 1}];
     }
 
