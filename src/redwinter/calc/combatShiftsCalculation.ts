@@ -50,6 +50,7 @@ function defenderInLake() {
     if (state.map[0] !== 'lake') {
         return [];
     }
+    // TODO: both on ice
     return [{
         type: '5. Frozen lake',
         value: state.combatDefenderNationality === 'soviet' ? 4 : 3
