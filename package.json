@@ -19,10 +19,7 @@
   "dependencies": {
     "jsdom": "^26.0.0",
     "preact": "^10.26.4",
-    "react-dice-roll": "^1.2.2",
-    "remeda": "^2.21.2"
-  },
-  "devDependencies": {
+    "remeda": "^2.21.2",
     "@babel/plugin-transform-react-jsx-source": "^7.25.9",
     "@preact/preset-vite": "^2.10.1",
     "@testing-library/preact": "^3.2.4",
