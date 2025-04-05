@@ -59,9 +59,9 @@ function defenderInLake() {
 function pajariLeaderBonus() {
     const type = '6. Pajari';
     if (isOneOfAttackers('pajari')) {
-        return [{type, value: -1}]
-    } else if (isOneOfDefenders('pajari')) {
         return [{type, value: 1}]
+    } else if (isOneOfDefenders('pajari')) {
+        return [{type, value: -1}]
     }
     return [];
 }
