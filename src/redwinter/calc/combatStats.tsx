@@ -7,6 +7,7 @@ import {combatResult, shiftRatio} from "./crt.ts";
 import {Explanation} from "../ui/explanation.tsx";
 import {CRTView} from "../ui/CRTView.tsx";
 import {CombatProbability} from "../ui/combatProbability.tsx";
+import {getTimeOfDay} from "./timeOfDay.tsx";
 
 export function CombatStats() {
     const defender = R.pipe(
@@ -18,6 +19,7 @@ export function CombatStats() {
     const attacker = R.pipe(
         state.cs,
         R.map(frozenLakeOrBridgePenalty),
+        R.map(armorAtNightPenalty),
         R.filter(attackerHexesFilter),
         R.flat(),
         R.filter(it => it.type !== 'mortar'),
@@ -65,11 +67,18 @@ function frozenLakeOrBridgePenalty(units: CS[], hexIndex: number) {
         return units;
     }
 }
+function armorAtNightPenalty(units: CS[]) {
+    if (getTimeOfDay(state.turn) === 'night') {
+        return halvedCS(units, unit => unit.type === 'armor')
+    } else {
+        return units;
+    }
+}
 
-function halvedCS(units: CS[]) {
+function halvedCS(units: CS[], filter:(cs:CS)=>boolean = ()=>true) {
     return units.map(unit => ({
         ...unit,
-        value: Math.ceil(unit.value / 2),
+        value: filter(unit) ? Math.ceil(unit.value / 2) : unit.value,
     }));
 }
 
