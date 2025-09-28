@@ -29,7 +29,7 @@ describe('ratDRM', () => {
     resetState();
   });
 
-  test('should return 0 when targetHex is undefined', () => {
+  test('should return NaN when targetHex is undefined', () => {
     // given
     state.rat.targetHex = undefined;
 
@@ -37,7 +37,7 @@ describe('ratDRM', () => {
     const result = ratDRM();
 
     // then
-    expect(result).toBe(0);
+    expect(result).toBeNaN();
   });
 
   test('should calculate basic DRM with default values', () => {
