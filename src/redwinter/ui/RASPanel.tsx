@@ -10,6 +10,7 @@ import { getLOS, getTimeOfDay } from '../calc/timeOfDay.tsx';
 import { Checkbox } from '../../ui/Checkbox.tsx';
 import { atLeast2d6 } from '../../generic/probability2d6.tsx';
 import { Percent } from '../../ui/Percent.tsx';
+import * as _ from 'remeda';
 
 export function RASPanel() {
   const noRAS = getTimeOfDay(state.turn) === 'night';
@@ -20,7 +21,7 @@ export function RASPanel() {
   return <div style={{
     fontSize: '70%',
     display: 'flex',
-    gap: '1.6mm'
+    gap: '1.6mm',
   }}>
     <SideColumn>
       <RATFirerSelector disabled={noRAS}/>
@@ -85,22 +86,30 @@ function RATResult(props: { need: number, children: string }) {
 
 function RATFirerSelector(props: { disabled?: boolean }) {
   const options: Record<RATFirer, string> = {
-    MG: 'MG',
     mortar: 'mtr',
-    infantry: 'inf',
-    arty: 'Art',
     IG: 'IG',
+    arty: 'arty',
+
+    MG: 'MG',
     armored: 'arm',
+    infantry: 'inf',
   };
-  return <Row style={{marginTop: '1mm'}}>
-    {Object.entries(options).map(([firer, label]) =>
-      <Button key={firer}
-              disabled={props.disabled}
-              selected={state.rat.firer === firer}
-              onClick={update(() => state.rat.firer = firer as RATFirer)}>
-        {label}
-      </Button>)}
-  </Row>;
+  return <CenterColumn style={{marginTop: '1mm'}}>
+    {_.pipe(
+      options,
+      _.entries(),
+      _.chunk(3),
+      _.map((row, rowIndex) => <Row key={rowIndex}>
+        {row.map(([firer, label]) =>
+          <Button key={firer}
+                  disabled={props.disabled}
+                  selected={state.rat.firer === firer}
+                  onClick={update(() => state.rat.firer = firer as RATFirer)}>
+            {label}
+          </Button>)}
+      </Row>),
+    )}
+  </CenterColumn>;
 }
 
 
