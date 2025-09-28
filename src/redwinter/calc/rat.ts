@@ -86,7 +86,7 @@ function longRange() {
 export function ratDRM() {
     const {targetHex} = state.rat;
     if (targetHex === undefined) {
-        return 0;
+        return NaN;
     }
     return pipe([
         state.rat.rs,
