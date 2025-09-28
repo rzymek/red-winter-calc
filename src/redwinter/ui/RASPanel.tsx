@@ -20,6 +20,7 @@ export function RASPanel() {
   return <div style={{
     fontSize: '70%',
     display: 'flex',
+    gap: '1.6mm'
   }}>
     <SideColumn>
       <RATFirerSelector disabled={noRAS}/>
@@ -75,23 +76,31 @@ function RATCheckbox(props: {
 }
 
 function RATResult(props: { need: number, children: string }) {
-    return <tr>
-        <th>{props.children}</th>
-        <td>{isNaN(props.need) ? 'Select RAS & hex' : `${props.need}+`}</td>
-        <th><Percent value={atLeast2d6(props.need)}/></th>
-    </tr>
+  return <tr>
+    <th>{props.children}</th>
+    <td>{isNaN(props.need) ? 'Select RAS & hex' : `${props.need}+`}</td>
+    <th><Percent value={atLeast2d6(props.need)}/></th>
+  </tr>;
 }
 
 function RATFirerSelector(props: { disabled?: boolean }) {
-  const options: RATFirer[] = [
-    'MG', 'mortar', 'infantry', 'arty', 'IG', 'armored',
-  ];
-  return <select {...props} style={{height: '8mm'}} onChange={e => update(() =>
-    state.rat.firer = (e.target as any).value)()}>
-    {options.map(o =>
-      <option key={o}>{o}</option>,
-    )}
-  </select>;
+  const options: Record<RATFirer, string> = {
+    MG: 'MG',
+    mortar: 'mtr',
+    infantry: 'inf',
+    arty: 'Art',
+    IG: 'IG',
+    armored: 'arm',
+  };
+  return <Row style={{marginTop: '1mm'}}>
+    {Object.entries(options).map(([firer, label]) =>
+      <Button key={firer}
+              disabled={props.disabled}
+              selected={state.rat.firer === firer}
+              onClick={update(() => state.rat.firer = firer as RATFirer)}>
+        {label}
+      </Button>)}
+  </Row>;
 }
 
 
