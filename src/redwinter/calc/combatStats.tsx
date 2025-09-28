@@ -79,7 +79,7 @@ function armorAtNightPenalty(units: CS[]) {
 function halvedCS(units: CS[], filter:(cs:CS)=>boolean = ()=>true) {
     return units.map(unit => ({
         ...unit,
-        value: filter(unit) ? Math.ceil(unit.value / 2) : unit.value,
+        value: filter(unit) ? (unit.value / 2) : unit.value,
     }));
 }
 
