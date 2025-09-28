@@ -24,7 +24,8 @@ export function CombatStats() {
         R.flat(),
         R.filter(it => it.type !== 'mortar'),
         R.map(it => it.value),
-        R.sum()
+        R.sum(),
+        Math.round,
     );
 
     const ratio = formatCombatRatio(attacker, defender);
