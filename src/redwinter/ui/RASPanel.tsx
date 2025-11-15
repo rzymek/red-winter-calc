@@ -13,7 +13,7 @@ import { Percent } from '../../ui/Percent.tsx';
 import * as _ from 'remeda';
 
 export function RASPanel() {
-  const noRAS = getTimeOfDay(state.turn) === 'night';
+  const noRAS = false;
   const drm = ratDRM();
   const {firer, modifiers} = state.rat;
   const canSelfSpot = firer === 'mortar' || firer === 'IG';
