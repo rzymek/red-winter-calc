@@ -11,7 +11,7 @@ export function Hotel() {
         {parts.map(d =>
             <path
                 d={d}
-                style="fill:#000000;stroke-width:0.0280116"/>
+                style="fill:#ff0000;stroke-width:0.0280116"/>
         )}
     </g>
 
