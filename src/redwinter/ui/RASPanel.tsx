@@ -6,7 +6,7 @@ import { Button } from '../../ui/Button.tsx';
 import { RATFirer, state } from '../state.ts';
 import { update } from '../../update.ts';
 import { isIndirectFirer, ratDRM } from '../calc/rat.ts';
-import { getLOS, getTimeOfDay } from '../calc/timeOfDay.tsx';
+import { getLOS } from '../calc/timeOfDay.tsx';
 import { Checkbox } from '../../ui/Checkbox.tsx';
 import { atLeast2d6 } from '../../generic/probability2d6.tsx';
 import { Percent } from '../../ui/Percent.tsx';
